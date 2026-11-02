@@ -21,7 +21,14 @@ async def lifespan(app: FastAPI):
         seed_if_empty(db)
     yield
 
-app = FastAPI(title="Toba Health Insight API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(
+    title="Toba Health Insight API",
+    version="1.0.0",
+    lifespan=lifespan,
+    docs_url="/api/docs",
+    redoc_url="/api/redoc",
+    openapi_url="/api/openapi.json",
+)
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:8080"], allow_methods=["GET", "POST", "PUT", "DELETE"], allow_headers=["*"])
 
 class FilterParams(BaseModel):
@@ -87,99 +94,3 @@ def meta(db: Session=Depends(get_db)):
 @app.get("/api/analytics")
 def get_analytics(q:FilterParams=Depends(), db:Session=Depends(get_db)):
     return analytics(filtered_data(db,q))
-
-@app.get("/api/measurements")
-def measurements(q:FilterParams=Depends(), page:int=Query(1,ge=1), page_size:int=Query(30,ge=1,le=1000), db:Session=Depends(get_db)):
-    df=filtered_data(db,q); start=(page-1)*page_size
-    return {"total":len(df), "page":page, "page_size":page_size, "rows":records(df.iloc[start:start+page_size])}
-
-@app.get("/api/model/demo")
-def demo_model():
-    return MODEL_DEMO
-
-@app.post("/api/predict/demo")
-def predict_demo(payload:Prediction):
-    status=klasifikasi_tekanan(payload.sistolik,payload.diastolik)
-    return {"status":status, "is_ml":False, "probability":None,
-        "message":"Klasifikasi aturan ambang dari Streamlit asli, bukan model ML/diagnosis medis."}
-
-@app.post("/api/data/upload")
-async def upload(file: UploadFile=File(...), db:Session=Depends(get_db)):
-    filename=(file.filename or "upload").replace("\\", "/").split("/")[-1]
-    if not filename.lower().endswith((".csv",".xlsx")):
-        raise HTTPException(422,"Hanya CSV dan XLSX yang didukung")
-    content=await file.read(15_000_001)
-    if len(content)>15_000_000:
-        raise HTTPException(413,"Ukuran file maksimal 15 MB")
-    try:
-        raw=(pd.read_excel(BytesIO(content)) if filename.lower().endswith(".xlsx") else pd.read_csv(BytesIO(content), encoding="utf-8-sig"))
-        count=replace_data(db,raw,filename,"uploaded")
-    except (ValueError, TypeError, DataValidationError) as e:
-        db.rollback(); raise HTTPException(422,str(e)) from e
-    except Exception as e:
-        db.rollback(); raise HTTPException(422,"Berkas gagal dibaca/diimpor: " + str(e)) from e
-    return {"ok":True,"rows":count,"source":filename}
-
-@app.post("/api/data/reset")
-def reset(db:Session=Depends(get_db)):
-    count=replace_data(db,buat_data_hipertensi_demo(),"Dataset demo (sintetis)","demo")
-    return {"ok":True, "rows":count}
-
-@app.get("/api/data/export")
-def export(format:str=Query("csv",pattern="^(csv|xlsx|txt)$"), q:FilterParams=Depends(), db:Session=Depends(get_db)):
-    df=filtered_data(db,q).drop(columns=["id"],errors="ignore")
-    if format=="txt":
-        return PlainTextResponse(f"TOBA HEALTH INSIGHT — RINGKASAN\nJumlah baris: {len(df)}\nJumlah kolom: {len(df.columns)}\nSumber: dashboard\n", headers={"Content-Disposition":"attachment; filename=laporan_ringkas.txt"})
-    buff=BytesIO()
-    if format=="csv":
-        payload=df.to_csv(index=False).encode("utf-8-sig")
-        return StreamingResponse(BytesIO(payload),media_type="text/csv", headers={"Content-Disposition":"attachment; filename=data_hipertensi.csv"})
-    with pd.ExcelWriter(buff,engine="xlsxwriter") as writer:
-        df.to_excel(writer,index=False,sheet_name="Data Partisipan")
-    buff.seek(0)
-    return StreamingResponse(buff,media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",headers={"Content-Disposition":"attachment; filename=data_hipertensi.xlsx"})
-
-def edit_row(db:Session, payload:Measurement, target_id:int|None):
-    current=get_frame(db)
-    row=payload.model_dump()
-    if target_id is None:
-        if "id" in current: row["id"]=int(current.id.max()+1) if len(current) else 1
-    else:
-        if target_id not in set(current.id.tolist()):
-            raise HTTPException(404,"Data pengukuran tidak ditemukan")
-        old = current.loc[current.id == target_id].iloc[0]
-        row["id"]=target_id
-        current=current[current.id!=target_id]
-        # Dimension attributes are properties of a participant, not a daily fact.
-        # Propagate user edits to the rest of that participant's measurements.
-        if row["id_partisipan"] == old["id_partisipan"]:
-            fixed = ["usia", "jenis_kelamin", "bmi", "aktivitas_fisik_hari_per_minggu",
-                     "pola_makan", "jam_tidur", "tingkat_stres", "merokok"]
-            for col in fixed:
-                current.loc[current.id_partisipan == row["id_partisipan"], col] = row[col]
-    combined=pd.concat([current,pd.DataFrame([row])],ignore_index=True).drop(columns=["id","status_hipertensi"],errors="ignore")
-    state=db.get(DatasetState,1)
-    try:
-        count=replace_data(db,combined,state.source_name if state else "Data edit",state.source_kind if state else "edited")
-    except DataValidationError as e:
-        db.rollback(); raise HTTPException(422,str(e)) from e
-    return {"ok":True,"rows":count}
-
-@app.post("/api/measurements")
-def add_measurement(payload:Measurement,db:Session=Depends(get_db)):
-    return edit_row(db,payload,None)
-
-@app.put("/api/measurements/{row_id}")
-def update_measurement(row_id:int,payload:Measurement,db:Session=Depends(get_db)):
-    return edit_row(db,payload,row_id)
-
-@app.delete("/api/measurements/{row_id}")
-def delete_measurement(row_id:int,db:Session=Depends(get_db)):
-    current=get_frame(db)
-    if row_id not in set(current.id.tolist()):
-        raise HTTPException(404,"Data pengukuran tidak ditemukan")
-    if len(current)<=1:
-        raise HTTPException(422,"Dataset tidak boleh kosong")
-    state=db.get(DatasetState,1)
-    count=replace_data(db,current[current.id!=row_id].drop(columns=["id","status_hipertensi"],errors="ignore"),state.source_name,state.source_kind)
-    return {"ok":True,"rows":count}
