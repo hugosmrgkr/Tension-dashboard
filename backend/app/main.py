@@ -1,18 +1,19 @@
 """Toba Health Insight API. Demo classification is not a trained ML model."""
 from contextlib import asynccontextmanager
 from io import BytesIO
-import os
+from pathlib import Path
+from typing import Literal
 import pandas as pd
 from fastapi import FastAPI, Depends, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse, PlainTextResponse
+from fastapi.responses import StreamingResponse, PlainTextResponse, JSONResponse
 from pydantic import BaseModel, Field
-from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from .db import Base, engine, get_db, SessionLocal
-from .models import DatasetState
+from .models import DatasetState, FaktaPengukuran
 from .data_utils import buat_data_hipertensi_demo, klasifikasi_tekanan, KELOMPOK_USIA
-from .service import validate_frame, replace_data, seed_if_empty, get_frame, filtered, analytics, records, DataValidationError, COLUMNS
+from .service import replace_data, seed_if_empty, get_frame, filtered, analytics, records, save_measurement, DataValidationError, COLUMNS
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -30,6 +31,16 @@ app = FastAPI(
     openapi_url="/api/openapi.json",
 )
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:8080"], allow_methods=["GET", "POST", "PUT", "DELETE"], allow_headers=["*"])
+
+
+@app.exception_handler(DataValidationError)
+async def validation_error_handler(request, exc):
+    return JSONResponse(status_code=422, content={"detail": str(exc)})
+
+
+@app.exception_handler(IntegrityError)
+async def integrity_error_handler(request, exc):
+    return JSONResponse(status_code=409, content={"detail": "Data bertentangan dengan data tersimpan. Muat ulang data dan coba lagi."})
 
 class FilterParams(BaseModel):
     awal: str | None = None
@@ -94,3 +105,124 @@ def meta(db: Session=Depends(get_db)):
 @app.get("/api/analytics")
 def get_analytics(q:FilterParams=Depends(), db:Session=Depends(get_db)):
     return analytics(filtered_data(db,q))
+
+
+@app.get("/api/measurements")
+def measurements(
+    q: FilterParams = Depends(),
+    db: Session = Depends(get_db),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(25, ge=1, le=1000),
+):
+    df = filtered_data(db, q)
+    start = (page - 1) * page_size
+    return {"rows": records(df.iloc[start:start + page_size], ["id", *COLUMNS]),
+            "total": len(df), "page": page, "page_size": page_size}
+
+
+@app.get("/api/model/demo")
+def model_demo():
+    return MODEL_DEMO
+
+
+@app.post("/api/predict/demo")
+def predict_demo(values: Prediction):
+    return {
+        "status": klasifikasi_tekanan(values.sistolik, values.diastolik),
+        "is_ml": False,
+        "message": "Klasifikasi demo berdasarkan sistolik dan diastolik; usia dan BMI tidak digunakan dalam aturan ini. Bukan prediksi model ML atau diagnosis.",
+    }
+
+
+@app.post("/api/measurements")
+def create_measurement(values: Measurement, db: Session = Depends(get_db)):
+    return save_measurement(db, values.model_dump())
+
+
+def require_measurement(db: Session, measurement_id: int):
+    measurement = db.get(FaktaPengukuran, measurement_id)
+    if measurement is None:
+        raise HTTPException(404, "Pengukuran tidak ditemukan")
+    return measurement
+
+
+@app.put("/api/measurements/{measurement_id}")
+def update_measurement(measurement_id: int, values: Measurement, db: Session = Depends(get_db)):
+    return save_measurement(db, values.model_dump(), require_measurement(db, measurement_id))
+
+
+@app.delete("/api/measurements/{measurement_id}")
+def delete_measurement(measurement_id: int, db: Session = Depends(get_db)):
+    db.delete(require_measurement(db, measurement_id))
+    db.commit()
+    return {"deleted": measurement_id}
+
+
+@app.post("/api/data/reset")
+def reset_data(db: Session = Depends(get_db)):
+    rows = replace_data(db, buat_data_hipertensi_demo(), "Dataset demo (sintetis)", "demo")
+    return {"rows": rows, "source": "Dataset demo (sintetis)", "source_kind": "demo"}
+
+
+@app.post("/api/data/upload")
+def upload_data(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    name = Path((file.filename or "").replace("\\", "/")).name
+    suffix = Path(name).suffix.lower()
+    if suffix not in {".csv", ".xlsx"}:
+        raise HTTPException(422, "Pilih berkas CSV atau XLSX")
+    # Bound API uploads too when running without Nginx.
+    max_size = 15 * 1024 * 1024
+    content = file.file.read(max_size + 1)
+    if len(content) > max_size:
+        raise HTTPException(413, "Ukuran berkas maksimal 15 MB")
+    try:
+        raw = (pd.read_csv(BytesIO(content), encoding="utf-8-sig") if suffix == ".csv"
+               else pd.read_excel(BytesIO(content), engine="openpyxl"))
+    except Exception as exc:
+        raise HTTPException(422, "Berkas tidak dapat dibaca sebagai CSV/XLSX yang valid") from exc
+    rows = replace_data(db, raw, name, "uploaded")
+    return {"rows": rows, "source": name, "source_kind": "uploaded"}
+
+
+@app.get("/api/data/export")
+def export_data(
+    q: FilterParams = Depends(),
+    db: Session = Depends(get_db),
+    format: Literal["csv", "xlsx", "txt"] = "csv",
+):
+    df = filtered_data(db, q)
+    if format == "txt":
+        summary = analytics(df)
+        state = db.get(DatasetState, 1)
+        lines = ["Toba Health Insight — Ringkasan Data",
+                 f"Sumber: {state.source_name if state else 'Tidak diketahui'}",
+                 "Filter: " + str(q.model_dump(exclude_none=True)),
+                 f"Total pengukuran: {len(df)}",
+                 f"Total partisipan: {summary.get('total_participants', 0)}"]
+        if not summary["empty"]:
+            lines.extend([
+                f"Rata-rata tekanan darah: {summary['mean_sistolik']}/{summary['mean_diastolik']} mmHg",
+                f"Di atas rentang normal: {summary['non_normal']} ({summary['non_normal_percent']}%)",
+                "Distribusi berdasarkan rata-rata per partisipan:",
+                *[f"- {row['status']}: {row['count']} ({row['percent']}%)" for row in summary["distribution"]],
+            ])
+        lines.append("Ringkasan deskriptif dataset aktif; bukan diagnosis atau evaluasi model ML.")
+        return PlainTextResponse("\n".join(lines) + "\n", headers={
+            "Content-Disposition": 'attachment; filename="laporan_ringkas.txt"'})
+
+    exported = df[COLUMNS].copy()
+    if not exported.empty:
+        exported["tanggal"] = pd.to_datetime(exported["tanggal"]).dt.strftime("%Y-%m-%d")
+    if format == "csv":
+        content = exported.to_csv(index=False).encode("utf-8-sig")
+        media_type = "text/csv; charset=utf-8"
+    else:
+        buffer = BytesIO()
+        with pd.ExcelWriter(buffer, engine="xlsxwriter", engine_kwargs={
+            "options": {"strings_to_formulas": False, "strings_to_urls": False}
+        }) as writer:
+            exported.to_excel(writer, index=False, sheet_name="Pengukuran")
+        content = buffer.getvalue()
+        media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    return StreamingResponse(BytesIO(content), media_type=media_type, headers={
+        "Content-Disposition": f'attachment; filename="data_hipertensi.{format}"'})

@@ -118,9 +118,12 @@ export default function App() {
   }, [meta, JSON.stringify(filters), revision]);
 
   let content = null;
+  const requiresAnalytics = [
+    "Dashboard", "Analisis Faktor Risiko", "Tren Tekanan Darah", "Laporan & Ringkasan",
+  ].includes(page);
 
-  // Dashboard tidak bergantung pada berhasilnya API model demo.
-  if (!loading && summary) {
+  // Pengelolaan data dan prediksi tetap tersedia saat analitik gagal.
+  if (!requiresAnalytics || (!loading && summary)) {
     switch (page) {
       case "Dashboard":
         content = (
@@ -233,9 +236,9 @@ export default function App() {
           </Notice>
         )}
 
-        {loading ? <Loading /> : content}
+        {loading && requiresAnalytics ? <Loading /> : content}
 
-        {!loading && !summary && !error && (
+        {requiresAnalytics && !loading && !summary && !error && (
           <Notice tone="warning">
             Data analitik belum tersedia.
             Periksa endpoint /api/analytics.

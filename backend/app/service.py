@@ -12,6 +12,7 @@ COLUMNS = ["id_partisipan", "tanggal", "usia", "jenis_kelamin", "kecamatan", "bm
 # The legacy CSV minimum did not require these two fields, but the dashboard uses them.
 REQUIRED = ["tanggal", "kecamatan", "jenis_kelamin", "usia", "bmi", "aktivitas_fisik_hari_per_minggu", "pola_makan", "jam_tidur", "merokok", "sistolik", "diastolik"]
 DEFAULTS = {"tingkat_stres": 5}
+PARTICIPANT_FIELDS = ["usia", "jenis_kelamin", "bmi", "aktivitas_fisik_hari_per_minggu", "pola_makan", "jam_tidur", "tingkat_stres", "merokok"]
 P_STATE = ["Normal", "Pra-hipertensi", "Hipertensi Tahap 1", "Hipertensi Tahap 2"]
 COLORS = ["#22b36b", "#fbbf3a", "#ef5b5b", "#d6232f"]
 
@@ -58,8 +59,8 @@ def validate_frame(raw: pd.DataFrame) -> pd.DataFrame:
     for col in ("usia", "jenis_kelamin", "bmi", "aktivitas_fisik_hari_per_minggu", "pola_makan", "jam_tidur", "tingkat_stres", "merokok"):
         if (df.groupby("id_partisipan")[col].nunique() > 1).any():
             raise DataValidationError(f"Nilai {col} harus konsisten untuk setiap id_partisipan")
-    for col in ("id_partisipan", "jenis_kelamin", "kecamatan", "pola_makan", "merokok"):
-        if df[col].str.len().max() > (40 if col == "id_partisipan" else 80):
+    for col, max_length in {"id_partisipan": 40, "jenis_kelamin": 32, "kecamatan": 80, "pola_makan": 50, "merokok": 12}.items():
+        if df[col].str.len().max() > max_length:
             raise DataValidationError(f"Teks pada {col} terlalu panjang")
     df["status_hipertensi"] = [klasifikasi_tekanan(s, d) for s, d in zip(df.sistolik, df.diastolik)]
     return df[COLUMNS].reset_index(drop=True)
@@ -100,6 +101,52 @@ def replace_data(db: Session, raw: pd.DataFrame, name: str, kind: str) -> int:
 def seed_if_empty(db: Session):
     if db.scalar(select(DatasetState.id).limit(1)) is None:
         replace_data(db, buat_data_hipertensi_demo(), "Dataset demo (sintetis)", "demo")
+
+
+def save_measurement(db: Session, values: dict, measurement: FaktaPengukuran | None = None) -> dict:
+    """Validate before writing; keep fact IDs stable and share participant attributes."""
+    row = validate_frame(pd.DataFrame([values])).to_dict("records")[0]
+    current = get_frame(db)
+    if measurement is not None:
+        current = current[current.id != measurement.id].copy()
+        # Editing participant attributes applies to their other measurements too.
+        same_participant = current.id_partisipan == row["id_partisipan"]
+        for field in PARTICIPANT_FIELDS:
+            current.loc[same_participant, field] = row[field]
+    candidate = pd.DataFrame([row]) if current.empty else pd.concat(
+        [current[COLUMNS], pd.DataFrame([row])], ignore_index=True
+    )
+    validate_frame(candidate)
+
+    participant = db.scalar(select(DimPartisipan).where(DimPartisipan.id_partisipan == row["id_partisipan"]))
+    if participant is None:
+        participant = DimPartisipan(id_partisipan=row["id_partisipan"])
+        db.add(participant)
+    for field in PARTICIPANT_FIELDS:
+        setattr(participant, field, row[field])
+
+    day = row["tanggal"]
+    date_dim = db.scalar(select(DimTanggal).where(DimTanggal.tanggal == day))
+    if date_dim is None:
+        date_dim = DimTanggal(tanggal=day, tahun=day.year, bulan=day.month, hari=day.day)
+        db.add(date_dim)
+    location = db.scalar(select(DimKecamatan).where(DimKecamatan.kecamatan == row["kecamatan"]))
+    if location is None:
+        location = DimKecamatan(kecamatan=row["kecamatan"])
+        db.add(location)
+    db.flush()
+
+    if measurement is None:
+        measurement = FaktaPengukuran()
+        db.add(measurement)
+    measurement.partisipan_id = participant.id
+    measurement.tanggal_id = date_dim.id
+    measurement.kecamatan_id = location.id
+    measurement.sistolik = row["sistolik"]
+    measurement.diastolik = row["diastolik"]
+    measurement.status_hipertensi = row["status_hipertensi"]
+    db.commit()
+    return {"id": measurement.id, **records(pd.DataFrame([row]))[0]}
 
 def get_frame(db: Session) -> pd.DataFrame:
     q = select(FaktaPengukuran.id, DimPartisipan.id_partisipan, DimTanggal.tanggal,

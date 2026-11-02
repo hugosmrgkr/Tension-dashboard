@@ -51,7 +51,7 @@ npm run dev
 ```
 
 - React dev: http://localhost:5173
-- Swagger API dev: http://localhost:8000/docs
+- Swagger API dev: http://localhost:8000/api/docs
 - Vite mem-proxy `/api` ke FastAPI di port 8000.
 
 ## Arsitektur
@@ -114,7 +114,7 @@ Filter query: `awal`, `akhir`, `kecamatan`, `jenis_kelamin`, `kelompok_usia`, `i
 
 - State upload tidak lagi hanya di sesi browser; data tersimpan di PostgreSQL.
 - Untuk mutu dan konsistensi dimensi, `id_partisipan + tanggal` harus unik. Atribut tetap satu partisipan harus konsisten; perubahan BMI/usia/gaya hidup melalui satu baris akan diterapkan pada seluruh riwayat partisipan tersebut agar dimensi tetap konsisten. Status dari data upload **dihitung ulang** berdasarkan sistolik/diastolik.
-- Edit/hapus pada web dikerjakan sebagai **rebuild dataset kecil** untuk menjaga integritas dimensional. Saat dataset besar, ganti dengan incremental ETL/UPDATE transaksi yang lebih efisien.
+- Tambah/edit/hapus pada web memperbarui baris terkait dan mempertahankan ID pengukuran lain. Edit atribut partisipan memperbarui dimensi bersama untuk seluruh riwayat partisipan tersebut. Upload/reset tetap mengganti seluruh dataset; validasi dan analitik masih membaca dataset ke Pandas.
 - `kelompok_usia` mengikuti 5 bucket asli 15–24 hingga 55–64. Upload dibatasi usia 15–64 pada prototipe ini.
 - Tidak ada fitur autentikasi/otorisasi. Untuk data kesehatan asli, **wajib** menambahkan auth, logging audit, keamanan transport, retensi dan pemenuhan ketentuan privasi sebelum dipublikasikan.
 
@@ -132,7 +132,7 @@ pip install -r requirements.txt pytest httpx
 python -m pytest -q
 ```
 
-Uji backend dengan SQLite sementara. Uji PostgreSQL melalui Docker Compose bila Docker tersedia. Untuk deployment publik, siapkan domain HTTPS, konfigurasi CORS, autentikasi, dan secret yang aman.
+Uji backend menggunakan SQLite in-memory terisolasi per test, tanpa mengubah dataset aktif. Uji PostgreSQL melalui Docker Compose bila Docker tersedia. Untuk deployment publik, siapkan domain HTTPS, konfigurasi CORS, autentikasi, dan secret yang aman.
 
 ## Catatan penggunaan AI
 

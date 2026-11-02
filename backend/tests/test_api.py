@@ -1,21 +1,39 @@
 """API smoke/integration tests. Run from backend dir: pytest -q."""
 import io
 import os
-from pathlib import Path
-
-os.environ["DATABASE_URL"] = "sqlite:///" + str(Path(__file__).parent / "test_toba.db")
+# Import the app with an in-memory URL; fixtures replace its engine/session.
+os.environ["DATABASE_URL"] = "sqlite://"
 
 import pandas as pd
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine, event
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
+from app import main
+from app.db import get_db
 from app.main import app
 from app.data_utils import buat_data_hipertensi_demo
 
 @pytest.fixture
-def client():
-    with TestClient(app) as c:
-        c.post("/api/data/reset")
-        yield c
+def client(monkeypatch):
+    engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
+    @event.listens_for(engine, "connect")
+    def enable_foreign_keys(connection, record):
+        connection.execute("PRAGMA foreign_keys=ON")
+    sessions = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+    monkeypatch.setattr(main, "engine", engine)
+    monkeypatch.setattr(main, "SessionLocal", sessions)
+    def test_db():
+        with sessions() as db:
+            yield db
+    app.dependency_overrides[get_db] = test_db
+    try:
+        with TestClient(app) as c:
+            yield c
+    finally:
+        app.dependency_overrides.pop(get_db, None)
+        engine.dispose()
 
 
 def test_seed_matches_generator(client):
@@ -90,3 +108,112 @@ def test_create_record_and_excel(client):
     assert r.status_code==200,r.text
     excel=client.get('/api/data/export?format=xlsx')
     assert excel.status_code==200 and excel.content.startswith(b'PK')
+
+
+def measurement_values(row):
+    return {key: value for key, value in row.items() if key not in ("id", "status_hipertensi")}
+
+
+def test_edit_keeps_fact_ids_and_reclassifies(client):
+    before = client.get("/api/measurements?id_partisipan=P001&page_size=1000").json()["rows"]
+    first = before[0]
+    values = measurement_values(first)
+    values.update(bmi=29.5, sistolik=175)
+    result = client.put(f"/api/measurements/{first['id']}", json=values)
+    assert result.status_code == 200, result.text
+    assert result.json()["id"] == first["id"]
+    assert result.json()["status_hipertensi"] == "Hipertensi Tahap 2"
+    after = client.get("/api/measurements?id_partisipan=P001&page_size=1000").json()["rows"]
+    assert [row["id"] for row in after] == [row["id"] for row in before]
+    assert all(row["bmi"] == 29.5 for row in after)
+    assert after[1]["sistolik"] == before[1]["sistolik"]
+
+
+def test_invalid_mutations_leave_dataset_unchanged(client):
+    before = client.get("/api/measurements?page_size=2").json()["rows"]
+    duplicate = measurement_values(before[0])
+    assert client.post("/api/measurements", json=duplicate).status_code == 422
+    duplicate["bmi"] = 31.5
+    # Moving another measurement onto this same participant/date must fail atomically.
+    assert client.put(f"/api/measurements/{before[1]['id']}", json=duplicate).status_code == 422
+    after = client.get("/api/measurements?page_size=2").json()["rows"]
+    assert after == before
+    assert client.get("/api/meta").json()["total_rows"] == 750
+
+
+def test_reject_inconsistent_participant_on_create(client):
+    row = client.get("/api/measurements?page_size=1").json()["rows"][0]
+    values = measurement_values(row)
+    values.update(tanggal="2025-11-01", bmi=31.5)
+    assert client.post("/api/measurements", json=values).status_code == 422
+    values["bmi"] = row["bmi"]
+    result = client.post("/api/measurements", json=values)
+    assert result.status_code == 200, result.text
+    assert result.json()["id"] != row["id"]
+
+
+@pytest.mark.parametrize("filename,content", [
+    ("bad.csv", b"x,y\n1,2\n"),
+    ("empty.csv", b""),
+    ("bad.xlsx", b"not an excel workbook"),
+    ("data.txt", b"x,y\n1,2\n"),
+])
+def test_invalid_upload_preserves_data(client, filename, content):
+    before = client.get("/api/analytics").json()
+    response = client.post("/api/data/upload", files={"file": (filename, content)})
+    assert response.status_code == 422
+    assert client.get("/api/analytics").json() == before
+
+
+def test_upload_excel_and_filtered_exports(client):
+    sample = buat_data_hipertensi_demo().iloc[:3]
+    workbook = io.BytesIO()
+    sample.to_excel(workbook, index=False)
+    response = client.post("/api/data/upload", files={"file": ("sample.xlsx", workbook.getvalue())})
+    assert response.status_code == 200, response.text
+    participant = sample.iloc[0]["id_partisipan"]
+    csv = client.get(f"/api/data/export?format=csv&id_partisipan={participant}")
+    exported = pd.read_csv(io.BytesIO(csv.content))
+    assert exported.id_partisipan.tolist() == [participant]
+    assert "id" not in exported.columns
+    excel = client.get(f"/api/data/export?format=xlsx&id_partisipan={participant}")
+    assert pd.read_excel(io.BytesIO(excel.content)).id_partisipan.tolist() == [participant]
+    report = client.get(f"/api/data/export?format=txt&id_partisipan={participant}")
+    assert report.status_code == 200
+    assert "Total partisipan: 1" in report.text
+    assert "sample.xlsx" in report.text
+
+
+def test_delete_last_measurement_and_reset(client):
+    csv = buat_data_hipertensi_demo().iloc[:1].to_csv(index=False).encode()
+    assert client.post("/api/data/upload", files={"file": ("one.csv", csv)}).status_code == 200
+    row = client.get("/api/measurements").json()["rows"][0]
+    assert client.delete(f"/api/measurements/{row['id']}").status_code == 200
+    assert client.get("/api/meta").json()["total_rows"] == 0
+    assert client.get("/api/analytics").json()["empty"] is True
+    assert client.get("/api/measurements").json()["rows"] == []
+    for format in ("csv", "xlsx", "txt"):
+        assert client.get(f"/api/data/export?format={format}").status_code == 200
+    reset = client.post("/api/data/reset")
+    assert reset.status_code == 200 and reset.json()["rows"] == 750
+    assert client.get("/api/meta").json()["source_kind"] == "demo"
+
+
+@pytest.mark.parametrize("query", ["page=0", "page_size=0", "page_size=1001", "awal=bad-date"])
+def test_invalid_measurement_queries(client, query):
+    assert client.get("/api/measurements?" + query).status_code == 422
+
+
+def test_missing_measurements_and_invalid_export(client):
+    values = measurement_values(client.get("/api/measurements?page_size=1").json()["rows"][0])
+    assert client.put("/api/measurements/999999", json=values).status_code == 404
+    assert client.delete("/api/measurements/999999").status_code == 404
+    assert client.get("/api/data/export?format=pdf").status_code == 422
+
+
+def test_upload_text_lengths_match_database(client):
+    sample = buat_data_hipertensi_demo().iloc[:1].copy()
+    sample["merokok"] = "x" * 13
+    response = client.post("/api/data/upload", files={"file": ("bad.csv", sample.to_csv(index=False).encode())})
+    assert response.status_code == 422
+    assert client.get("/api/meta").json()["total_rows"] == 750
