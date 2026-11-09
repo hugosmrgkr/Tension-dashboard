@@ -105,7 +105,7 @@ def test_schema_mismatch(source_pair):
 def test_pressure_readings_mean_counts_and_anomalies(source_pair):
     source_pair[1].iloc[0,4]='invalid'
     p,d,s,q=prepare(*source_pair)
-    assert s[0]['sbp1'] is None and s[0]['sbp_mean']==float(source_pair[1].iloc[0,6])
+    assert s[0]['sbp1'] is None and s[0]['sbp_mean'] is None  # partial paired reading requires review
     assert s[0]['valid_sbp_count']==1 and q['invalid_bp_count']==1
     source_pair[1].iloc[0,6]='invalid'
     _,_,s,q=prepare(*source_pair)

@@ -1,0 +1,97 @@
+{
+  "active_warehouse_unchanged": true,
+  "active_natural_content_sha256": "2c72512aed5d6c4f1e124f1be7ec47a03d0635fe2a6579fe6c3a7edd9c14c267",
+  "protected_files_unchanged": {
+    ".env": true,
+    "notebooks/02_eda_data_readiness.ipynb": true,
+    "data/Dataset_Sintetis_Tekanan_Darah_REFERENSI.xlsx": true,
+    "data/README.md": true,
+    "data/sample/Data_Harian_Sintetis.csv": true,
+    "data/sample/Data_Responden_Sintetis.csv": true
+  },
+  "backend-windows-final.xml": {
+    "tests": 74,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1
+  },
+  "backend-linux-postgresql-final.xml": {
+    "tests": 74,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1
+  },
+  "frontend-final.xml": {
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "browser": {
+    "startTime": "2026-11-09T12:54:54.784Z",
+    "duration": 36060.112,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "checkout-windows-final.json": {
+    "platform": "win32",
+    "git_checkout_index": true,
+    "real_repository_index_modified": false,
+    "results": [
+      {
+        "available": true,
+        "prediction_status": 200,
+        "run_id": "5d3bed0d6591cd2bc09d",
+        "metrics_crlf": 0,
+        "git_core_autocrlf": "false",
+        "binary_sha256_unchanged": true
+      },
+      {
+        "available": true,
+        "prediction_status": 200,
+        "run_id": "5d3bed0d6591cd2bc09d",
+        "metrics_crlf": 0,
+        "git_core_autocrlf": "true",
+        "binary_sha256_unchanged": true
+      }
+    ]
+  },
+  "checkout-linux-final.json": {
+    "platform": "linux",
+    "git_checkout_index": true,
+    "real_repository_index_modified": false,
+    "results": [
+      {
+        "available": true,
+        "prediction_status": 200,
+        "run_id": "5d3bed0d6591cd2bc09d",
+        "metrics_crlf": 0,
+        "git_core_autocrlf": "false",
+        "binary_sha256_unchanged": true
+      },
+      {
+        "available": true,
+        "prediction_status": 200,
+        "run_id": "5d3bed0d6591cd2bc09d",
+        "metrics_crlf": 0,
+        "git_core_autocrlf": "true",
+        "binary_sha256_unchanged": true
+      }
+    ]
+  },
+  "production_build": {
+    "passed": true,
+    "modules": 1592,
+    "asset": "index-aka-j8hL.js",
+    "warnings": [
+      "Plotly bundle larger than 500 kB"
+    ]
+  },
+  "notebook": {
+    "code_cells": 6,
+    "png_outputs": 3,
+    "errors": 0
+  }
+}

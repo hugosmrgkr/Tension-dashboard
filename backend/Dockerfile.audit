@@ -1,0 +1,7 @@
+FROM python:3.12-slim
+WORKDIR /workspace
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 MPLBACKEND=Agg MPLCONFIGDIR=/tmp/audit-matplotlib
+COPY requirements.txt requirements-dev.txt /tmp/cp2-deps/
+RUN pip install --no-cache-dir -r /tmp/cp2-deps/requirements-dev.txt
+RUN apt-get update && apt-get install -y --no-install-recommends git
+CMD ["python", "-m", "pytest", "backend/tests", "-q", "-p", "no:cacheprovider"]

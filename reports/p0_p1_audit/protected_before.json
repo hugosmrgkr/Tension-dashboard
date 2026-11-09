@@ -1,0 +1,8 @@
+{
+  ".env": null,
+  "notebooks/02_eda_data_readiness.ipynb": "9d8c172dcbe8666412c7b2b794633f4ba92405f634f278777f03a7d21f62f6c8",
+  "data/Dataset_Sintetis_Tekanan_Darah_REFERENSI.xlsx": "23bdbd74d39ea03d3fb53c7908b513a02b726d965e00a0a83f7ebbaa16791156",
+  "data/README.md": "8dac05ce514708c8fb8f17596861934e0fd654b9f3e0e950763c9701bde6d45c",
+  "data/sample/Data_Harian_Sintetis.csv": "a7814c628642c82c51e9ed05c11da56f4441f3a211c721a0e83b0414e163ad2d",
+  "data/sample/Data_Responden_Sintetis.csv": "e08d7bcbfc1130d7fbe1d098f33c4a8229d78c7b2afac8ddfc8a4861062ca53f"
+}

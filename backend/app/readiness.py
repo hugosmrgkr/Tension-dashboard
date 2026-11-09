@@ -23,7 +23,7 @@ def dictionary_markdown():
            'Setiap sesi menyimpan dua pembacaan sistolik dan diastolik. Usia/BMI berasal dari profil; '
            'perilaku dan stres berasal dari hari pengamatan.',
            'Missing kosong/NaN/None/NaT tetap NA; tidak diimputasi nol. ID atau tanggal tidak valid, '
-           'ID tanpa profil, serta duplikasi berikutnya dikarantina pada tingkat baris. '
+           'ID tanpa profil dikarantina; duplikat identik disisakan satu dan konflik seluruh versinya dikarantina. '
            'Sel non-kunci invalid menjadi NA dengan issue. Timestamp hanya metadata audit; nama dikeluarkan.']
     for title, headers, specs in [('Form Awal',EXPECTED_PROFILE_HEADERS,PROFILE_FIELDS),('Form Harian',EXPECTED_DAILY_HEADERS,DAILY_FIELDS)]:
         rows=[]
@@ -39,8 +39,8 @@ def dictionary_markdown():
         markdown_table(['Kolom','Rumus / asal','Grain / perlakuan'],[
             ['bmi','weight_kg / (height_cm/100)^2, dibulatkan 3 desimal','Profil; NA jika tinggi/berat tidak valid'],
             ['conditions_json','11 kunci riwayat pada Form Awal kolom 10–20','Profil; setiap jawaban kosong tetap null'],
-            ['sbp_mean / dbp_mean','Rata-rata pembacaan tersedia yang lolos validasi, terpisah per variabel','ID × tanggal × sesi; semua pembacaan hilang → NA'],
-            ['valid_sbp_count / valid_dbp_count','Jumlah pembacaan valid 0–2','Sesi valid untuk analitik bila kedua hitungan minimal 1'],
+            ['sbp_mean / dbp_mean','Rerata pasangan nomor pembacaan sama yang lolos gate teknis','Sesi ambigu, parsial atau tidak konsisten: NA pending_review; raw dipertahankan'],
+            ['valid_sbp_count / valid_dbp_count','Jumlah komponen numerik 0-2; bukan status sesi','is_valid memakai bp_policy, bukan sekadar kedua hitungan > 0'],
             ['session','Pagi/Malam dari pasangan kolom sumber','Bukan pertanyaan baru; pemisahan struktur wide → long'],
             ['year/month/day','Komponen tanggal pengamatan','Dimensi tanggal'],
             ['ID surrogate / FK','Dibuat database, bukan ID responden baru','PK teknis, berbeda dari respondent_id sumber'],
@@ -52,11 +52,22 @@ def dictionary_markdown():
         '- Multi-pilihan aktivitas umum tidak dipisahkan dengan koma: label pilihan juga mengandung koma.\n'
         '- Mapping khusus fixture sintetis: `4�7 jam`/`4-7 jam` → `4–7 jam`; `8�10 jam`/`8-10 jam` → `8–10 jam`. Raw tidak diubah. Mapping karakter rusak ini tidak diterapkan otomatis pada data aktual.\n'
         '- Tidur sintetis `06:30` → 6,5 jam. Pecahan 0<x<1 ditandai ambigu (dapat berupa pecahan hari Excel), tidak dikali 24 atau dianggap jam otomatis. Data aktual seluruhnya menunggu keputusan semantik.\n'
-        '- Rentang BP 60–260 sistolik, 35–170 diastolik adalah pagar teknis proyek, bukan pedoman diagnosis. Nilai di luar pagar menjadi NA dengan alasan; sumber mentah tetap ada. IQR dan SBP≤DBP hanya flag review.\n'
+        '- Rentang BP 60–260 sistolik, 35–170 diastolik adalah pagar teknis proyek, bukan pedoman diagnosis. Nilai di luar pagar menjadi NA dengan alasan; sumber mentah tetap ada. SBP≤DBP ditahan pending_review; IQR tetap flag deskriptif pada simulasi.\n'
         '- Tidak ada kriteria inklusi usia final yang dipaksakan. Usia teknis 0–120; kelayakan responden ditentukan terpisah bersama dosen.\n'
         '- Semua perubahan kategori/satuan dapat ditelusuri lewat laporan normalisasi dan hash sumber. Tidak ada identitas langsung dalam keluaran analitik.'
     ])
-    return '\n\n'.join(parts)+'\n'
+    parts.append('''## Klarifikasi final P0/P1 - mengikat API, ETL dan baseline
+
+- Gate `paired-reading-review-v1` adalah gate teknis sementara, bukan aturan klinis. Pasangan harus pada nomor yang sama; komponen silang/parsial, nilai di luar pagar teknis lama, SBP<=DBP, atau derived NA dari review tidak masuk rerata/model. Nilai mentah sumber tetap ada; keputusan minimum bacaan dan protokol penelitian menunggu dosen.
+- `review_status` API: ready / incomplete / pending_review; `review_reasons`, `valid_pair_count`, `is_valid` dihitung saat serving. Tidak ada migrasi/penghapusan DB aktif.
+- Responden aktif = ID dengan sedikitnya satu catatan harian diterima ETL pada filter; `respondents_with_valid_bp` berbeda. Catatan tanpa BP tetap aktif harian; mean BP NA dan grafik kosong, bukan dummy.
+- Duplikat identik: satu dipakai, pengulangan diaudit. Konflik jawaban pada kunci sama: semua versi dikarantina, tanpa memilih first/last/timestamp. Koreksi perlu input bersih berversi + decision log; raw tidak ditimpa.
+- Tanggal mencurigakan menurut pagar teknis lama 2024-2030 atau sesudah timestamp pengiriman dikarantina, bukan diperbaiki/ditebak. Batas tersebut bukan kriteria ilmiah baru.
+- IQR pada sumber sintetis tetap flag deskriptif; bukan diagnosis dan tidak otomatis dihapus. Commit aktual dengan issues/karantina/IQR belum diselesaikan ditolak quality gate. Arti tidur aktual masih pending.
+- Header dikenali secara eksplisit: BOM/spasi/kapital/CRLF aman; urutan/pertanyaan baru atau kolom hilang ditolak. Ekspor aktual belum tersedia untuk membuktikan mapping final; jangan mengira pemetaan bebas berdasarkan posisi.
+- Ekspor CSV mengawali teks berpotensi formula spreadsheet dengan apostrof. Ini pelindung ekspor, bukan pengubahan nilai database.
+''')
+    return '\n\n'.join(parts).rstrip()+'\n'
 
 
 def analyze(profiles,days,sessions,quality):
@@ -192,7 +203,7 @@ def quality_markdown(quality, manifest):
               markdown_table(['Sesi','Variabel','n','Q1','Q3','Batas bawah IQR','Batas atas IQR','Ditandai'],
                   [[r[k] for k in ['session','field','n','q1','q3','lower','upper','flagged']] for r in q['pressure_anomalies']['summaries']]),
               f"{q['pressure_anomalies']['flagged_sessions']} sesi memiliki sedikitnya satu flag IQR; "
-              f"{q['invalid_bp_count']} sel BP invalid. IQR dan SBP≤DBP tidak otomatis menghapus sesi. "
+              f"{q['invalid_bp_count']} sel BP invalid. IQR tidak otomatis menghapus sesi; SBP≤DBP ditahan dari analisis pending_review, dengan raw dipertahankan. "
               'Pagar numerik teknis, nilai invalid, dan alasan dapat ditelusuri ke baris sumber. Batas tersebut bukan kriteria diagnosis.',
               '## Issue dan keputusan',
               markdown_table(['Kode','Jumlah'],sorted(q['issue_counts'].items())) if q['issue_counts'] else 'Tidak ditemukan issue tipe/rentang/konsistensi pada fixture ini; missing yang disengaja tetap dilaporkan.',
@@ -213,4 +224,15 @@ def findings_markdown(eda):
     parts.append('Denominator profil adalah orang; sesi adalah ID-tanggal-sesi; korelasi menggunakan catatan ID-tanggal. '
                  'Korelasi pairwise mengabaikan NA per pasangan; tidak terdefinisi bila varians nol atau data tidak cukup. '
                  'Sampel berulang tidak dianggap observasi independen. Tidak ada inferensi statistik atau training model pada CP2 ini.')
+    parts.append('''## Klarifikasi final P0/P1 - mengikat API, ETL dan baseline
+
+- Gate `paired-reading-review-v1` adalah gate teknis sementara, bukan aturan klinis. Pasangan harus pada nomor yang sama; komponen silang/parsial, nilai di luar pagar teknis lama, SBP<=DBP, atau derived NA dari review tidak masuk rerata/model. Nilai mentah sumber tetap ada; keputusan minimum bacaan dan protokol penelitian menunggu dosen.
+- `review_status` API: ready / incomplete / pending_review; `review_reasons`, `valid_pair_count`, `is_valid` dihitung saat serving. Tidak ada migrasi/penghapusan DB aktif.
+- Responden aktif = ID dengan sedikitnya satu catatan harian diterima ETL pada filter; `respondents_with_valid_bp` berbeda. Catatan tanpa BP tetap aktif harian; mean BP NA dan grafik kosong, bukan dummy.
+- Duplikat identik: satu dipakai, pengulangan diaudit. Konflik jawaban pada kunci sama: semua versi dikarantina, tanpa memilih first/last/timestamp. Koreksi perlu input bersih berversi + decision log; raw tidak ditimpa.
+- Tanggal mencurigakan menurut pagar teknis lama 2024-2030 atau sesudah timestamp pengiriman dikarantina, bukan diperbaiki/ditebak. Batas tersebut bukan kriteria ilmiah baru.
+- IQR pada sumber sintetis tetap flag deskriptif; bukan diagnosis dan tidak otomatis dihapus. Commit aktual dengan issues/karantina/IQR belum diselesaikan ditolak quality gate. Arti tidur aktual masih pending.
+- Header dikenali secara eksplisit: BOM/spasi/kapital/CRLF aman; urutan/pertanyaan baru atau kolom hilang ditolak. Ekspor aktual belum tersedia untuk membuktikan mapping final; jangan mengira pemetaan bebas berdasarkan posisi.
+- Ekspor CSV mengawali teks berpotensi formula spreadsheet dengan apostrof. Ini pelindung ekspor, bukan pengubahan nilai database.
+''')
     return '\n\n'.join(parts)+'\n'

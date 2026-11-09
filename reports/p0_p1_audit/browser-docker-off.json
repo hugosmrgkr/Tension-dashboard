@@ -1,0 +1,612 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\@playwright\\test\\cli.js",
+      "test"
+    ],
+    "configFile": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\playwright.config.js",
+    "rootDir": "D:/SEMESTER 5_TRPL/Data Analyst (DALIS)/PROYEK DASI_DALIS/Tension-dashboard/frontend/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/SEMESTER 5_TRPL/Data Analyst (DALIS)/PROYEK DASI_DALIS/Tension-dashboard/reports/p0_p1_audit/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/SEMESTER 5_TRPL/Data Analyst (DALIS)/PROYEK DASI_DALIS/Tension-dashboard/frontend/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser",
+        "snapshotDir": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 90000,
+        "use": {
+          "baseURL": "http://127.0.0.1:8082",
+          "channel": "msedge",
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "screenshot": "only-on-failure",
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../reports/p0_p1_audit/browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "dashboard.spec.js",
+      "file": "dashboard.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "verified baseline scores match raw predictions and evaluation UI",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 464,
+                  "error": {
+                    "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/#Evaluasi%20Model\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/#Evaluasi%20Model\", waiting until \"load\"\u001b[22m\n",
+                    "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/#Evaluasi%20Model\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/#Evaluasi%20Model\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:11:14)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:15)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:17)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:22)",
+                    "location": {
+                      "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                      "column": 14,
+                      "line": 11
+                    }
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                        "column": 14,
+                        "line": 11
+                      },
+                      "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/#Evaluasi%20Model\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/#Evaluasi%20Model\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:11:14)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:15)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:17)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:22)"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T12:52:11.073Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-verified-baselin-a8725-edictions-and-evaluation-UI\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-verified-baselin-a8725-edictions-and-evaluation-UI\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                    "column": 14,
+                    "line": 11
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a1bb41a2bd6df77ed2f7-b824ee09d05d549d1cf9",
+          "file": "dashboard.spec.js",
+          "line": 10,
+          "column": 1
+        },
+        {
+          "title": "8 desktop pages render real read-only PostgreSQL data and the baseline API",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 534,
+                  "error": {
+                    "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n",
+                    "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:27:14)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:9)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:11)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:7)",
+                    "location": {
+                      "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                      "column": 14,
+                      "line": 27
+                    }
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                        "column": 14,
+                        "line": 27
+                      },
+                      "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:27:14)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:9)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:11)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:7)"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T12:52:18.505Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-8-desktop-pages--adb02-L-data-and-the-baseline-API\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-8-desktop-pages--adb02-L-data-and-the-baseline-API\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-8-desktop-pages--adb02-L-data-and-the-baseline-API\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                    "column": 14,
+                    "line": 27
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a1bb41a2bd6df77ed2f7-cd9fead1c0049cfa934f",
+          "file": "dashboard.spec.js",
+          "line": 24,
+          "column": 1
+        },
+        {
+          "title": "chart cross-filter, date/ID/session filters and CSV download share the same scope",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 399,
+                  "error": {
+                    "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n",
+                    "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:49:14)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:15)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:17)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:22)",
+                    "location": {
+                      "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                      "column": 14,
+                      "line": 49
+                    }
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                        "column": 14,
+                        "line": 49
+                      },
+                      "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:49:14)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:15)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:17)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:22)"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T12:52:20.303Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-chart-cross-filt-569ac-wnload-share-the-same-scope\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-chart-cross-filt-569ac-wnload-share-the-same-scope\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                    "column": 14,
+                    "line": 49
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a1bb41a2bd6df77ed2f7-1429c0317bd21b285277",
+          "file": "dashboard.spec.js",
+          "line": 48,
+          "column": 1
+        },
+        {
+          "title": "province chart drills into a city and demographic filters remain global",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 556,
+                  "error": {
+                    "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n",
+                    "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:69:14)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:15)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:17)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:22)",
+                    "location": {
+                      "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                      "column": 14,
+                      "line": 69
+                    }
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                        "column": 14,
+                        "line": 69
+                      },
+                      "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:69:14)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:15)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:17)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:22)"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T12:52:21.933Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-province-chart-d-71039-aphic-filters-remain-global\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-province-chart-d-71039-aphic-filters-remain-global\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-province-chart-d-71039-aphic-filters-remain-global\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                    "column": 14,
+                    "line": 69
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a1bb41a2bd6df77ed2f7-8cbc5d3aff7caf7a3557",
+          "file": "dashboard.spec.js",
+          "line": 68,
+          "column": 1
+        },
+        {
+          "title": "mobile layout and navigation work on all 8 pages without horizontal overflow",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 515,
+                  "error": {
+                    "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n",
+                    "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:83:65)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:9)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:11)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:7)",
+                    "location": {
+                      "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                      "column": 65,
+                      "line": 83
+                    }
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                        "column": 65,
+                        "line": 83
+                      },
+                      "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:83:65)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:9)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:11)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:7)"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T12:52:23.724Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-mobile-layout-an-a3273-without-horizontal-overflow\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-mobile-layout-an-a3273-without-horizontal-overflow\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-mobile-layout-an-a3273-without-horizontal-overflow\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                    "column": 65,
+                    "line": 83
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a1bb41a2bd6df77ed2f7-c10c0bdbbe85d4f92c47",
+          "file": "dashboard.spec.js",
+          "line": 82,
+          "column": 1
+        },
+        {
+          "title": "all 8 pages show an informative empty state without KPI or charts",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 452,
+                  "error": {
+                    "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n",
+                    "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:98:14)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:9)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:11)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:7)",
+                    "location": {
+                      "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                      "column": 14,
+                      "line": 98
+                    }
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                        "column": 14,
+                        "line": 98
+                      },
+                      "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:98:14)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:9)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:11)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:7)"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T12:52:25.545Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-all-8-pages-show-f29da-state-without-KPI-or-charts\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-all-8-pages-show-f29da-state-without-KPI-or-charts\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                    "column": 14,
+                    "line": 98
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a1bb41a2bd6df77ed2f7-7541b6d3d07f63586e50",
+          "file": "dashboard.spec.js",
+          "line": 95,
+          "column": 1
+        },
+        {
+          "title": "API errors and filters with no observations never fabricate charts",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 543,
+                  "error": {
+                    "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n",
+                    "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:109:14)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:9)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:11)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:7)",
+                    "location": {
+                      "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                      "column": 14,
+                      "line": 109
+                    }
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                        "column": 14,
+                        "line": 109
+                      },
+                      "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js:109:14)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1646:9)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1135:11)\n    at D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\node_modules\\playwright\\lib\\worker\\workerProcessEntry.js:1644:7)"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T12:52:27.242Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-API-errors-and-f-719fa-ions-never-fabricate-charts\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-API-errors-and-f-719fa-ions-never-fabricate-charts\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\reports\\p0_p1_audit\\browser-artifacts\\dashboard-API-errors-and-f-719fa-ions-never-fabricate-charts\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\frontend\\tests\\browser\\dashboard.spec.js",
+                    "column": 14,
+                    "line": 109
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a1bb41a2bd6df77ed2f7-2d3580d3cfaae055556c",
+          "file": "dashboard.spec.js",
+          "line": 107,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-09T12:52:10.297Z",
+    "duration": 18039.834,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 7,
+    "flaky": 0
+  }
+}

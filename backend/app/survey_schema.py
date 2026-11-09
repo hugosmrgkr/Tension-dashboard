@@ -104,6 +104,8 @@ def parse_value(value, spec, synthetic=True):
         return None, None
     if spec["max_length"] and len(s) > spec["max_length"]:
         return None, "text_too_long"
+    if kind == "id" and any(character.isspace() or ord(character)<32 for character in s):
+        return None,"invalid_id_control_or_whitespace"
     if kind in ("number", "integer"):
         n = parse_numeric(s, spec["unit"], spec["bounds"], kind == "integer")
         return n, None if n is not None else "invalid_number_or_unit"

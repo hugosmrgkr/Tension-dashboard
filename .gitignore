@@ -1,4 +1,15 @@
 .env
+**/.env
+**/.env.*
+!**/.env.example
+data/actual/
+data/private/
+data/raw/
+credentials.json
+credentials-*.json
+service-account*.json
+*.pem
+*.key
 reports/.matplotlib/
 reports/.jupyter/
 __pycache__/

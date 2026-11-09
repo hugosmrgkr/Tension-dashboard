@@ -7,6 +7,9 @@ from .warehouse_audit import audit_warehouse
 def apply_validated(db,profiles,days,sessions,quality,*,kind,expected_current_hash=None,allow_source_change=False):
     if kind not in ('synthetic','actual'):
         raise DataQualityError('Jenis sumber harus synthetic atau actual')
+    if kind=='actual' and (quality.get('rejected_profiles',0) or quality.get('rejected_daily',0) or
+                          quality.get('issues') or quality.get('pressure_anomalies',{}).get('flagged_sessions',0)):
+        raise DataQualityError('Quality gate aktual: pending review; selesaikan keputusan dan koreksi sumber berversi sebelum commit. Tidak ada override diam-diam.')
     if db.bind.dialect.name=='postgresql':
         db.execute(text('SELECT pg_advisory_xact_lock(73421031)'))
     current=audit_warehouse(db)

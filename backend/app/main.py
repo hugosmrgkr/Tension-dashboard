@@ -109,5 +109,11 @@ def export(kind:Literal['sessions','daily','participants'],q:dict=Depends(query_
     result=analytics(db,q)
     rows=result['session_rows'] if kind=='sessions' else result['daily_rows'] if kind=='daily' else result['participants']
     df=pd.DataFrame(rows,columns=EXPORT_FIELDS[kind])
+    # Spreadsheet formula injection protection; raw database values stay untouched.
+    def safe_csv(value):
+        if isinstance(value,str) and value.lstrip().startswith(('=','+','-','@')):return "'"+value
+        if isinstance(value,str) and value.startswith(('\t','\r','\n')):return "'"+value
+        return value
+    for column in df.columns:df[column]=df[column].map(safe_csv)
     content=df.to_csv(index=False).encode('utf-8-sig')
     return StreamingResponse(BytesIO(content),media_type='text/csv',headers={'Content-Disposition':f'attachment; filename=toba_{kind}.csv'})

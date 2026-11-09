@@ -6,6 +6,14 @@ Prototipe interaktif untuk eksplorasi pola pengukuran tekanan darah **pagi dan m
 
 > **STATUS: DATA SINTETIS / SIMULASI.** Hasil tidak boleh dipakai sebagai kesimpulan kesehatan masyarakat maupun klaim performa pada pasien nyata.
 
+## Audit final P0/P1 setelah commit CP3
+
+Laporan paling baru: [docs/P0_P1_FINAL_AUDIT.md](docs/P0_P1_FINAL_AUDIT.md). Gate BP/API/model kini satu definisi; responden aktif dihitung dari ID-harian, dibedakan dari ID dengan BP valid. Pasangan silang, parsial atau tidak konsisten memakai `pending_review`, bukan klaim klinis. Duplikat konflik tidak memilih baris pertama.
+
+Artefak memakai manifest v3 dengan hash teks UTF-8/LF dan hash binary joblib ketat; `.gitattributes` menjaga checkout. Jangan menyunting metrik/hash manual atau melewati validasi. Sintetis dan aktual tetap terpisah; actual/private/raw serta dotenv/kredensial dilindungi Git. Quality gate aktual yang belum lolos review akan menolak commit.
+
+Laporan CP2/CP3 berikut adalah riwayat. Untuk definisi yang berubah, gunakan audit final dan dictionary terbaru. Uji kandidat checkout memakai repo/index temporary, bukan commit/push ke repo ini.
+
 ## CP3 final - demo tengah siap pada DATA SINTETIS
 
 Laporan final: [CP3_FINAL_REPORT.md](docs/CP3_FINAL_REPORT.md). Baseline: [CP3_BASELINE_REPORT.md](docs/CP3_BASELINE_REPORT.md). Persiapan presentasi: [CP3_DEMO_SCRIPT.md](docs/CP3_DEMO_SCRIPT.md), [checklist](docs/CP3_CHECKLIST.md), [progres](docs/CP3_PROGRESS_REPORT.md), [rencana CP4-CP5](docs/CP3_NEXT_STEPS.md).

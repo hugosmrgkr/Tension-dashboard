@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="8" skipped="0" tests="8" time="7.015" timestamp="2026-11-09T15:45:21.541483+07:00" hostname="HUGO-HMS10"><testcase classname="backend.tests.test_p0_p1_audit" name="test_artifacts_survive_lf_and_crlf_checkout" time="0.040"><failure message="AssertionError: Unavailable after checkout ending=b'\n'&#10;assert False">tmp_path = WindowsPath('C:/Users/TUF GAMING/AppData/Local/Temp/pytest-of-TUF GAMING/pytest-23/test_artifacts_survive_lf_and_0')
+
+    def test_artifacts_survive_lf_and_crlf_checkout(tmp_path):
+        for ending in [b'\n',b'\r\n']:
+            folder=tmp_path/('lf' if ending==b'\n' else 'crlf');folder.mkdir()
+            for source in (ROOT/'models').glob('baseline*.json'):
+                folder.joinpath(source.name).write_bytes(source.read_bytes().replace(b'\r\n',b'\n').replace(b'\n',ending))
+            shutil.copyfile(ROOT/'models/linear_regression_synthetic.joblib',folder/'linear_regression_synthetic.joblib')
+&gt;           assert load_experiment(folder)['available'],f'Unavailable after checkout ending={ending!r}'
+E           AssertionError: Unavailable after checkout ending=b'\n'
+E           assert False
+
+backend\tests\test_p0_p1_audit.py:21: AssertionError</failure></testcase><testcase classname="backend.tests.test_p0_p1_audit" name="test_cross_reading_components_are_pending_review" time="0.308"><failure message="assert (123.0 is None)">source_pair = (              Timestamp  ... 25. Dalam satu minggu biasa, berapa hari Anda melakukan aktivitas fisik yang membuat nap...= Rendah
+569  2026-09-30 21:47:00  ...                                         2 = Rendah
+
+[570 rows x 28 columns])
+
+    def test_cross_reading_components_are_pending_review(source_pair):
+        source_pair[1].iloc[0,5]='';source_pair[1].iloc[0,6]=''
+        p,d,s,q=prepare(*source_pair)
+        assert s[0]['sbp1'] is not None and s[0]['dbp2'] is not None
+&gt;       assert s[0]['sbp_mean'] is None and s[0]['dbp_mean'] is None
+E       assert (123.0 is None)
+
+backend\tests\test_p0_p1_audit.py:28: AssertionError</failure></testcase><testcase classname="backend.tests.test_p0_p1_audit" name="test_contradictory_bp_is_retained_but_not_aggregated" time="0.250"><failure message="assert (92.5 is None)">source_pair = (              Timestamp  ... 25. Dalam satu minggu biasa, berapa hari Anda melakukan aktivitas fisik yang membuat nap...= Rendah
+569  2026-09-30 21:47:00  ...                                         2 = Rendah
+
+[570 rows x 28 columns])
+
+    def test_contradictory_bp_is_retained_but_not_aggregated(source_pair):
+        source_pair[1].iloc[0,4]='65';source_pair[1].iloc[0,5]='100'
+        p,d,s,q=prepare(*source_pair)
+        assert s[0]['sbp1']==65 and s[0]['dbp1']==100
+&gt;       assert s[0]['sbp_mean'] is None and s[0]['dbp_mean'] is None
+E       assert (92.5 is None)
+
+backend\tests\test_p0_p1_audit.py:38: AssertionError</failure></testcase><testcase classname="backend.tests.test_p0_p1_audit" name="test_conflicting_duplicate_does_not_choose_first_answer" time="0.234"><failure message="AssertionError: assert (570 == 569)&#10; +  where 570 = len([{'respondent_id': 'SIM001', 'date': datetime.date(2026, 9, 1), 'activity_type': 'Tidak melakukan aktivitas fisik atau...pe': 'Pekerjaan fisik, seperti bertani, mengangkat barang, atau pekerjaan lapangan', 'activity_minutes': 90, ...}, ...])">source_pair = (              Timestamp  ... 25. Dalam satu minggu biasa, berapa hari Anda melakukan aktivitas fisik yang membuat nap...= Rendah
+569  2026-09-30 21:47:00  ...                                         2 = Rendah
+
+[570 rows x 28 columns])
+
+    def test_conflicting_duplicate_does_not_choose_first_answer(source_pair):
+        p,d=source_pair;duplicate=d.iloc[[0]].copy();duplicate.iloc[0,27]='5' if d.iloc[0,27]!='5' else '1'
+        joined=pd.concat([d,duplicate],ignore_index=True)
+        _,days,_,q=prepare(p,joined)
+&gt;       assert len(days)==569 and q['rejected_daily']==2
+E       AssertionError: assert (570 == 569)
+E        +  where 570 = len([{'respondent_id': 'SIM001', 'date': datetime.date(2026, 9, 1), 'activity_type': 'Tidak melakukan aktivitas fisik atau...pe': 'Pekerjaan fisik, seperti bertani, mengangkat barang, atau pekerjaan lapangan', 'activity_minutes': 90, ...}, ...])
+
+backend\tests\test_p0_p1_audit.py:45: AssertionError</failure></testcase><testcase classname="backend.tests.test_p0_p1_audit" name="test_active_respondents_are_daily_ids_even_without_bp" time="0.666"><failure message="assert 0 == 19">loaded = &lt;starlette.testclient.TestClient object at 0x0000020EEA19BA10&gt;
+warehouse_engine = Engine(sqlite://)
+
+    def test_active_respondents_are_daily_ids_even_without_bp(loaded,warehouse_engine):
+        with Session(warehouse_engine) as db:
+            db.execute(update(BPSession).values(sbp1=None,sbp2=None,dbp1=None,dbp2=None,sbp_mean=None,dbp_mean=None));db.commit()
+        data=loaded.get('/api/analytics').json()
+&gt;       assert data['kpis']['respondents']==19
+E       assert 0 == 19
+
+backend\tests\test_p0_p1_audit.py:54: AssertionError</failure></testcase><testcase classname="backend.tests.test_p0_p1_audit" name="test_private_paths_cannot_be_accidentally_added_to_git" time="0.045"><failure message="AssertionError: data/actual/respondents.csv&#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['git', 'check-ignore', '--no-index', '-q', 'data/actual/respondents.csv'], returncode=1).returncode&#10;[+2 more lines; full report in element text]">def test_private_paths_cannot_be_accidentally_added_to_git():
+        paths=['data/actual/respondents.csv','data/private/export.xlsx','backend/.env.local','frontend/.env.production','credentials.json']
+        for path in paths:
+&gt;           assert subprocess.run(['git','check-ignore','--no-index','-q',path],cwd=ROOT).returncode==0,path
+E           AssertionError: data/actual/respondents.csv
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['git', 'check-ignore', '--no-index', '-q', 'data/actual/respondents.csv'], returncode=1).returncode
+E            +    where CompletedProcess(args=['git', 'check-ignore', '--no-index', '-q', 'data/actual/respondents.csv'], returncode=1) = &lt;function run at 0x0000020EA3050860&gt;(['git', 'check-ignore', '--no-index', '-q', 'data/actual/respondents.csv'], cwd=WindowsPath('D:/SEMESTER 5_TRPL/Data Analyst (DALIS)/PROYEK DASI_DALIS/Tension-dashboard'))
+E            +      where &lt;function run at 0x0000020EA3050860&gt; = subprocess.run
+
+backend\tests\test_p0_p1_audit.py:62: AssertionError</failure></testcase><testcase classname="backend.tests.test_p0_p1_audit" name="test_public_metadata_does_not_disclose_actual_source_name" time="0.436"><failure message="assert 'PRIVATE-NAME-SECRET' not in '{&quot;participa...rsion&quot;:null}'&#10;  &#10;  'PRIVATE-NAME-SECRET' is contained here:&#10;    &quot;source&quot;:&quot;PRIVATE-NAME-SECRET.csv&quot;,&quot;min_date&quot;:null,&quot;max_date&quot;:null,&quot;gender&quot;:[],&quot;province&quot;:[],&quot;city&quot;:[],&quot;occupation&quot;:[],&quot;respondent_ids&quot;:[],&quot;sessions&quot;:[],&quot;age_groups&quot;:[],&quot;etl_audit_version&quot;:null,&quot;data_version&quot;:null}&#10;  ?           +++++++++++++++++++">loaded = &lt;starlette.testclient.TestClient object at 0x0000020EEA384410&gt;
+warehouse_engine = Engine(sqlite://)
+
+    def test_public_metadata_does_not_disclose_actual_source_name(loaded,warehouse_engine):
+        with Session(warehouse_engine) as db:
+            state=db.get(SourceState,1);state.source_kind='actual';state.source_name='PRIVATE-NAME-SECRET.csv';db.commit()
+        response=loaded.get('/api/meta');assert response.status_code==200
+&gt;       assert 'PRIVATE-NAME-SECRET' not in response.text
+E       assert 'PRIVATE-NAME-SECRET' not in '{"participa...rsion":null}'
+E
+E         'PRIVATE-NAME-SECRET' is contained here:
+E           "source":"PRIVATE-NAME-SECRET.csv","min_date":null,"max_date":null,"gender":[],"province":[],"city":[],"occupation":[],"respondent_ids":[],"sessions":[],"age_groups":[],"etl_audit_version":null,"data_version":null}
+E         ?           +++++++++++++++++++
+
+backend\tests\test_p0_p1_audit.py:69: AssertionError</failure></testcase><testcase classname="backend.tests.test_p0_p1_audit" name="test_csv_formula_text_is_escaped" time="0.765"><failure message="assert False&#10; +  where False = &lt;built-in method startswith of str object at 0x0000020F2A9E17A0&gt;(&quot;'=&quot;)&#10; +    where &lt;built-in method startswith of str object at 0x0000020F2A9E17A0&gt; = '=HYPERLINK(&quot;https://example.invalid&quot;)'.startswith">loaded = &lt;starlette.testclient.TestClient object at 0x0000020EEA385950&gt;
+warehouse_engine = Engine(sqlite://)
+
+    def test_csv_formula_text_is_escaped(loaded,warehouse_engine):
+        with Session(warehouse_engine) as db:
+            row=db.scalar(select(Participant));row.occupation='=HYPERLINK("https://example.invalid")';db.commit()
+        response=loaded.get('/api/data/export/participants')
+        frame=pd.read_csv(__import__('io').StringIO(response.text))
+&gt;       assert frame.occupation.iloc[0].startswith("'=" )
+E       assert False
+E        +  where False = &lt;built-in method startswith of str object at 0x0000020F2A9E17A0&gt;("'=")
+E        +    where &lt;built-in method startswith of str object at 0x0000020F2A9E17A0&gt; = '=HYPERLINK("https://example.invalid")'.startswith
+
+backend\tests\test_p0_p1_audit.py:77: AssertionError</failure></testcase></testsuite></testsuites>

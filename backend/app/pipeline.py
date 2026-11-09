@@ -25,7 +25,7 @@ EXPECTED_PROFILE_HEADERS = ['Timestamp', '1. ID Responden', '2. Nama lengkap', '
 EXPECTED_DAILY_HEADERS = ['Timestamp', '1. ID Responden', '2. Tanggal pengamatan', '3. Pukul berapa Anda mengukur tekanan darah pagi ini?', '4. Berapa angka atas (sistolik) pada pembacaan pertama?', '6. Berapa angka bawah (diastolik) pada pembacaan pertama?', '7. Berapa angka atas (sistolik) pada pembacaan kedua?', '8. Berapa angka bawah (diastolik) pada pembacaan kedua?', '9. Dalam 30 menit sebelum pengukuran pagi, apakah Anda melakukan salah satu kegiatan berikut?', '10. Pukul berapa Anda mengukur tekanan darah malam ini?', '11. Berapa angka atas (sistolik) pada pembacaan pertama?', '12. Berapa angka bawah (diastolik) pada pembacaan pertama?', '13. Berapa angka atas (sistolik) pada pembacaan kedua?', '14. Berapa angka bawah (diastolik) pada pembacaan kedua?', '15. Dalam 30 menit sebelum pengukuran malam, apakah Anda melakukan salah satu kegiatan berikut?', '16. Aktivitas fisik atau olahraga apa yang Anda lakukan hari ini?', '17. Berapa total menit yang Anda gunakan untuk aktivitas fisik hari ini? \nContoh: Jalan cepat atau kegiatan yang membuat napas sedikit lebih cepat, tetapi Anda masih bisa berbicara. Hitung total waktu dan jangan menghitung menit yang sama dua kali. Jika tidak ada, isi 0.', '18. Berapa total menit yang Anda gunakan untuk aktivitas fisik berat hari ini?\n(contoh: lari cepat atau aktivitas fisik yang membuat napas jauh lebih cepat dan membuat Anda sulit berbicara panjang. Jika tidak ada, isi 0. Jika tidak tahu, jangan mengira-ngira.)', '19. Kira-kira berapa lama total Anda duduk atau hanya sedikit bergerak hari ini, di luar waktu tidur?', '20. Berapa jam Anda tidur tadi malam?', '21. Hari ini, berapa kali Anda makan makanan asin atau makanan olahan?', '22. Hari ini, berapa porsi buah yang Anda makan?', '23. Hari ini, berapa porsi sayur yang Anda makan?', '24. Hari ini, berapa gelas atau cangkir minuman berkafein yang Anda konsumsi?\nContoh: kopi, teh, atau minuman energi.', '25. Apakah anda merokok hari ini?', 'Berapa kali anda merokok hari ini?', '26. Jika Anda menggunakan obat yang diresepkan untuk tekanan darah, apakah Anda minum obat sesuai petunjuk hari ini?', '27. Seberapa besar stres yang Anda rasakan hari ini?']
 
 def header_key(v):
-    return re.sub(r"\s+", " ", str(v).strip().lstrip("\ufeff")).casefold()
+    return re.sub(r"\s+", " ", str(v).strip().lstrip("\ufeff").strip()).casefold()
 
 def verify_headers(df, expected, name):
     if len(df.columns)!=len(expected):
@@ -73,10 +73,16 @@ def _canonical_rows(df, specs, source, synthetic=True):
 def parse_profiles(df, audit=None, synthetic=True):
     verify_headers(df, EXPECTED_PROFILE_HEADERS, 'Form Awal')
     canonical, issues, changes = _canonical_rows(df, PROFILE_FIELDS, 'profiles', synthetic)
+    from collections import defaultdict
+    grouped=defaultdict(list)
+    for number,row in canonical:
+        if row['respondent_id']:grouped[row['respondent_id']].append(row)
+    conflicts={key for key,rows in grouped.items() if len({json.dumps({k:v for k,v in r.items() if k not in ('submitted_at','direct_identity')},default=str,sort_keys=True) for r in rows})>1}
+
     output, errors, accepted, seen = [], [], [], set()
     for number, row in canonical:
         rid = row['respondent_id']
-        reason = 'ID responden kosong/tidak valid' if not rid else 'ID responden duplikat' if rid in seen else None
+        reason = 'ID responden kosong/tidak valid' if not rid else 'Konflik profil: semua versi ID dikarantina' if rid in conflicts else 'ID responden duplikat identik' if rid in seen else None
         if reason:
             errors.append({'row':number, 'reason':reason}); continue
         seen.add(rid)
@@ -93,6 +99,12 @@ def parse_profiles(df, audit=None, synthetic=True):
 def parse_days(df, profile_ids, synthetic=True, audit=None):
     verify_headers(df, EXPECTED_DAILY_HEADERS, 'Form Harian')
     canonical, issues, changes = _canonical_rows(df, DAILY_FIELDS, 'daily', synthetic)
+    from collections import defaultdict
+    grouped=defaultdict(list)
+    for number,row in canonical:
+        if row['respondent_id'] and row['date']:grouped[(row['respondent_id'],row['date'])].append(row)
+    conflicts={key for key,rows in grouped.items() if len({json.dumps({k:v for k,v in r.items() if k!='submitted_at'},default=str,sort_keys=True) for r in rows})>1}
+
     days, sessions, errors, accepted, suspicious, consistency = [], [], [], [], [], []
     session_source_rows = []
     keys, duplicate_keys = set(), set()
@@ -101,15 +113,21 @@ def parse_days(df, profile_ids, synthetic=True, audit=None):
         if not rid or not day or rid not in profile_ids:
             errors.append({'row':number, 'reason':'ID kosong/tidak cocok profil diterima atau tanggal tidak valid'}); continue
         key = rid, day
+        if key in conflicts:
+            duplicate_keys.add(key)
+            errors.append({'row':number,'reason':'Konflik ID-tanggal: seluruh versi dikarantina; keputusan koreksi sumber diperlukan'})
+            continue
         if key in keys:
             duplicate_keys.add(key)
             errors.append({'row':number, 'reason':'Duplikasi ID-tanggal: baris berikutnya dikarantina; baris pertama dipertahankan'})
             continue
         keys.add(key)
         if day.year < 2024 or day.year > 2030:
-            suspicious.append({'row':number, 'date':str(day), 'reason':'Tanggal di luar rentang audit 2024?2030; perlu verifikasi, tidak dikoreksi otomatis'})
+            suspicious.append({'row':number,'date':str(day),'reason':'Tanggal di luar rentang audit teknis lama 2024-2030: pending review'})
+            errors.append({'row':number,'reason':'Tanggal pending review; raw tidak diubah'});continue
         if row['submitted_at'] and day > datetime.fromisoformat(row['submitted_at']).date():
-            consistency.append({'source':'daily','row':number,'field':'date','code':'observation_after_submission','action':'retain_for_review'})
+            consistency.append({'source':'daily','row':number,'field':'date','code':'observation_after_submission','action':'quarantine_pending_review'})
+            errors.append({'row':number,'reason':'Tanggal pengamatan sesudah pengiriman: pending review'});continue
         if row['smoked'] in ('Tidak', 'Tidak berlaku karena saya tidak merokok') and (row['smoke_count'] or 0) > 0:
             consistency.append({'source':'daily','row':number,'field':'smoke_count','code':'smoking_status_count_conflict','action':'retain_for_review'})
         if row['smoked'] == 'Ya' and row['smoke_count'] is None:
@@ -126,9 +144,14 @@ def parse_days(df, profile_ids, synthetic=True, audit=None):
                 if a is not None and b is not None and a <= b:
                     consistency.append({'source':'daily','row':number,'field':f'{prefix}_reading{reading}',
                                         'code':'sbp_not_above_dbp','action':'retain_for_review'})
+            from .bp_policy import assess_session
+            invalid=[i['field'] for i in issues if i['row']==number and i['field'].startswith(prefix+'_') and re.search(r'(sbp|dbp)[12]$',i['field'])]
+            assessed=assess_session(dict(sbp1=sbp1,dbp1=dbp1,sbp2=sbp2,dbp2=dbp2),invalid)
+            if assessed['review_status']=='pending_review':
+                consistency.append({'source':'daily','row':number,'field':prefix+'_session','code':'bp_session_pending_review','action':'exclude_derived_pending_decision','reasons':assessed['review_reasons']})
             sessions.append(dict(respondent_id=rid,date=day,session=session,measured_at=row[f'{prefix}_time'],
                 sbp1=sbp1,dbp1=dbp1,sbp2=sbp2,dbp2=dbp2,
-                sbp_mean=float(np.mean(sbp)) if sbp else None, dbp_mean=float(np.mean(dbp)) if dbp else None,
+                sbp_mean=assessed['sbp_mean'], dbp_mean=assessed['dbp_mean'],
                 valid_sbp_count=len(sbp),valid_dbp_count=len(dbp),before_activity=row[f'{prefix}_context']))
     invalid_bp = [i for i in issues if re.fullmatch(r'(morning|evening)_(sbp|dbp)[12]',i['field'])]
     quality = dict(raw_daily=len(df), accepted_daily=len(days), rejected_daily=len(errors),

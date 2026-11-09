@@ -39,6 +39,8 @@ def main():
     sample=Path(__file__).resolve().parents[1]/'data/sample'
     if kind=='actual' and any(Path(path).resolve().is_relative_to(sample.resolve()) for path in (args.profile,args.daily)):
         p.error('File data/sample adalah fixture sintetis. Gunakan --synthetic; data aktual harus terpisah.')
+    if kind=='actual' and args.report_dir and not Path(args.report_dir).resolve().is_relative_to((sample.parent/'private').resolve()):
+        p.error('Laporan aktual harus disimpan pada data/private/ yang diabaikan Git, bukan reports publik.')
     try:
         profiles,days,sessions,quality=prepare(pd.read_csv(args.profile,dtype=str,keep_default_na=False),pd.read_csv(args.daily,dtype=str,keep_default_na=False),synthetic=kind=='synthetic')
     except DataQualityError as exc:

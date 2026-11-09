@@ -28,6 +28,7 @@ def test_future_measurements_and_behaviors_never_enter_features(prepared):
     for row in s:
         if row['respondent_id']==rid and str(row['date'])>origin:
             row['sbp_mean']+=25;row['dbp_mean']+=10
+            row['sbp1']+=25;row['sbp2']+=25;row['dbp1']+=10;row['dbp2']+=10
     for row in d:
         if row['respondent_id']==rid and str(row['date'])>origin:
             row['activity_minutes']=1000;row['sleep_hours']=20;row['stress']=5
@@ -42,7 +43,8 @@ def test_post_cutoff_values_do_not_change_fitted_model(prepared):
     p,d,s,_=copy.deepcopy(prepared)
     before=partitions(make_training(p,d,s));model=fit_model(before['train'])
     for row in s:
-        if str(row['date'])>before['cutoff']:row['sbp_mean']+=100
+        if str(row['date'])>before['cutoff']:
+            row['sbp_mean']+=20;row['sbp1']+=20;row['sbp2']+=20
     after=partitions(make_training(p,d,s));other=fit_model(after['train'])
     np.testing.assert_allclose(model.named_steps['regressor'].coef_,other.named_steps['regressor'].coef_)
     assert before['test'].target.mean()!=after['test'].target.mean()

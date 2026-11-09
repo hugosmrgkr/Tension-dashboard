@@ -74,7 +74,7 @@ def build_quality(profiles_raw, daily_raw, profiles, days, sessions, audit, lega
     valid_keys=raw_days.dropna()
     normalizations=audit['profile_changes']+audit['daily_changes']
     return dict(
-        audit_version='cp2-1',
+        audit_version='cp2-1',bp_policy_version='paired-reading-review-v1',
         prepared_content_sha256=hashlib.sha256(json.dumps(dict(profiles=profiles,days=days,sessions=sessions),
                                                          default=str,sort_keys=True,ensure_ascii=False).encode()).hexdigest(),
         schema_fingerprint=hashlib.sha256(json.dumps([list(profiles_raw.columns),list(daily_raw.columns)],ensure_ascii=False).encode()).hexdigest(),
@@ -95,9 +95,9 @@ def build_quality(profiles_raw, daily_raw, profiles, days, sessions, audit, lega
                          units='tahun; cm; kg; mmHg; menit; hari/minggu; stres 1–5; tidur asumsi simulasi'),
         pressure_anomalies=pressure_anomalies(sessions,audit['session_source_rows']),
         policies=dict(invalid_cell='NA + issue; raw CSV tidak diubah',
-                      duplicate='Baris pertama diterima; kemunculan berikutnya dikarantina dengan nomor baris; bukan koreksi otomatis',
+                      duplicate='Identik: pertama diterima; konflik: semua versi dikarantina tanpa memilih urutan. Koreksi perlu versi sumber/decision log',
                       quarantine='Laporan menyimpan nomor baris/reason; raw lengkap tetap pada sumber privat, tidak disalin ke laporan publik',
                       categories='Enum yang diketahui dinormalisasi kapital/spasi; pilihan terbuka ditahan untuk review tanpa menebak kategori',
-                      suspicious_date='Ditandai, dipertahankan, perlu keputusan sumber/dosen',
-                      outliers='IQR/SBP<=DBP ditandai dan tetap disimpan bila lolos rentang teknis; bukan diagnosis'),
+                      suspicious_date='Tanggal mencurigakan dikarantina untuk keputusan sumber; raw dipertahankan',
+                      outliers='IQR saja: flag, tanpa vonis klinis; pasangan BP ambigu/SBP<=DBP: pending_review, dikecualikan dari mean/model; raw dipertahankan'),
     )

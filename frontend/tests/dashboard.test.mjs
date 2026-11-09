@@ -31,7 +31,7 @@ const visible=node=>typeof node==='string'?node:(node.children||[]).map(visible)
 const button=label=>renderer.root.findAllByType('button').find(node=>visible(node)===label);
 const text=()=>JSON.stringify(renderer.toJSON());
 async function settle(){for(let n=0;n<3;n++)await act(async()=>{await new Promise(resolve=>setImmediate(resolve))});}
-async function mount({empty=false,failAnalytics=false,page='Dashboard'}={}){
+async function mount({empty=false,failAnalytics=false,page='Dashboard',dataOverride=null}={}){
   requests=[];
   global.window={location:{hash:'#'+encodeURIComponent(page)},addEventListener(){},removeEventListener(){},scrollTo(){}};
   global.document={createElement:()=>({click(){},remove(){}}),body:{appendChild(){}}};
@@ -41,7 +41,7 @@ async function mount({empty=false,failAnalytics=false,page='Dashboard'}={}){
     const failure=failAnalytics&&url.startsWith('/api/analytics');
     return {ok:!failure,status:failure?503:200,blob:async()=>new Blob(['csv']),json:async()=>failure?{detail:'Warehouse tidak dapat dibaca'}:
       url==='/api/meta'?{...meta,warehouse_empty:empty,participants:empty?0:23,message:empty?'Warehouse belum berisi data. Jalankan ETL manual.':meta.message}:
-      url==='/api/model/baseline'?model:empty?{...payload,empty:true,kpis:{},trend:[]}:payload};
+      url==='/api/model/baseline'?model:empty?{...payload,empty:true,kpis:{},trend:[]}:dataOverride||payload};
   };
   await act(async()=>{renderer=TestRenderer.create(React.createElement(App))});
   await settle();
@@ -129,5 +129,15 @@ test('risk page explains smoking, medication, nulls and observed sample sizes',a
     assert.match(text(),/Tidak menggunakan obat tidak sama dengan tidak patuh/);
     assert.match(text(),/Belum ada nilai valid untuk grafik/);
     assert.match(text(),/Pearson r/);
+  }finally{await dispose();}
+});
+
+test('daily-active respondents remain visible without valid BP and no fake chart appears',async()=>{
+  try{
+    await mount({dataOverride:{...payload,empty:false,message:'Belum ada sesi yang lolos gate pasangan.',kpis:{respondents:23,respondents_with_valid_bp:0,daily_records:77,sessions:0,mean_sbp:null},trend:[],session_box:[],heatmap:[],filtered_quality:{...payload.filtered_quality,valid_sessions:0,pending_review_sessions:151}}});
+    const values=renderer.root.findAll(node=>node.props.className==='kpi-value').map(visible);
+    assert.deepEqual(values.slice(0,3),['23','77','0']);
+    assert.ok(!values[3].startsWith('0'));assert.equal(renderer.root.findAllByType('plot-probe').length,0);
+    assert.match(text(),/catatan harian diterima ETL/);assert.match(text(),/Sesi pending review/);
   }finally{await dispose();}
 });

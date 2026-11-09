@@ -27,8 +27,15 @@ CONFIG=dict(seed=42,heldout_id_fraction=.32,calendar_train_fraction=.60,test_tar
 
 def sha256(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
+def text_sha256(path):
+    """Hash UTF-8 bytes with physical CRLF normalized to LF; content stays protected."""
+    raw=Path(path).read_bytes();raw.decode('utf-8')
+    return hashlib.sha256(raw.replace(b'\r\n',b'\n')).hexdigest()
+
 def daily_bp(sessions):
     frame=pd.DataFrame(sessions).copy()
+    from .bp_policy import assessed_frame
+    frame=assessed_frame(frame)
     frame['date']=pd.to_datetime(frame.date).dt.normalize()
     # Matches historical baseline: available SBP per session, then equal day weight.
     return frame.groupby(['respondent_id','date'],as_index=False).agg(sbp=('sbp_mean','mean'),dbp=('dbp_mean','mean'))
@@ -127,8 +134,8 @@ def run_experiment(profile_csv,day_csv,out_dir,report_dir=None):
     model=fit_model(parts['train']);scores,samples=evaluate(model,parts['test']);audit=leakage_audit(parts['train'],parts['test'],model)
     legacy_scores,legacy_predictions=evaluate(fit_model(parts['legacy_train']),parts['legacy_test'])
     rolling_scores,rolling_predictions=evaluate(model,parts['rolling_test'])
-    provenance=dict(profile_sha256=sha256(profile_csv),daily_sha256=sha256(day_csv),prepared_content_sha256=quality['prepared_content_sha256'],
-        code_sha256=sha256(__file__),versions=dict(python=platform.python_version(),numpy=np.__version__,pandas=pd.__version__,sklearn=sklearn.__version__,joblib=joblib.__version__))
+    provenance=dict(text_hash_mode='utf8-lf-v1',profile_sha256=text_sha256(profile_csv),daily_sha256=text_sha256(day_csv),prepared_content_sha256=quality['prepared_content_sha256'],
+        code_sha256=text_sha256(__file__),bp_policy_sha256=text_sha256(Path(__file__).with_name('bp_policy.py')),pipeline_sha256=text_sha256(Path(__file__).with_name('pipeline.py')),versions=dict(python=platform.python_version(),numpy=np.__version__,pandas=pd.__version__,sklearn=sklearn.__version__,joblib=joblib.__version__))
     run_id=hashlib.sha256(json.dumps(dict(provenance=provenance,config=CONFIG),sort_keys=True).encode()).hexdigest()[:20]
     result=dict(schema_version=2,run_id=run_id,status='DATA SINTETIS / SIMULASI - EKSPERIMEN',target=TARGET,target_approved=False,
         description='Rerata SBP harian t+1..t+7; origin akhir hari t. Usulan target, belum disetujui dosen.',
@@ -146,8 +153,8 @@ def run_experiment(profile_csv,day_csv,out_dir,report_dir=None):
     out=Path(out_dir);out.mkdir(exist_ok=True,parents=True)
     joblib.dump(model,out/'linear_regression_synthetic.joblib')
     result['model_sha256']=sha256(out/'linear_regression_synthetic.joblib')
-    (out/'baseline_metrics.json').write_text(json.dumps(result,indent=2,ensure_ascii=False,allow_nan=False)+'\n',encoding='utf-8')
-    (out/'baseline_manifest.json').write_text(json.dumps(dict(schema_version=2,run_id=run_id,metrics_sha256=sha256(out/'baseline_metrics.json'),model_sha256=result['model_sha256']),indent=2)+'\n',encoding='utf-8')
+    (out/'baseline_metrics.json').write_bytes((json.dumps(result,indent=2,ensure_ascii=False,allow_nan=False)+'\n').encode('utf-8'))
+    (out/'baseline_manifest.json').write_bytes((json.dumps(dict(schema_version=3,metrics_hash_mode='utf8-lf-v1',run_id=run_id,metrics_sha256=text_sha256(out/'baseline_metrics.json'),model_sha256=result['model_sha256']),indent=2)+'\n').encode('utf-8'))
     if report_dir:
         report=Path(report_dir);report.mkdir(exist_ok=True,parents=True)
         frame.to_csv(report/'all_windows.csv',index=False)
@@ -163,7 +170,10 @@ def load_experiment(folder):
     folder=Path(folder)
     try:
         manifest=json.loads((folder/'baseline_manifest.json').read_text(encoding='utf-8'))
-        if sha256(folder/'baseline_metrics.json')!=manifest['metrics_sha256'] or sha256(folder/'linear_regression_synthetic.joblib')!=manifest['model_sha256']:
+        mode=manifest.get('metrics_hash_mode','raw-bytes')
+        if mode not in ('raw-bytes','utf8-lf-v1'):raise ValueError('Unknown hash mode')
+        metrics_hash=text_sha256(folder/'baseline_metrics.json') if mode=='utf8-lf-v1' else sha256(folder/'baseline_metrics.json')
+        if metrics_hash!=manifest['metrics_sha256'] or sha256(folder/'linear_regression_synthetic.joblib')!=manifest['model_sha256']:
             raise ValueError('Artifact hash mismatch')
         result=json.loads((folder/'baseline_metrics.json').read_text(encoding='utf-8'))
         if result['schema_version']!=2 or result['run_id']!=manifest['run_id'] or result['target']!=TARGET:raise ValueError('Artifact contract mismatch')

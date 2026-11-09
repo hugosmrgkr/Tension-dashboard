@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "run_id": "242a4f84499a00fc1028",
+  "run_id": "5d3bed0d6591cd2bc09d",
   "status": "DATA SINTETIS / SIMULASI - EKSPERIMEN",
   "target": "future_7d_mean_sbp",
   "target_approved": false,
@@ -154,10 +154,13 @@
     "training_overlapping_target_id_days": 288
   },
   "provenance": {
-    "profile_sha256": "e08d7bcbfc1130d7fbe1d098f33c4a8229d78c7b2afac8ddfc8a4861062ca53f",
-    "daily_sha256": "a7814c628642c82c51e9ed05c11da56f4441f3a211c721a0e83b0414e163ad2d",
+    "text_hash_mode": "utf8-lf-v1",
+    "profile_sha256": "041778498fca147f2690b1612518eabec71f8db5ac449ef074695293b066e3c3",
+    "daily_sha256": "140734ffbbe95d31ba6c70d34e15f78b2174bd2bf71d5edc1061d6f8cbb7c70f",
     "prepared_content_sha256": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
-    "code_sha256": "81af925b49bea0e0a8d22d079466e9664f63d2e782b4f7d249a7e2e50bf60e0d",
+    "code_sha256": "c9ffb174cb656d79a8572b9a055bf41a7a4840f46ce4215a1470bc1c4bfe73e1",
+    "bp_policy_sha256": "6941b059ba2529dc05f780bb874e5d04899020ddb4ef176de276942720351509",
+    "pipeline_sha256": "41939dd2ad71f2b5e5b10b4f53d3bf34418e9c6d9fe7bd7f3e14c77de08b8e82",
     "versions": {
       "python": "3.13.7",
       "numpy": "2.5.4",

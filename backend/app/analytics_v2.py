@@ -9,7 +9,7 @@ AGE_GROUPS = ['<15', '15\u201329', '30\u201344', '45\u201359', '60+', 'Tidak dik
 EXPORT_FIELDS = {
     'participants': ['respondent_id','age','gender','province','city','occupation','education','height_cm','weight_kg','bmi','active_days_week','days'],
     'daily': ['respondent_id','date','sleep_hours','stress','activity_type','activity_minutes','heavy_minutes','sitting','salty_food','fruit','vegetable','caffeine','smoked','smoke_count','medication','sbp_mean','dbp_mean'],
-    'sessions': ['respondent_id','date','session','measured_at','sbp1','dbp1','sbp2','dbp2','sbp_mean','dbp_mean','valid_sbp_count','valid_dbp_count','is_valid'],
+    'sessions': ['respondent_id','date','session','measured_at','sbp1','dbp1','sbp2','dbp2','sbp_mean','dbp_mean','valid_sbp_count','valid_dbp_count','is_valid','valid_pair_count','review_status','review_reasons'],
 }
 
 
@@ -41,6 +41,7 @@ def metadata_payload(db):
                   min_date=None,max_date=None,gender=[],province=[],city=[],occupation=[],respondent_ids=[],sessions=[],age_groups=[],
                   etl_audit_version=None,data_version=None)
     if result['access_restricted']:
+        result['source']='Sumber aktual - akses dibatasi'
         for key in ('participants','daily_records','session_records'): result[key]=None
         return result
     profiles = pd.read_sql(select(*[c for c in Participant.__table__.columns if c.name!='conditions_json']),db.connection())
@@ -115,7 +116,8 @@ def analytics(db:Session,query=None):
     original=frames(db)
     warehouse_empty=not any(len(frame) for frame in original)
     p,s,d=filter_frames(*original,query)
-    s=s.copy();s['is_valid']=s.sbp_mean.notna() & s.dbp_mean.notna()
+    from .bp_policy import assessed_frame,POLICY_VERSION
+    s=assessed_frame(s)
     valid=s[s.is_valid].copy()
     state=db.get(SourceState,1)
     quality=json.loads(state.quality_json or '{}') if state else {}
@@ -124,6 +126,7 @@ def analytics(db:Session,query=None):
     n=len(valid)
     scoped=dict(daily_records=len(d),session_records=len(s),valid_sessions=n,incomplete_sessions=len(s)-n,
                 **{'missing_'+field:int(d[field].isna().sum()) for field in ['sleep_hours','sitting','stress','activity_minutes','smoke_count']})
+    scoped['pending_review_sessions']=int((s.review_status=='pending_review').sum())
     reason=('warehouse_empty' if warehouse_empty else 'filters_empty' if not len(s) and not len(d) else 'no_valid_sessions' if not n else None)
     messages={
         'warehouse_empty':'Warehouse belum berisi data. Tidak ada angka atau grafik contoh yang ditampilkan. Jalankan ETL manual setelah validasi dan persetujuan.',
@@ -158,14 +161,14 @@ def analytics(db:Session,query=None):
         first=pd.Timestamp(query['start_date']);last=pd.Timestamp(query['end_date']);span=(last-first).days+1
         start=(first-pd.Timedelta(days=span)).date();end=(first-pd.Timedelta(days=1)).date()
         _,old_s,old_d=filter_frames(*original,{**query,'start_date':str(start),'end_date':str(end)})
-        old_valid=old_s.dropna(subset=['sbp_mean','dbp_mean'])
+        old_s=assessed_frame(old_s);old_valid=old_s[old_s.is_valid]
         comparison=dict(period=f'{start} - {end}',has_data=bool(len(old_valid) or len(old_d)),
-                        active=int(old_valid.respondent_id.nunique()),daily=len(old_d),sessions=len(old_valid),
+                        active=int(old_d.respondent_id.nunique()),daily=len(old_d),sessions=len(old_valid),
                         sbp=round(float(old_valid.sbp_mean.mean()),1) if len(old_valid) else None)
     return dict(source_kind=state.source_kind if state else 'empty' if warehouse_empty else 'unknown',
-                data_version=quality.get('prepared_content_sha256'),empty=not n,empty_reason=reason,message=messages.get(reason),
+                bp_policy_version=POLICY_VERSION,data_version=quality.get('prepared_content_sha256'),empty=not len(d) and not len(s),empty_reason=reason,message=messages.get(reason),
                 filters={k:v for k,v in query.items() if v is not None},
-                kpis=dict(respondents=int(valid.respondent_id.nunique()),daily_records=len(d),sessions=n,
+                kpis=dict(respondents=int(d.respondent_id.nunique()),respondents_with_valid_bp=int(valid.respondent_id.nunique()),daily_records=len(d),sessions=n,
                           mean_sbp=round(float(valid.sbp_mean.mean()),1) if n else None,
                           mean_dbp=round(float(valid.dbp_mean.mean()),1) if n else None,dates=int(d.date.nunique())),
                 comparison=comparison,trend=trend,session_box=boxes,heatmap=trend,scatter=scatter,categories=categories,
@@ -175,9 +178,9 @@ def analytics(db:Session,query=None):
                 daily_rows=records(day_data.sort_values(['date','respondent_id'],ascending=[False,True]),EXPORT_FIELDS['daily']),
                 session_rows=records(s.sort_values(['date','respondent_id','session'],ascending=[False,True,True]),EXPORT_FIELDS['sessions']),
                 quality=quality,filtered_quality=scoped,
-                definitions=dict(respondents='ID unik dengan sedikitnya satu sesi valid pada filter.',
+                definitions=dict(respondents='ID unik dengan sedikitnya satu catatan harian diterima ETL pada filter.',
                     daily_records='Catatan ID-tanggal diterima; tidak digandakan untuk dua sesi.',
-                    sessions='Sesi dengan sedikitnya satu SBP dan satu DBP valid.',
+                    sessions='Sesi dengan pasangan pembacaan nomor sama yang memenuhi gate teknis; pending review dikecualikan, bukan diagnosis.',
                     session_rows='Semua sesi pada filter, termasuk pembacaan tidak lengkap.',
                     mean_sbp='Rata-rata SBP sesi valid, mmHg.',
                     quality='Snapshot laporan batch ETL seluruh sumber; bukan statistik filter.',

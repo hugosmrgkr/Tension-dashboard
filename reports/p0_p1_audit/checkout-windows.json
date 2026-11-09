@@ -1,0 +1,23 @@
+{
+  "platform": "win32",
+  "git_checkout_index": true,
+  "real_repository_index_modified": false,
+  "results": [
+    {
+      "available": true,
+      "prediction_status": 200,
+      "run_id": "5d3bed0d6591cd2bc09d",
+      "metrics_crlf": 0,
+      "git_core_autocrlf": "false",
+      "binary_sha256_unchanged": true
+    },
+    {
+      "available": true,
+      "prediction_status": 200,
+      "run_id": "5d3bed0d6591cd2bc09d",
+      "metrics_crlf": 0,
+      "git_core_autocrlf": "true",
+      "binary_sha256_unchanged": true
+    }
+  ]
+}

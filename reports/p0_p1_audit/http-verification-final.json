@@ -1,0 +1,162 @@
+{
+  "verified_at_utc": "2026-11-09T12:56:21.198701+00:00",
+  "url": "http://127.0.0.1:8082",
+  "postgresql": true,
+  "counts": {
+    "profiles": 19,
+    "daily": 570,
+    "sessions": 1140
+  },
+  "kpis": {
+    "respondents": 19,
+    "respondents_with_valid_bp": 19,
+    "daily_records": 570,
+    "sessions": 1140,
+    "mean_sbp": 118.9,
+    "mean_dbp": 72.6,
+    "dates": 30
+  },
+  "filtered_quality": {
+    "daily_records": 570,
+    "session_records": 1140,
+    "valid_sessions": 1140,
+    "incomplete_sessions": 0,
+    "missing_sleep_hours": 6,
+    "missing_sitting": 3,
+    "missing_stress": 0,
+    "missing_activity_minutes": 0,
+    "missing_smoke_count": 550,
+    "pending_review_sessions": 0
+  },
+  "model_run_id": "5d3bed0d6591cd2bc09d",
+  "artifact_integrity_verified": true,
+  "warehouse_batch_match": true,
+  "scores": [
+    {
+      "model": "Naive 7-day mean",
+      "mae": 1.933673469387758,
+      "rmse": 2.2347229985988153,
+      "r2": 0.8503092921859248
+    },
+    {
+      "model": "Linear Regression",
+      "mae": 2.575491601598052,
+      "rmse": 3.1139849025417368,
+      "r2": 0.7093432252178669
+    }
+  ],
+  "checks": {
+    "nginx_spa": true,
+    "filters_and_exports": true,
+    "all_heldout_naive_predictions_match_artifact": true,
+    "empty_filter": true,
+    "cp2_weekly_activity_present": true
+  },
+  "forecasts": [
+    {
+      "respondent_id": "SIM001",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "prediction_mmHg": 121.18,
+      "baseline": "Rata-rata SBP 7 hari terakhir",
+      "target": "future_7d_mean_sbp",
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS",
+      "artifact_run_id": "5d3bed0d6591cd2bc09d",
+      "target_approved": false
+    },
+    {
+      "respondent_id": "SIM002",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "prediction_mmHg": 120.18,
+      "baseline": "Rata-rata SBP 7 hari terakhir",
+      "target": "future_7d_mean_sbp",
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS",
+      "artifact_run_id": "5d3bed0d6591cd2bc09d",
+      "target_approved": false
+    },
+    {
+      "respondent_id": "SIM004",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "prediction_mmHg": 128.68,
+      "baseline": "Rata-rata SBP 7 hari terakhir",
+      "target": "future_7d_mean_sbp",
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS",
+      "artifact_run_id": "5d3bed0d6591cd2bc09d",
+      "target_approved": false
+    },
+    {
+      "respondent_id": "SIM006",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "prediction_mmHg": 116.93,
+      "baseline": "Rata-rata SBP 7 hari terakhir",
+      "target": "future_7d_mean_sbp",
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS",
+      "artifact_run_id": "5d3bed0d6591cd2bc09d",
+      "target_approved": false
+    },
+    {
+      "respondent_id": "SIM009",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "prediction_mmHg": 121.18,
+      "baseline": "Rata-rata SBP 7 hari terakhir",
+      "target": "future_7d_mean_sbp",
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS",
+      "artifact_run_id": "5d3bed0d6591cd2bc09d",
+      "target_approved": false
+    },
+    {
+      "respondent_id": "SIM012",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "prediction_mmHg": 106.57,
+      "baseline": "Rata-rata SBP 7 hari terakhir",
+      "target": "future_7d_mean_sbp",
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS",
+      "artifact_run_id": "5d3bed0d6591cd2bc09d",
+      "target_approved": false
+    },
+    {
+      "respondent_id": "SIM017",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "prediction_mmHg": 121.25,
+      "baseline": "Rata-rata SBP 7 hari terakhir",
+      "target": "future_7d_mean_sbp",
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS",
+      "artifact_run_id": "5d3bed0d6591cd2bc09d",
+      "target_approved": false
+    }
+  ]
+}

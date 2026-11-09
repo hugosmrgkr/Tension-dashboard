@@ -1,10 +1,10 @@
 # CP3 Baseline Report - DATA SINTETIS / SIMULASI
 
-Dihitung oleh `etl/verify_baseline.py`, bukan pengisian metrik manual. Run `242a4f84499a00fc1028`. Target `future_7d_mean_sbp` **belum disetujui final oleh dosen**. Tidak ada validitas klinis, diagnosis hipertensi, atau hasil penelitian aktual.
+Dihitung oleh `etl/verify_baseline.py`, bukan pengisian metrik manual. Run `5d3bed0d6591cd2bc09d`. Target `future_7d_mean_sbp` **belum disetujui final oleh dosen**. Tidak ada validitas klinis, diagnosis hipertensi, atau hasil penelitian aktual.
 
 ## Definisi, fitur dan persyaratan
 
-Origin adalah **akhir hari t**, setelah pengukuran/perilaku t tersedia. SBP sesi = rerata pembacaan SBP diterima parser; SBP harian = rerata sesi dengan SBP tersedia (Pagi/Malam berbobot sama bila keduanya tersedia). Target = rerata tujuh SBP harian **t+1..t+7**, bukan rerata semua sesi dengan bobot hari berbeda. Histori **t-6..t** dan target masing-masing wajib tujuh tanggal berurutan dengan SBP harian tersedia. Window tidak lengkap dilewati; tidak membuat hari palsu. Aturan baseline lama menerima satu sesi/hari atau satu bacaan valid/sesi dipertahankan dan perlu konfirmasi dosen untuk aktual.
+Origin adalah **akhir hari t**, setelah pengukuran/perilaku t tersedia. SBP sesi = rerata pembacaan SBP diterima parser; SBP harian = rerata sesi yang lolos gate teknis pasangan pembacaan (Pagi/Malam berbobot sama bila keduanya tersedia). Target = rerata tujuh SBP harian **t+1..t+7**, bukan rerata semua sesi dengan bobot hari berbeda. Histori **t-6..t** dan target masing-masing wajib tujuh tanggal berurutan dengan SBP harian tersedia. Window tidak lengkap dilewati; tidak membuat hari palsu. Satu pasangan lengkap pada nomor pembacaan sama dapat dipakai bila tidak ada komponen ambigu. Pasangan silang, komponen parsial dan SBP<=DBP menunggu review dan tidak masuk agregat/model. Ini gate teknis sementara, bukan keputusan klinis; aturan penelitian final harus disetujui dosen.
 
 Fitur: `past_7d_sbp, past_7d_dbp, past_7d_sbp_std, age, bmi, past_7d_activity, past_7d_sleep, past_7d_stress`. Perilaku hanya dari histori, NA diabaikan pada rerata histori; median training mengisi fitur seluruh historinya kosong. Simpangan baku ddof=0. Profil usia/BMI diasumsikan diketahui sebelum origin pada fixture statis. Ketersediaan profil/late submission aktual belum dibuktikan; tidak mengklaim asumsi ini berlaku pada penelitian aktual.
 

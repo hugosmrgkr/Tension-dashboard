@@ -80,7 +80,7 @@ Database v2 memakai nama tabel baru agar volume PostgreSQL lama dapat dipertahan
 | fact_daily_behavior_v2 | id | participant_id + date_id (unique constraint) | Dua FK ke dimensi | 570 |
 | dataset_state_v2 | id (singleton 1) | Metadata batch, bukan dimensi tambahan | Sumber, jenis data, jumlah harian, quality_json | 1 |
 
-Diagram menampilkan kolom utama; implementasi lengkap juga menyimpan pekerjaan, pendidikan, aktivitas umum dan konteks sebelum pengukuran. Tidak ada kolom nama/kontak di warehouse. `conditions_json` memuat sebelas jawaban riwayat, bukan identitas. FK non-null, sementara sel pengukuran/perilaku dapat null; validitas sesi dihitung dari jumlah pembacaan.
+Diagram menampilkan kolom utama; implementasi lengkap juga menyimpan pekerjaan, pendidikan, aktivitas umum dan konteks sebelum pengukuran. Tidak ada kolom nama/kontak di warehouse. `conditions_json` memuat sebelas jawaban riwayat, bukan identitas. FK non-null, sementara sel pengukuran/perilaku dapat null; validitas sesi dihitung oleh bp_policy dari pasangan nomor sama dan status pending_review, bukan sekadar jumlah komponen.
 
 PK surrogate tidak harus tetap sama setelah reload. Idempotensi didefinisikan sebagai kesamaan natural key, nilai, jumlah baris, dan hash isi natural setelah input yang sama dimuat ulang. Warehouse audit memeriksa PK, FK, unique constraints **dan unique indexes**, orphan, serta hash tanpa nama.
 
