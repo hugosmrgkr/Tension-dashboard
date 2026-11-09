@@ -1,11 +1,14 @@
-# Data penelitian
+# Sumber data sintetis (bukan dataset penelitian)
 
-Tidak disertakan dataset pasien asli. Saat pertama start, backend membuat data sintetis dari fungsi `buat_data_hipertensi_demo` yang disalin dari source Streamlit pengguna.
+`sample/Data_Responden_Sintetis.csv` adalah profil awal (19 ID, 24 kolom Form Awal).
+`sample/Data_Harian_Sintetis.csv` adalah catatan harian (570 baris, 28 kolom Form Harian).
+Workbook gabungan pengguna mempunyai sheet `Data_Responden`, `Data_Harian`, dan `Petunjuk`. Dua CSV di atas adalah sumber aktif agar file tidak dihitung dua kali.
 
-Syarat tugas dosen: data tabular bukan dari Kaggle, minimal 5.000 baris data publik ATAU 500 baris data primer, dan sedikitnya 10 kolom; diperlukan provenance, izin, dan anonimisasi. 750 baris demo di sini **tidak dihitung** sebagai dataset penelitian yang memenuhi syarat.
+- ID `SIM001`–`SIM019` bersifat sintetis.
+- Form Awal: satu baris = satu profil. Form Harian: satu baris = satu ID dan tanggal.
+- Dua sesi BP per hari, masing-masing dua pasangan pembacaan. Dalam warehouse: 1.140 baris fakta sesi.
+- Jam tidur dalam CSV sintetis `06:31` ditafsirkan **6 jam 31 menit** untuk demo. **JANGAN** terapkan otomatis pada respon aktual karena arti pertanyaan masih perlu konfirmasi.
+- Missing value tidak diganti nol. Nilai mentah tidak ditimpa. Nama responden tidak masuk database/API.
+- Dataset sintetis dilarang disebut hasil penelitian nyata atau dipakai untuk klaim prevalensi.
 
-Kolom minimal impor: `tanggal`, `kecamatan`, `jenis_kelamin`, `usia`, `bmi`, `aktivitas_fisik_hari_per_minggu`, `pola_makan`, `jam_tidur`, `merokok`, `sistolik`, `diastolik`.
-
-Sangat disarankan `id_partisipan` untuk data longitudinal. Kolom `tingkat_stres` opsional dan default=5. `status_hipertensi` dihitung ulang dari tekanan darah berdasarkan aturan prototipe, sehingga tidak dipercaya mentah dari file.
-
-Tidak menyimpan data nyata di git tanpa izin dan pengamanan. File CSV/XLSX menggantikan dataset aktif dalam database, bukan ditaruh otomatis ke repositori.
+Hasil audit kualitas tersedia lewat `/api/quality`. Data aktual disimpan terpisah, privat, dan baru dimuat setelah persetujuan dan validasi.

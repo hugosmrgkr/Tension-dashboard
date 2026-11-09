@@ -1,50 +1,86 @@
+"""Dimensional warehouse v2: new names avoid destructive changes to older installations."""
 from datetime import date
-from sqlalchemy import Date, Float, ForeignKey, Integer, String, UniqueConstraint
+from sqlalchemy import Date, DateTime, Float, ForeignKey, Integer, String, Text, UniqueConstraint, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .db import Base
 
-class DimPartisipan(Base):
-    __tablename__ = "dim_partisipan"
+class Participant(Base):
+    __tablename__ = 'dim_participant_v2'
     id: Mapped[int] = mapped_column(primary_key=True)
-    id_partisipan: Mapped[str] = mapped_column(String(40), unique=True, index=True)
-    usia: Mapped[int] = mapped_column(Integer)
-    jenis_kelamin: Mapped[str] = mapped_column(String(32))
-    bmi: Mapped[float] = mapped_column(Float)
-    aktivitas_fisik_hari_per_minggu: Mapped[int] = mapped_column(Integer)
-    pola_makan: Mapped[str] = mapped_column(String(50))
-    jam_tidur: Mapped[float] = mapped_column(Float)
-    tingkat_stres: Mapped[int] = mapped_column(Integer)
-    merokok: Mapped[str] = mapped_column(String(12))
+    respondent_id: Mapped[str] = mapped_column(String(40), unique=True, index=True)
+    age: Mapped[int|None] = mapped_column(Integer, nullable=True)
+    gender: Mapped[str|None] = mapped_column(String(35), nullable=True)
+    province: Mapped[str|None] = mapped_column(String(100), nullable=True)
+    city: Mapped[str|None] = mapped_column(String(100), nullable=True)
+    occupation: Mapped[str|None] = mapped_column(String(220), nullable=True)
+    education: Mapped[str|None] = mapped_column(String(150), nullable=True)
+    height_cm: Mapped[float|None] = mapped_column(Float, nullable=True)
+    weight_kg: Mapped[float|None] = mapped_column(Float, nullable=True)
+    bmi: Mapped[float|None] = mapped_column(Float, nullable=True)
+    usual_activity: Mapped[str|None] = mapped_column(Text, nullable=True)
+    active_days_week: Mapped[int|None] = mapped_column(Integer, nullable=True)
+    conditions_json: Mapped[str|None] = mapped_column(Text, nullable=True)
 
-class DimTanggal(Base):
-    __tablename__ = "dim_tanggal"
+class CalendarDate(Base):
+    __tablename__ = 'dim_date_v2'
     id: Mapped[int] = mapped_column(primary_key=True)
-    tanggal: Mapped[date] = mapped_column(Date, unique=True, index=True)
-    tahun: Mapped[int] = mapped_column(Integer)
-    bulan: Mapped[int] = mapped_column(Integer)
-    hari: Mapped[int] = mapped_column(Integer)
+    date: Mapped[date] = mapped_column(Date, unique=True, index=True)
+    year: Mapped[int] = mapped_column(Integer)
+    month: Mapped[int] = mapped_column(Integer)
+    day: Mapped[int] = mapped_column(Integer)
 
-class DimKecamatan(Base):
-    __tablename__ = "dim_kecamatan"
+class SessionType(Base):
+    __tablename__ = 'dim_session_v2'
     id: Mapped[int] = mapped_column(primary_key=True)
-    kecamatan: Mapped[str] = mapped_column(String(80), unique=True, index=True)
+    name: Mapped[str] = mapped_column(String(12), unique=True)
 
-class FaktaPengukuran(Base):
-    __tablename__ = "fact_pengukuran"
-    __table_args__ = (UniqueConstraint("partisipan_id", "tanggal_id", name="uq_partisipan_tanggal"),)
+class BPSession(Base):
+    __tablename__ = 'fact_bp_session_v2'
+    __table_args__ = (UniqueConstraint('participant_id', 'date_id', 'session_id', name='uq_bp_session_v2'),)
     id: Mapped[int] = mapped_column(primary_key=True)
-    partisipan_id: Mapped[int] = mapped_column(ForeignKey("dim_partisipan.id"), index=True)
-    tanggal_id: Mapped[int] = mapped_column(ForeignKey("dim_tanggal.id"), index=True)
-    kecamatan_id: Mapped[int] = mapped_column(ForeignKey("dim_kecamatan.id"), index=True)
-    sistolik: Mapped[int] = mapped_column(Integer)
-    diastolik: Mapped[int] = mapped_column(Integer)
-    status_hipertensi: Mapped[str] = mapped_column(String(40))
-    partisipan: Mapped[DimPartisipan] = relationship()
-    tanggal_dim: Mapped[DimTanggal] = relationship()
-    kecamatan_dim: Mapped[DimKecamatan] = relationship()
+    participant_id: Mapped[int] = mapped_column(ForeignKey('dim_participant_v2.id'), index=True)
+    date_id: Mapped[int] = mapped_column(ForeignKey('dim_date_v2.id'), index=True)
+    session_id: Mapped[int] = mapped_column(ForeignKey('dim_session_v2.id'), index=True)
+    measured_at: Mapped[str|None] = mapped_column(String(8), nullable=True)
+    sbp1: Mapped[float|None] = mapped_column(Float, nullable=True)
+    dbp1: Mapped[float|None] = mapped_column(Float, nullable=True)
+    sbp2: Mapped[float|None] = mapped_column(Float, nullable=True)
+    dbp2: Mapped[float|None] = mapped_column(Float, nullable=True)
+    sbp_mean: Mapped[float|None] = mapped_column(Float, nullable=True)
+    dbp_mean: Mapped[float|None] = mapped_column(Float, nullable=True)
+    valid_sbp_count: Mapped[int] = mapped_column(Integer, default=0)
+    valid_dbp_count: Mapped[int] = mapped_column(Integer, default=0)
+    before_activity: Mapped[str|None] = mapped_column(String(220), nullable=True)
+    participant: Mapped[Participant] = relationship()
+    calendar: Mapped[CalendarDate] = relationship()
+    session_type: Mapped[SessionType] = relationship()
 
-class DatasetState(Base):
-    __tablename__ = "dataset_state"
+class DailyBehavior(Base):
+    __tablename__ = 'fact_daily_behavior_v2'
+    __table_args__ = (UniqueConstraint('participant_id', 'date_id', name='uq_daily_behavior_v2'),)
     id: Mapped[int] = mapped_column(primary_key=True)
-    source_name: Mapped[str] = mapped_column(String(240), default="Dataset demo (sintetis)")
-    source_kind: Mapped[str] = mapped_column(String(20), default="demo")
+    participant_id: Mapped[int] = mapped_column(ForeignKey('dim_participant_v2.id'), index=True)
+    date_id: Mapped[int] = mapped_column(ForeignKey('dim_date_v2.id'), index=True)
+    activity_type: Mapped[str|None] = mapped_column(Text, nullable=True)
+    activity_minutes: Mapped[int|None] = mapped_column(Integer, nullable=True)
+    heavy_minutes: Mapped[int|None] = mapped_column(Integer, nullable=True)
+    sitting: Mapped[str|None] = mapped_column(String(90), nullable=True)
+    sleep_hours: Mapped[float|None] = mapped_column(Float, nullable=True)
+    salty_food: Mapped[str|None] = mapped_column(String(90), nullable=True)
+    fruit: Mapped[str|None] = mapped_column(String(90), nullable=True)
+    vegetable: Mapped[str|None] = mapped_column(String(90), nullable=True)
+    caffeine: Mapped[str|None] = mapped_column(String(90), nullable=True)
+    smoked: Mapped[str|None] = mapped_column(String(110), nullable=True)
+    smoke_count: Mapped[int|None] = mapped_column(Integer, nullable=True)
+    medication: Mapped[str|None] = mapped_column(String(180), nullable=True)
+    stress: Mapped[int|None] = mapped_column(Integer, nullable=True)
+    participant: Mapped[Participant] = relationship()
+    calendar: Mapped[CalendarDate] = relationship()
+
+class SourceState(Base):
+    __tablename__ = 'dataset_state_v2'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    source_name: Mapped[str] = mapped_column(String(240))
+    source_kind: Mapped[str] = mapped_column(String(30), default='synthetic')
+    row_count: Mapped[int] = mapped_column(Integer, default=0)
+    quality_json: Mapped[str|None] = mapped_column(Text, nullable=True)

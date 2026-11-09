@@ -1,0 +1,6 @@
+import React from 'react';
+const OPTIONS=[['province','Provinsi','province'],['city','Kabupaten/Kota','city'],['gender','Jenis kelamin','gender'],['age_group','Kelompok usia','age_groups'],['session','Sesi pengukuran','sessions'],['occupation','Pekerjaan','occupation']];
+export default function FilterBar({meta,filters,setFilters}){
+ const set=(key,value)=>setFilters(old=>({...old,[key]:value}));
+ return <section className="filter-strip" aria-label="Filter global"><div className="filter-strip-title"><b>Filter global</b><span>Berlaku pada semua KPI, tabel, dan grafik yang sesuai</span><button type="button" className="button light" onClick={()=>setFilters({})}>Reset filter</button></div><div className="filter-controls"><label><span>Mulai tanggal</span><input type="date" value={filters.start_date||''} min={meta?.min_date} max={meta?.max_date} onChange={e=>set('start_date',e.target.value)}/></label><label><span>Sampai tanggal</span><input type="date" value={filters.end_date||''} min={meta?.min_date} max={meta?.max_date} onChange={e=>set('end_date',e.target.value)}/></label>{OPTIONS.map(([key,title,optionsKey])=><label key={key}><span>{title}</span><select value={filters[key]||''} onChange={e=>set(key,e.target.value)}><option value="">Semua</option>{(meta?.[optionsKey]||[]).map(v=><option key={v} value={v}>{v}</option>)}</select></label>)}</div></section>
+}

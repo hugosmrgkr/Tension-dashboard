@@ -16,8 +16,13 @@ services:
 
   backend:
     build: ./backend
+    volumes:
+      - ./data/sample:/app/data/sample:ro
+      - ./models:/app/models:ro
     restart: unless-stopped
     environment:
+      ENABLE_IMPORT: ${ENABLE_IMPORT:-false}
+      IMPORT_TOKEN: ${IMPORT_TOKEN:-}
       DATABASE_URL: postgresql+psycopg://toba:${POSTGRES_PASSWORD:-change-me-local-only}@db:5432/toba_health
     depends_on:
       db:
