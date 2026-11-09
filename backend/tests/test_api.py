@@ -1,4 +1,6 @@
-"""API smoke/integration tests. Run from backend dir: pytest -q."""
+"""Historical API v1 contracts, superseded by CP2/v2/CP3 tests."""
+import pytest
+pytest.skip('API v1 retired; run the CP2/v2/CP3 serving contracts',allow_module_level=True)
 import io
 import os
 # Import the app with an in-memory URL; fixtures replace its engine/session.

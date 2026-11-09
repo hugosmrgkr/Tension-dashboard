@@ -1,14 +1,17 @@
 import os
 from pathlib import Path
-# Isolated SQLite database for the test suite. Must be set before importing app.db.
+# Read-only fixtures plus a per-test isolated engine (never an on-disk active DB).
 ROOT=Path(__file__).resolve().parents[2]
-os.environ['DATABASE_URL']='sqlite:///'+str(ROOT/'test_tmp.db')
+os.environ['DATABASE_URL']='sqlite://'
 os.environ['SAMPLE_DATA_DIR']=str(ROOT/'data/sample')
 os.environ['MODEL_DIR']=str(ROOT/'models')
 os.environ['ENABLE_IMPORT']='false'
 from fastapi.testclient import TestClient
 from app.main import app
-from app.pipeline import prepare, DataQualityError
+from app import main
+from app.db import get_db
+from sqlalchemy.orm import sessionmaker
+from app.pipeline import prepare, load_warehouse, DataQualityError
 import pandas as pd
 import pytest
 
@@ -47,7 +50,7 @@ def test_04_import_secure_by_default_and_export_anonymized():
     with TestClient(app) as c:
         p=c.get('/api/data/export/participants');assert p.status_code==200
         assert 'Nama lengkap' not in p.text and 'DATA SIMULASI 001' not in p.text
-        d=c.post('/api/data/import-pair');assert d.status_code in (403,422)
+        d=c.post('/api/data/import-pair');assert d.status_code==404
 
 def test_05_duplicate_id_date_is_quarantined_not_autofixed():
     p=pd.read_csv(ROOT/'data/sample/Data_Responden_Sintetis.csv',dtype=str,keep_default_na=False)
@@ -56,8 +59,18 @@ def test_05_duplicate_id_date_is_quarantined_not_autofixed():
     pp,dd,ss,q=prepare(p,d)
     assert len(dd)==570 and len(ss)==1140 and q['duplicate_pairs']==1 and q['rejected_daily']==1
 
-@pytest.fixture(scope='session',autouse=True)
-def cleanup_tmp_db():
-    yield
-    path=ROOT/'test_tmp.db'
-    if path.exists():path.unlink()
+@pytest.fixture(autouse=True)
+def isolated_api(warehouse_engine,monkeypatch,source_pair):
+    sessions=sessionmaker(bind=warehouse_engine,autoflush=False,expire_on_commit=False)
+    monkeypatch.setattr(main,'engine',warehouse_engine)
+    monkeypatch.setattr(main,'SessionLocal',sessions)
+    with sessions() as db:
+        load_warehouse(db,*prepare(*source_pair))
+    def isolated_db():
+        with sessions() as db:
+            yield db
+    app.dependency_overrides[get_db]=isolated_db
+    try:
+        yield
+    finally:
+        app.dependency_overrides.pop(get_db,None)

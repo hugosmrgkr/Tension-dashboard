@@ -1,0 +1,128 @@
+{
+  "stage": "CP3 final Tahap 3 dan 4",
+  "verified_at_utc": "2026-11-09T07:56:56.602401+00:00",
+  "status": "technically_complete_on_synthetic_data_only",
+  "tests": {
+    "backend_sqlite": {
+      "passed": 59,
+      "skipped": 1,
+      "failed": 0
+    },
+    "backend_postgresql_linux": {
+      "passed": 59,
+      "skipped": 1,
+      "failed": 0
+    },
+    "frontend_components": {
+      "passed": 9,
+      "skipped": 0,
+      "failed": 0
+    }
+  },
+  "browser": {
+    "passed": 7,
+    "unexpected": 0,
+    "browser": "Microsoft Edge",
+    "source": "isolated Docker Nginx -> FastAPI -> PostgreSQL"
+  },
+  "notebook": {
+    "path": "notebooks/03_verifikasi_baseline_cp3.ipynb",
+    "executed_code_cells": 6,
+    "embedded_pngs": 3
+  },
+  "production_build": {
+    "passed": true,
+    "asset": "index-Df_cKMbT.js",
+    "js_bytes": 4910111,
+    "sha256": "8c70b50557fb72e364b8a3dc40305fbee6da13a32de26e20641605406946bc3e"
+  },
+  "baseline": {
+    "run_id": "242a4f84499a00fc1028",
+    "rows_train": 60,
+    "rows_test": 7,
+    "cutoff": "2026-09-18",
+    "scores": [
+      {
+        "model": "Naive 7-day mean",
+        "mae": 1.933673469387758,
+        "rmse": 2.2347229985988153,
+        "r2": 0.8503092921859248
+      },
+      {
+        "model": "Linear Regression",
+        "mae": 2.575491601598052,
+        "rmse": 3.1139849025417368,
+        "r2": 0.7093432252178669
+      }
+    ],
+    "audit": {
+      "subject_overlap": [],
+      "shared_measurement_id_dates": 0,
+      "train_target_end_max": "2026-09-18",
+      "test_origin_min": "2026-09-18",
+      "labels_available_before_test": true,
+      "test_overlapping_target_id_days": 0,
+      "imputer_matches_training_only": true,
+      "scaler_matches_training_only": true,
+      "training_overlapping_target_id_days": 288
+    },
+    "target_approved": false
+  },
+  "warehouse_ml_equivalence": {
+    "warehouse_windows_equal_offline_csv": true,
+    "windows": 323,
+    "primary_test_rows": 7,
+    "warehouse_linear_predictions_equal_artifact": true,
+    "max_abs_prediction_difference": 0.0,
+    "model_run_id": "242a4f84499a00fc1028"
+  },
+  "protected_files_unchanged": {
+    ".env": true,
+    "backend/app/pipeline.py": true,
+    "backend/app/survey_schema.py": true,
+    "backend/app/quality.py": true,
+    "etl/import_data.py": true,
+    "notebooks/02_eda_data_readiness.ipynb": true,
+    "data/Dataset_Sintetis_Tekanan_Darah_REFERENSI.xlsx": true,
+    "data/README.md": true,
+    "data/sample/Data_Harian_Sintetis.csv": true,
+    "data/sample/Data_Responden_Sintetis.csv": true
+  },
+  "active_warehouse": {
+    "unchanged": true,
+    "natural_hash_before": "2c72512aed5d6c4f1e124f1be7ec47a03d0635fe2a6579fe6c3a7edd9c14c267",
+    "natural_hash_after": "2c72512aed5d6c4f1e124f1be7ec47a03d0635fe2a6579fe6c3a7edd9c14c267",
+    "counts": {
+      "dim_participant_v2": 19,
+      "dim_date_v2": 30,
+      "dim_session_v2": 2,
+      "fact_bp_session_v2": 1140,
+      "fact_daily_behavior_v2": 570,
+      "dataset_state_v2": 1
+    },
+    "missing_active_days_week": 19,
+    "etl_commit_performed": false,
+    "services_restarted": false
+  },
+  "isolated_demo": {
+    "url": "http://127.0.0.1:8081",
+    "api": "http://127.0.0.1:8001",
+    "database": "toba_cp3_demo",
+    "tmpfs": true,
+    "counts": {
+      "profiles": 19,
+      "daily": 570,
+      "sessions": 1140
+    },
+    "running_at_completion": true,
+    "active_volume_shared": false
+  },
+  "limitations": [
+    "Synthetic only; target not approved by lecturer.",
+    "Only 7 held-out test origins on 7 IDs; no clinical/generalization claim.",
+    "Training target windows overlap within training.",
+    "Static profile availability before origin is a synthetic assumption.",
+    "Public deployment, user study, actual data, tuning and three algorithms are pending.",
+    "Shared models directory updated explicitly; old service may read new compatible JSON without restart."
+  ]
+}

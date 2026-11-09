@@ -1,34 +1,94 @@
-# Data dictionary ringkas — Toba Health Insight (M6–M8)
+# Data dictionary lengkap — CP2
 
-Sumber utama: `data/sample/Data_Responden_Sintetis.csv` (24 kolom) dan `data/sample/Data_Harian_Sintetis.csv` (28 kolom). Pemrosesan memakai indeks/urutan header asal yang diverifikasi, bukan asumsi kolom lama `kecamatan` atau `pola_makan`.
+**SIMULASI.** Kontrak fixture terdiri dari 24 kolom Form Awal dan 28 kolom Form Harian. Header harus cocok setelah normalisasi BOM/spasi/kapital, dengan urutan yang sama. Penambahan atau pemindahan kolom memerlukan pembaruan kontrak; tidak dipetakan secara tebakan.
 
-| Kolom warehouse | Sumber / definisi | Grain dan satuan |
+Relasi: satu `respondent_id` pada profil → banyak ID-tanggal pada harian → dua sesi Pagi/Malam. Setiap sesi menyimpan dua pembacaan sistolik dan diastolik. Usia/BMI berasal dari profil; perilaku dan stres berasal dari hari pengamatan.
+
+Missing kosong/NaN/None/NaT tetap NA; tidak diimputasi nol. ID atau tanggal tidak valid, ID tanpa profil, serta duplikasi berikutnya dikarantina pada tingkat baris. Sel non-kunci invalid menjadi NA dengan issue. Timestamp hanya metadata audit; nama dikeluarkan.
+
+## Form Awal
+
+| No. | Nama asli | Nama teknis | Sumber | Tipe | Satuan | Kategori | Missing | Validasi / catatan | Transformasi |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Timestamp | submitted_at | Form Awal | timestamp | — | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Metadata audit; bukan tanggal pengamatan; tidak dimuat ke dimensi. | Parse sesuai definisi tipe |
+| 2 | 1. ID Responden | respondent_id | Form Awal | id | — | Teks sumber / numerik sesuai tipe | Karantina baris bila kosong/invalid | Maksimum 40 karakter. Wajib; tidak membuat ID otomatis atau mengubah digit ID. | Parse sesuai definisi tipe |
+| 3 | 2. Nama lengkap | direct_identity | Form Awal | excluded | — | Teks sumber / numerik sesuai tipe | Tidak dimuat (identitas) | Nama tidak dimuat, tidak disalin ke laporan atau dataset analitik. | Parse sesuai definisi tipe |
+| 4 | 3. Berapa usia anda saat ini (Contoh: 22 tahun) | age | Form Awal | integer | tahun | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 0–120. Rentang teknis; kriteria inklusi penelitian belum final. | Parse numerik; terima sufiks hanya sesuai satuan |
+| 5 | 4. Apa jenis kelamin anda? | gender | Form Awal | category | — | Laki-laki; Perempuan | NA; catat bila tidak valid | Maksimum 35 karakter.  | Normalisasi spasi/kapital ke label enum |
+| 6 | 5. Di provinsi mana Anda tinggal saat ini? (Contoh: Sumatera Utara) | province | Form Awal | text | — | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Maksimum 100 karakter. Teks lokasi; belum ada registry wilayah untuk verifikasi geografis. | Parse sesuai definisi tipe |
+| 7 | 6. Di kabupaten atau kota mana Anda tinggal saat ini? (Contoh: Toba Samosir) | city | Form Awal | text | — | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Maksimum 100 karakter. Kabupaten/kota, bukan kecamatan; ejaan tidak ditebak. | Parse sesuai definisi tipe |
+| 8 | 7. Apa pekerjaan atau kegiatan utama Anda saat ini? | occupation | Form Awal | text | — | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Maksimum 220 karakter. Pilihan/teks lain dari formulir; dipertahankan, bukan enum tebakan. | Parse sesuai definisi tipe |
+| 9 | 9. Apa pendidikan terakhir yang telah Anda selesaikan? | education | Form Awal | text | — | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Maksimum 150 karakter. Pilihan/teks lain dari formulir; dipertahankan. | Parse sesuai definisi tipe |
+| 10 | 10. Apakah Anda pernah didiagnosis memiliki tekanan darah tinggi oleh tenaga kesehatan? | diagnosed_bp | Form Awal | category | — | Ya; Tidak | NA; catat bila tidak valid | Disimpan sebagai kunci conditions_json; kosong bukan Tidak. | Normalisasi spasi/kapital ke label enum |
+| 11 | 11. Apakah saat ini Anda menggunakan obat yang diresepkan untuk tekanan darah tinggi? | bp_medication | Form Awal | category | — | Ya; Tidak | NA; catat bila tidak valid | Disimpan sebagai kunci conditions_json; kosong bukan Tidak. | Normalisasi spasi/kapital ke label enum |
+| 12 | 12. Apakah Anda pernah didiagnosis diabetes oleh tenaga kesehatan? | diabetes | Form Awal | category | — | Ya; Tidak | NA; catat bila tidak valid | Disimpan sebagai kunci conditions_json; kosong bukan Tidak. | Normalisasi spasi/kapital ke label enum |
+| 13 | 13. Apakah Anda pernah didiagnosis penyakit ginjal oleh tenaga kesehatan? | kidney | Form Awal | category | — | Ya; Tidak | NA; catat bila tidak valid | Disimpan sebagai kunci conditions_json; kosong bukan Tidak. | Normalisasi spasi/kapital ke label enum |
+| 14 | 14. Apakah Anda pernah didiagnosis kolesterol tinggi atau gangguan lemak darah oleh tenaga kesehatan? | cholesterol | Form Awal | category | — | Ya; Tidak | NA; catat bila tidak valid | Disimpan sebagai kunci conditions_json; kosong bukan Tidak. | Normalisasi spasi/kapital ke label enum |
+| 15 | 15. Apakah Anda pernah didiagnosis penyakit jantung oleh tenaga kesehatan? | heart | Form Awal | category | — | Ya; Tidak | NA; catat bila tidak valid | Disimpan sebagai kunci conditions_json; kosong bukan Tidak. | Normalisasi spasi/kapital ke label enum |
+| 16 | 16. Apakah Anda pernah didiagnosis mengalami stroke oleh tenaga kesehatan? | stroke | Form Awal | category | — | Ya; Tidak | NA; catat bila tidak valid | Disimpan sebagai kunci conditions_json; kosong bukan Tidak. | Normalisasi spasi/kapital ke label enum |
+| 17 | 17. Apakah ibu kandung Anda pernah didiagnosis memiliki tekanan darah tinggi? | mother_bp | Form Awal | category | — | Ya; Tidak | NA; catat bila tidak valid | Disimpan sebagai kunci conditions_json; kosong bukan Tidak. | Normalisasi spasi/kapital ke label enum |
+| 18 | 18. Apakah ayah kandung Anda pernah didiagnosis memiliki tekanan darah tinggi? | father_bp | Form Awal | category | — | Ya; Tidak | NA; catat bila tidak valid | Disimpan sebagai kunci conditions_json; kosong bukan Tidak. | Normalisasi spasi/kapital ke label enum |
+| 19 | 20. Apakah orang tua kandung atau saudara kandung Anda pernah didiagnosis diabetes? | family_diabetes | Form Awal | category | — | Ya; Tidak | NA; catat bila tidak valid | Disimpan sebagai kunci conditions_json; kosong bukan Tidak. | Normalisasi spasi/kapital ke label enum |
+| 20 | 21. Apakah orang tua kandung atau saudara kandung Anda pernah didiagnosis penyakit jantung atau mengalami stroke? | family_heart | Form Awal | category | — | Ya; Tidak | NA; catat bila tidak valid | Disimpan sebagai kunci conditions_json; kosong bukan Tidak. | Normalisasi spasi/kapital ke label enum |
+| 21 | 22. Berapa tinggi badan Anda? (Masukkan dalam sentimeter (cm), misalnya 165 cm) | height_cm | Form Awal | number | cm | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 80–250.  | Parse numerik; terima sufiks hanya sesuai satuan |
+| 22 | 23. Berapa berat badan Anda? (Masukkan dalam kilogram misalnya 45 kg) | weight_kg | Form Awal | number | kg | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 15–300.  | Parse numerik; terima sufiks hanya sesuai satuan |
+| 23 | 24. Aktivitas fisik atau olahraga apa yang biasanya Anda lakukan? (boleh memilih lebih dari satu) | usual_activity | Form Awal | text | — | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Multi-pilihan utuh; jangan split koma karena label juga mengandung koma. | Parse sesuai definisi tipe |
+| 24 | 25. Dalam satu minggu biasa, berapa hari Anda melakukan aktivitas fisik yang membuat napas atau denyut jantung sedikit lebih cepat? | active_days_week | Form Awal | integer | hari/minggu | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 0–7.  | Parse numerik; terima sufiks hanya sesuai satuan |
+
+## Form Harian
+
+| No. | Nama asli | Nama teknis | Sumber | Tipe | Satuan | Kategori | Missing | Validasi / catatan | Transformasi |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Timestamp | submitted_at | Form Harian | timestamp | — | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Metadata audit saja; tidak menggantikan tanggal pengamatan. | Parse sesuai definisi tipe |
+| 2 | 1. ID Responden | respondent_id | Form Harian | id | — | Teks sumber / numerik sesuai tipe | Karantina baris bila kosong/invalid | Maksimum 40 karakter. Wajib cocok dengan profil diterima. | Parse sesuai definisi tipe |
+| 3 | 2. Tanggal pengamatan | date | Form Harian | date | — | Teks sumber / numerik sesuai tipe | Karantina baris bila kosong/invalid | Tanggal ISO atau DD/MM/YYYY eksplisit; pasangan ID-tanggal unik. | Parse sesuai definisi tipe |
+| 4 | 3. Pukul berapa Anda mengukur tekanan darah pagi ini? | morning_time | Form Harian | time | HH:MM[:SS] | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Waktu lokal pengukuran; tidak disamakan dengan durasi. | Parse sesuai definisi tipe |
+| 5 | 4. Berapa angka atas (sistolik) pada pembacaan pertama? | morning_sbp1 | Form Harian | number | mmHg | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 60–260.  | Parse numerik; terima sufiks hanya sesuai satuan |
+| 6 | 6. Berapa angka bawah (diastolik) pada pembacaan pertama? | morning_dbp1 | Form Harian | number | mmHg | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 35–170.  | Parse numerik; terima sufiks hanya sesuai satuan |
+| 7 | 7. Berapa angka atas (sistolik) pada pembacaan kedua? | morning_sbp2 | Form Harian | number | mmHg | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 60–260.  | Parse numerik; terima sufiks hanya sesuai satuan |
+| 8 | 8. Berapa angka bawah (diastolik) pada pembacaan kedua? | morning_dbp2 | Form Harian | number | mmHg | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 35–170.  | Parse numerik; terima sufiks hanya sesuai satuan |
+| 9 | 9. Dalam 30 menit sebelum pengukuran pagi, apakah Anda melakukan salah satu kegiatan berikut? | morning_context | Form Harian | open_category | — | Berolahraga; Tidak ada kegiatan di atas; Minum kopi, teh, atau minuman berkafein; Merokok | NA; catat bila tidak valid | Maksimum 220 karakter.  | Normalisasi spasi/kapital ke label enum |
+| 10 | 10. Pukul berapa Anda mengukur tekanan darah malam ini? | evening_time | Form Harian | time | HH:MM[:SS] | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Waktu lokal pengukuran; tidak disamakan dengan durasi. | Parse sesuai definisi tipe |
+| 11 | 11. Berapa angka atas (sistolik) pada pembacaan pertama? | evening_sbp1 | Form Harian | number | mmHg | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 60–260.  | Parse numerik; terima sufiks hanya sesuai satuan |
+| 12 | 12. Berapa angka bawah (diastolik) pada pembacaan pertama? | evening_dbp1 | Form Harian | number | mmHg | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 35–170.  | Parse numerik; terima sufiks hanya sesuai satuan |
+| 13 | 13. Berapa angka atas (sistolik) pada pembacaan kedua? | evening_sbp2 | Form Harian | number | mmHg | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 60–260.  | Parse numerik; terima sufiks hanya sesuai satuan |
+| 14 | 14. Berapa angka bawah (diastolik) pada pembacaan kedua? | evening_dbp2 | Form Harian | number | mmHg | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 35–170.  | Parse numerik; terima sufiks hanya sesuai satuan |
+| 15 | 15. Dalam 30 menit sebelum pengukuran malam, apakah Anda melakukan salah satu kegiatan berikut? | evening_context | Form Harian | open_category | — | Berolahraga; Tidak ada kegiatan di atas; Minum kopi, teh, atau minuman berkafein; Merokok | NA; catat bila tidak valid | Maksimum 220 karakter.  | Normalisasi spasi/kapital ke label enum |
+| 16 | 16. Aktivitas fisik atau olahraga apa yang Anda lakukan hari ini? | activity_type | Form Harian | open_category | — | Tidak melakukan aktivitas fisik atau olahraga hari ini; Jalan kaki untuk pergi bekerja, sekolah, berbelanja, atau keperluan lain; Pekerjaan fisik, seperti bertani, mengangkat barang, atau pekerjaan lapangan; Latihan kekuatan atau angkat beban; Pekerjaan rumah atau berkebun, seperti menyapu, mengepel, atau mencangkul; Jalan kaki untuk olahraga; Jogging atau lari; Senam atau aerobik; Olahraga permainan, seperti bulu tangkis, sepak bola, atau bola voli; Bersepeda; Aktivitas lainnya | NA; catat bila tidak valid |  | Normalisasi spasi/kapital ke label enum |
+| 17 | 17. Berapa total menit yang Anda gunakan untuk aktivitas fisik hari ini? <br>Contoh: Jalan cepat atau kegiatan yang membuat napas sedikit lebih cepat, tetapi Anda masih bisa berbicara. Hitung total waktu dan jangan menghitung menit yang sama dua kali. Jika tidak ada, isi 0. | activity_minutes | Form Harian | integer | menit | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 0–1440.  | Parse numerik; terima sufiks hanya sesuai satuan |
+| 18 | 18. Berapa total menit yang Anda gunakan untuk aktivitas fisik berat hari ini?<br>(contoh: lari cepat atau aktivitas fisik yang membuat napas jauh lebih cepat dan membuat Anda sulit berbicara panjang. Jika tidak ada, isi 0. Jika tidak tahu, jangan mengira-ngira.) | heavy_minutes | Form Harian | integer | menit | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 0–1440.  | Parse numerik; terima sufiks hanya sesuai satuan |
+| 19 | 19. Kira-kira berapa lama total Anda duduk atau hanya sedikit bergerak hari ini, di luar waktu tidur? | sitting | Form Harian | category | — | Kurang dari 4 jam; 4–7 jam; 8–10 jam; Lebih dari 10 jam | NA; catat bila tidak valid | Maksimum 90 karakter.  | Normalisasi spasi/kapital ke label enum |
+| 20 | 20. Berapa jam Anda tidur tadi malam? | sleep_hours | Form Harian | sleep | jam | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 0–18. HH:MM sebagai durasi hanya untuk simulasi. Data aktual tetap NA sampai definisi disetujui. | Parse sesuai definisi tipe |
+| 21 | 21. Hari ini, berapa kali Anda makan makanan asin atau makanan olahan? | salty_food | Form Harian | category | — | Tidak sama sekali; 1 kali; 2 kali; 3 kali atau lebih | NA; catat bila tidak valid | Maksimum 90 karakter.  | Normalisasi spasi/kapital ke label enum |
+| 22 | 22. Hari ini, berapa porsi buah yang Anda makan? | fruit | Form Harian | category | — | Tidak mengonsumsi buah; 1 porsi; 2 porsi; 3 porsi atau lebih | NA; catat bila tidak valid | Maksimum 90 karakter.  | Normalisasi spasi/kapital ke label enum |
+| 23 | 23. Hari ini, berapa porsi sayur yang Anda makan? | vegetable | Form Harian | category | — | Tidak mengonsumsi sayur; 1 porsi; 2 porsi; 3 porsi atau lebih | NA; catat bila tidak valid | Maksimum 90 karakter.  | Normalisasi spasi/kapital ke label enum |
+| 24 | 24. Hari ini, berapa gelas atau cangkir minuman berkafein yang Anda konsumsi?<br>Contoh: kopi, teh, atau minuman energi. | caffeine | Form Harian | category | — | Tidak mengonsumsi; 1 gelas; 2 gelas; 3 gelas atau lebih | NA; catat bila tidak valid | Maksimum 90 karakter.  | Normalisasi spasi/kapital ke label enum |
+| 25 | 25. Apakah anda merokok hari ini? | smoked | Form Harian | category | — | Ya; Tidak; Tidak berlaku karena saya tidak merokok | NA; catat bila tidak valid | Maksimum 110 karakter.  | Normalisasi spasi/kapital ke label enum |
+| 26 | Berapa kali anda merokok hari ini? | smoke_count | Form Harian | integer | kali/hari (sesuai pertanyaan, bukan otomatis batang) | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 0–100. Kosong tetap NA, termasuk tidak berlaku; tidak diisi nol otomatis. | Parse numerik; terima sufiks hanya sesuai satuan |
+| 27 | 26. Jika Anda menggunakan obat yang diresepkan untuk tekanan darah, apakah Anda minum obat sesuai petunjuk hari ini? | medication | Form Harian | category | — | Ya; Tidak; Saya tidak menggunakan obat tekanan darah | NA; catat bila tidak valid | Maksimum 180 karakter.  | Normalisasi spasi/kapital ke label enum |
+| 28 | 27. Seberapa besar stres yang Anda rasakan hari ini? | stress | Form Harian | stress | skor | Teks sumber / numerik sesuai tipe | NA; catat bila tidak valid | Rentang teknis 1–5. Terima integer 1–5 atau label persis formulir. | Parse sesuai definisi tipe |
+
+## Kolom turunan dan penyimpanan
+
+| Kolom | Rumus / asal | Grain / perlakuan |
 | --- | --- | --- |
-| respondent_id | ID Responden pada kedua form | Profil / kunci pseudonim |
-| age, gender | Form awal Q3/Q4 | Per responden; tahun / kategori |
-| province, city | Form awal Q5/Q6 | Per responden; bukan kecamatan |
-| occupation, education | Form awal Q7/Q9 | Per responden |
-| height_cm, weight_kg | Form awal Q22/Q23 | Per responden; cm dan kg |
-| bmi | `weight_kg/(height_cm/100)^2` | Per responden; turunan |
-| usual_activity, active_days_week | Form awal Q24/Q25 | Per responden; deskripsi dan 0–7 hari |
-| date | Form harian Q2 | ID × tanggal; **bukan timestamp pengiriman** |
-| session | Struktur pagi / malam | ID × tanggal × sesi |
-| sbp1,dbp1,sbp2,dbp2 | Form harian Q4/Q6/Q7/Q8 dan Q11–Q14 | mmHg; nilai mentah valid yang tidak diganti |
-| sbp_mean,dbp_mean | Rata-rata pembacaan valid per sesi | mmHg; data turunan; `valid_*_count` disimpan |
-| activity_minutes, heavy_minutes | Form harian Q17/Q18 | ID × tanggal; menit |
-| sitting | Q19 | ID × tanggal; kategori |
-| sleep_hours | Q20; HH:MM simulasi → jam desimal | ID × tanggal; **asumsi hanya untuk data sintetis** |
-| salty_food,fruit,vegetable,caffeine | Q21–Q24 | ID × tanggal; kategori terpisah |
-| smoked,smoke_count,medication | Q25, tak bernomor, Q26 | ID × tanggal; kategori/jumlah (NA bukan otomatis 0) |
-| stress | Q27 `1 = ...` → integer 1–5 | ID × tanggal; tidak boleh 0–10 |
-| future_7d_mean_sbp | Rata-rata SBP harian 7 hari setelah t | Target model numerik, **bukan** pertanyaan form |
+| bmi | weight_kg / (height_cm/100)^2, dibulatkan 3 desimal | Profil; NA jika tinggi/berat tidak valid |
+| conditions_json | 11 kunci riwayat pada Form Awal kolom 10–20 | Profil; setiap jawaban kosong tetap null |
+| sbp_mean / dbp_mean | Rata-rata pembacaan tersedia yang lolos validasi, terpisah per variabel | ID × tanggal × sesi; semua pembacaan hilang → NA |
+| valid_sbp_count / valid_dbp_count | Jumlah pembacaan valid 0–2 | Sesi valid untuk analitik bila kedua hitungan minimal 1 |
+| session | Pagi/Malam dari pasangan kolom sumber | Bukan pertanyaan baru; pemisahan struktur wide → long |
+| year/month/day | Komponen tanggal pengamatan | Dimensi tanggal |
+| ID surrogate / FK | Dibuat database, bukan ID responden baru | PK teknis, berbeda dari respondent_id sumber |
+| future_7d_mean_sbp | Usulan target tahap modelling | Di luar CP2; tidak dibuat/diubah oleh pekerjaan ini |
 
-## Aturan kualitas minimum
+## Aturan format dan kategori
 
-- `respondent_id` wajib dari Form Awal, tidak boleh membuat ID otomatis.
-- Duplikasi `(respondent_id,date)` ditahan dan dicatat, bukan diam-diam ditimpa.
-- Angka BP yang tidak valid disimpan sebagai NA pada *clean table*, sumber mentah tetap ada di file sumber.
-- Sesi dianggap valid bila terdapat ≥1 SBP dan ≥1 DBP yang lolos pemeriksaan.
-- Kolom harian tidak dipaksakan tetap di seluruh tanggal untuk satu orang.
-- Kategori asli boleh dinormalisasi terpisah bila ada mapping eksplisit; jangan menambah variabel yang tidak ditanya.
-- Foto, nama lengkap, NIK, kontak responden tidak boleh diekspor atau di-commit.
+- Integer menerima angka bulat saja; `3 hari`, `45 menit`, `21 tahun`, `165 cm`, `60,5 kg` hanya diterima pada kolom dengan satuan yang sesuai. `3.5 hari` tidak dibulatkan diam-diam.
+- Tanggal menerima ISO `YYYY-MM-DD`/datetime ISO atau `DD/MM/YYYY` eksplisit; waktu menerima `HH:MM[:SS]`. Nomor serial Excel dan teks tanggal ambigu ditahan, bukan ditebak.
+- Kategori tertutup yang tidak dikenal menjadi NA dengan issue. Kategori aktivitas/konteks terbuka dipertahankan dengan flag review. Pekerjaan, pendidikan, provinsi dan kota bukan enum geografis yang telah diverifikasi.
+- Multi-pilihan aktivitas umum tidak dipisahkan dengan koma: label pilihan juga mengandung koma.
+- Mapping khusus fixture sintetis: `4�7 jam`/`4-7 jam` → `4–7 jam`; `8�10 jam`/`8-10 jam` → `8–10 jam`. Raw tidak diubah. Mapping karakter rusak ini tidak diterapkan otomatis pada data aktual.
+- Tidur sintetis `06:30` → 6,5 jam. Pecahan 0<x<1 ditandai ambigu (dapat berupa pecahan hari Excel), tidak dikali 24 atau dianggap jam otomatis. Data aktual seluruhnya menunggu keputusan semantik.
+- Rentang BP 60–260 sistolik, 35–170 diastolik adalah pagar teknis proyek, bukan pedoman diagnosis. Nilai di luar pagar menjadi NA dengan alasan; sumber mentah tetap ada. IQR dan SBP≤DBP hanya flag review.
+- Tidak ada kriteria inklusi usia final yang dipaksakan. Usia teknis 0–120; kelayakan responden ditentukan terpisah bersama dosen.
+- Semua perubahan kategori/satuan dapat ditelusuri lewat laporan normalisasi dan hash sumber. Tidak ada identitas langsung dalam keluaran analitik.

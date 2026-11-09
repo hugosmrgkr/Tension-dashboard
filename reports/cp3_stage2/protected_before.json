@@ -1,0 +1,16 @@
+{
+  ".env": null,
+  "backend/app/pipeline.py": "2593d6cc8d1ce4275f801726e32976e513495176d39d4c924c2feccdbbd65519",
+  "backend/app/survey_schema.py": "724fcefd9ba47953699fed203ca3ba6f4e17214f29e79b8756f41b48f063e337",
+  "backend/app/quality.py": "4e280f14dea0e38b4199bf3670a2404cbba7431fe8239d753b6be5cbfdf74440",
+  "backend/app/baseline.py": "f713f2c2c7c899e2d835c774c8d3c8209b90b757f5911237c7df2a3860428d6f",
+  "etl/import_data.py": "a77caf851b83d1a90f68633c5405aa1f8efcf8796d63a52a5562a9470c7227aa",
+  "models/baseline_metrics.json": "681c5d42dd46b0a0fc03159b4262751c9713dc167aa2aa3e7a534cb662b41df9",
+  "models/linear_regression_synthetic.joblib": "fe645d99eda5fb0704d1e285d4c9f9ebce5c43d71e882a11495ed6dbc3432734",
+  "models/README.md": "a668333ffbc1d3b2756d78f016c2dc3ac21490bdb84f5d945b84e29c0d43fb75",
+  "notebooks/01_baseline_regresi.ipynb": "e32a21b656daa00e7ff397e9894a67949572aee8d2e6d44fd06b71dd431bcf53",
+  "notebooks/02_eda_data_readiness.ipynb": "9d8c172dcbe8666412c7b2b794633f4ba92405f634f278777f03a7d21f62f6c8",
+  "notebooks/README.md": "8ba347cf47d780038c45e1beaf848171b089ad8142f7917ba3a32cbc34d66e67",
+  "data/sample/Data_Harian_Sintetis.csv": "a7814c628642c82c51e9ed05c11da56f4441f3a211c721a0e83b0414e163ad2d",
+  "data/sample/Data_Responden_Sintetis.csv": "e08d7bcbfc1130d7fbe1d098f33c4a8229d78c7b2afac8ddfc8a4861062ca53f"
+}

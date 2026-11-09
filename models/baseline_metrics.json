@@ -1,10 +1,13 @@
 {
-  "status": "SIMULASI / EKSPERIMEN",
+  "schema_version": 2,
+  "run_id": "242a4f84499a00fc1028",
+  "status": "DATA SINTETIS / SIMULASI - EKSPERIMEN",
   "target": "future_7d_mean_sbp",
-  "description": "Rata-rata SBP pada tujuh hari kalender setelah tanggal prediksi; bukan diagnosis medis.",
-  "dataset": "19 ID sintetis × 30 hari; satu baris training per tanggal dengan 7 hari histori dan 7 hari target.",
-  "rows_training": 204,
-  "rows_test": 119,
+  "target_approved": false,
+  "description": "Rerata SBP harian t+1..t+7; origin akhir hari t. Usulan target, belum disetujui dosen.",
+  "dataset": "19 ID sintetis, 570 ID-tanggal, 1140 sesi; 323 complete windows.",
+  "rows_training": 60,
+  "rows_test": 7,
   "respondents_train": [
     "SIM003",
     "SIM005",
@@ -38,859 +41,175 @@
     "past_7d_sleep",
     "past_7d_stress"
   ],
-  "split": "GroupShuffleSplit by respondent_id (random_state=42); no subject overlap",
+  "config": {
+    "seed": 42,
+    "heldout_id_fraction": 0.32,
+    "calendar_train_fraction": 0.6,
+    "test_target_stride_days": 7
+  },
+  "cutoff": "2026-09-18",
+  "split": "Held-out respondent IDs + chronological label purge + non-overlapping 7-day test targets (seed=42)",
   "scores": [
     {
       "model": "Naive 7-day mean",
-      "mae": 1.94,
-      "rmse": 2.318,
-      "r2": 0.857
+      "mae": 1.933673469387758,
+      "rmse": 2.2347229985988153,
+      "r2": 0.8503092921859248
     },
     {
       "model": "Linear Regression",
-      "mae": 2.262,
-      "rmse": 2.925,
-      "r2": 0.772
+      "mae": 2.575491601598052,
+      "rmse": 3.1139849025417368,
+      "r2": 0.7093432252178669
     }
   ],
   "actual_vs_predicted": [
     {
       "respondent_id": "SIM001",
-      "date": "2026-09-07",
-      "actual": 122.25,
-      "naive": 119.32,
-      "linear": 121.02
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-08",
-      "actual": 122.25,
-      "naive": 119.39,
-      "linear": 121.36
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-09",
-      "actual": 121.54,
-      "naive": 120.18,
-      "linear": 121.43
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-10",
-      "actual": 120.68,
-      "naive": 120.64,
-      "linear": 121.77
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-11",
-      "actual": 121.18,
-      "naive": 120.36,
-      "linear": 122.19
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-12",
-      "actual": 121.0,
-      "naive": 121.36,
-      "linear": 122.43
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-13",
-      "actual": 120.82,
-      "naive": 121.57,
-      "linear": 122.39
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-14",
-      "actual": 121.46,
-      "naive": 122.25,
-      "linear": 122.22
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-15",
-      "actual": 121.46,
-      "naive": 122.25,
-      "linear": 123.54
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-16",
-      "actual": 122.11,
-      "naive": 121.54,
-      "linear": 123.01
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-17",
-      "actual": 122.0,
-      "naive": 120.68,
-      "linear": 122.97
-    },
-    {
-      "respondent_id": "SIM001",
       "date": "2026-09-18",
-      "actual": 122.54,
-      "naive": 121.18,
-      "linear": 122.45
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-19",
-      "actual": 121.75,
-      "naive": 121.0,
-      "linear": 121.8
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-20",
-      "actual": 121.5,
-      "naive": 120.82,
-      "linear": 120.86
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-21",
-      "actual": 120.32,
-      "naive": 121.46,
-      "linear": 121.54
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-22",
-      "actual": 119.68,
-      "naive": 121.46,
-      "linear": 120.77
-    },
-    {
-      "respondent_id": "SIM001",
-      "date": "2026-09-23",
-      "actual": 119.75,
-      "naive": 122.11,
-      "linear": 121.5
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-07",
-      "actual": 120.14,
-      "naive": 119.25,
-      "linear": 118.36
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-08",
-      "actual": 120.82,
-      "naive": 118.89,
-      "linear": 116.86
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-09",
-      "actual": 121.0,
-      "naive": 118.64,
-      "linear": 116.31
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-10",
-      "actual": 121.21,
-      "naive": 119.64,
-      "linear": 116.31
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-11",
-      "actual": 120.18,
-      "naive": 120.0,
-      "linear": 116.87
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-12",
-      "actual": 119.57,
-      "naive": 121.11,
-      "linear": 118.1
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-13",
-      "actual": 120.5,
-      "naive": 119.82,
-      "linear": 117.35
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-14",
-      "actual": 120.86,
-      "naive": 120.14,
-      "linear": 116.5
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-15",
-      "actual": 120.64,
-      "naive": 120.82,
-      "linear": 116.4
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-16",
-      "actual": 120.57,
-      "naive": 121.0,
-      "linear": 116.53
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-17",
-      "actual": 121.43,
-      "naive": 121.21,
-      "linear": 117.72
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 122.53571428571429,
+      "naive": 121.17857142857143,
+      "linear": 123.38319812652209,
+      "naive_residual": 1.357142857142861,
+      "linear_residual": -0.847483840807797
     },
     {
       "respondent_id": "SIM002",
       "date": "2026-09-18",
-      "actual": 122.07,
-      "naive": 120.18,
-      "linear": 118.83
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-19",
-      "actual": 122.36,
-      "naive": 119.57,
-      "linear": 119.63
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-20",
-      "actual": 121.43,
-      "naive": 120.5,
-      "linear": 119.38
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-21",
-      "actual": 120.39,
-      "naive": 120.86,
-      "linear": 119.81
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-22",
-      "actual": 120.68,
-      "naive": 120.64,
-      "linear": 120.96
-    },
-    {
-      "respondent_id": "SIM002",
-      "date": "2026-09-23",
-      "actual": 120.43,
-      "naive": 120.57,
-      "linear": 122.09
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-07",
-      "actual": 127.57,
-      "naive": 126.39,
-      "linear": 124.49
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-08",
-      "actual": 127.11,
-      "naive": 126.86,
-      "linear": 124.45
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-09",
-      "actual": 127.21,
-      "naive": 126.86,
-      "linear": 125.25
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-10",
-      "actual": 128.54,
-      "naive": 125.61,
-      "linear": 125.77
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-11",
-      "actual": 128.68,
-      "naive": 126.36,
-      "linear": 126.67
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-12",
-      "actual": 128.11,
-      "naive": 127.29,
-      "linear": 128.47
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-13",
-      "actual": 128.43,
-      "naive": 126.82,
-      "linear": 127.45
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-14",
-      "actual": 128.36,
-      "naive": 127.57,
-      "linear": 127.6
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-15",
-      "actual": 129.5,
-      "naive": 127.11,
-      "linear": 127.0
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-16",
-      "actual": 129.79,
-      "naive": 127.21,
-      "linear": 126.84
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-17",
-      "actual": 129.79,
-      "naive": 128.54,
-      "linear": 126.94
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 122.07142857142857,
+      "naive": 120.17857142857143,
+      "linear": 117.66939610537716,
+      "naive_residual": 1.892857142857139,
+      "linear_residual": 4.402032466051409
     },
     {
       "respondent_id": "SIM004",
       "date": "2026-09-18",
-      "actual": 130.32,
-      "naive": 128.68,
-      "linear": 127.66
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-19",
-      "actual": 130.71,
-      "naive": 128.11,
-      "linear": 126.79
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-20",
-      "actual": 131.43,
-      "naive": 128.43,
-      "linear": 127.25
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-21",
-      "actual": 132.04,
-      "naive": 128.36,
-      "linear": 126.19
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-22",
-      "actual": 130.93,
-      "naive": 129.5,
-      "linear": 126.8
-    },
-    {
-      "respondent_id": "SIM004",
-      "date": "2026-09-23",
-      "actual": 131.29,
-      "naive": 129.79,
-      "linear": 127.28
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-07",
-      "actual": 118.39,
-      "naive": 114.0,
-      "linear": 116.55
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-08",
-      "actual": 118.0,
-      "naive": 113.96,
-      "linear": 116.92
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-09",
-      "actual": 117.68,
-      "naive": 113.61,
-      "linear": 115.69
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-10",
-      "actual": 117.79,
-      "naive": 114.36,
-      "linear": 116.44
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-11",
-      "actual": 116.93,
-      "naive": 115.79,
-      "linear": 116.1
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-12",
-      "actual": 116.68,
-      "naive": 117.0,
-      "linear": 116.51
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-13",
-      "actual": 116.89,
-      "naive": 118.11,
-      "linear": 115.76
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-14",
-      "actual": 116.46,
-      "naive": 118.39,
-      "linear": 115.57
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-15",
-      "actual": 115.86,
-      "naive": 118.0,
-      "linear": 114.26
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-16",
-      "actual": 115.54,
-      "naive": 117.68,
-      "linear": 115.49
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-17",
-      "actual": 115.36,
-      "naive": 117.79,
-      "linear": 115.21
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 130.32142857142858,
+      "naive": 128.67857142857142,
+      "linear": 126.16438830314577,
+      "naive_residual": 1.642857142857167,
+      "linear_residual": 4.157040268282813
     },
     {
       "respondent_id": "SIM006",
       "date": "2026-09-18",
-      "actual": 116.04,
-      "naive": 116.93,
-      "linear": 115.34
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-19",
-      "actual": 116.64,
-      "naive": 116.68,
-      "linear": 114.94
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-20",
-      "actual": 115.68,
-      "naive": 116.89,
-      "linear": 114.97
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-21",
-      "actual": 115.82,
-      "naive": 116.46,
-      "linear": 115.28
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-22",
-      "actual": 116.29,
-      "naive": 115.86,
-      "linear": 116.41
-    },
-    {
-      "respondent_id": "SIM006",
-      "date": "2026-09-23",
-      "actual": 115.96,
-      "naive": 115.54,
-      "linear": 116.44
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-07",
-      "actual": 119.64,
-      "naive": 121.0,
-      "linear": 119.64
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-08",
-      "actual": 120.39,
-      "naive": 119.32,
-      "linear": 117.46
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-09",
-      "actual": 120.86,
-      "naive": 119.39,
-      "linear": 117.87
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-10",
-      "actual": 121.11,
-      "naive": 118.79,
-      "linear": 117.4
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-11",
-      "actual": 121.18,
-      "naive": 118.68,
-      "linear": 116.9
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-12",
-      "actual": 122.39,
-      "naive": 118.75,
-      "linear": 117.51
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-13",
-      "actual": 122.79,
-      "naive": 119.36,
-      "linear": 118.32
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-14",
-      "actual": 122.25,
-      "naive": 119.64,
-      "linear": 117.52
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-15",
-      "actual": 122.93,
-      "naive": 120.39,
-      "linear": 118.64
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-16",
-      "actual": 122.36,
-      "naive": 120.86,
-      "linear": 118.64
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-17",
-      "actual": 122.5,
-      "naive": 121.11,
-      "linear": 118.81
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 116.03571428571429,
+      "naive": 116.92857142857143,
+      "linear": 114.77623871090437,
+      "naive_residual": -0.892857142857139,
+      "linear_residual": 1.259475574809926
     },
     {
       "respondent_id": "SIM009",
       "date": "2026-09-18",
-      "actual": 121.86,
-      "naive": 121.18,
-      "linear": 118.59
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-19",
-      "actual": 120.64,
-      "naive": 122.39,
-      "linear": 119.17
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-20",
-      "actual": 119.82,
-      "naive": 122.79,
-      "linear": 118.95
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-21",
-      "actual": 119.57,
-      "naive": 122.25,
-      "linear": 119.45
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-22",
-      "actual": 119.21,
-      "naive": 122.93,
-      "linear": 119.07
-    },
-    {
-      "respondent_id": "SIM009",
-      "date": "2026-09-23",
-      "actual": 119.11,
-      "naive": 122.36,
-      "linear": 118.61
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-07",
-      "actual": 105.82,
-      "naive": 109.89,
-      "linear": 112.21
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-08",
-      "actual": 105.25,
-      "naive": 110.07,
-      "linear": 113.15
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-09",
-      "actual": 105.36,
-      "naive": 109.57,
-      "linear": 113.88
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-10",
-      "actual": 106.0,
-      "naive": 108.93,
-      "linear": 112.75
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-11",
-      "actual": 106.57,
-      "naive": 108.21,
-      "linear": 112.4
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-12",
-      "actual": 107.04,
-      "naive": 106.54,
-      "linear": 111.8
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-13",
-      "actual": 107.04,
-      "naive": 105.93,
-      "linear": 110.11
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-14",
-      "actual": 107.43,
-      "naive": 105.82,
-      "linear": 110.62
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-15",
-      "actual": 108.5,
-      "naive": 105.25,
-      "linear": 110.86
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-16",
-      "actual": 109.54,
-      "naive": 105.36,
-      "linear": 109.49
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-17",
-      "actual": 110.14,
-      "naive": 106.0,
-      "linear": 111.1
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 121.85714285714286,
+      "naive": 121.17857142857143,
+      "linear": 116.72081015045681,
+      "naive_residual": 0.678571428571431,
+      "linear_residual": 5.136332706686048
     },
     {
       "respondent_id": "SIM012",
       "date": "2026-09-18",
-      "actual": 110.64,
-      "naive": 106.57,
-      "linear": 111.18
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-19",
-      "actual": 110.82,
-      "naive": 107.04,
-      "linear": 110.5
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-20",
-      "actual": 110.75,
-      "naive": 107.04,
-      "linear": 110.15
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-21",
-      "actual": 110.57,
-      "naive": 107.43,
-      "linear": 111.05
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-22",
-      "actual": 109.96,
-      "naive": 108.5,
-      "linear": 109.85
-    },
-    {
-      "respondent_id": "SIM012",
-      "date": "2026-09-23",
-      "actual": 108.96,
-      "naive": 109.54,
-      "linear": 110.52
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-07",
-      "actual": 124.0,
-      "naive": 123.82,
-      "linear": 126.5
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-08",
-      "actual": 122.82,
-      "naive": 123.96,
-      "linear": 126.65
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-09",
-      "actual": 121.39,
-      "naive": 124.82,
-      "linear": 127.08
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-10",
-      "actual": 121.25,
-      "naive": 124.43,
-      "linear": 127.06
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-11",
-      "actual": 121.25,
-      "naive": 124.79,
-      "linear": 126.54
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-12",
-      "actual": 121.57,
-      "naive": 125.14,
-      "linear": 124.99
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-13",
-      "actual": 121.21,
-      "naive": 125.29,
-      "linear": 123.7
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-14",
-      "actual": 121.57,
-      "naive": 124.0,
-      "linear": 123.66
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-15",
-      "actual": 122.18,
-      "naive": 122.82,
-      "linear": 122.63
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-16",
-      "actual": 123.57,
-      "naive": 121.39,
-      "linear": 122.8
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-17",
-      "actual": 124.82,
-      "naive": 121.25,
-      "linear": 122.61
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 110.64285714285714,
+      "naive": 106.57142857142857,
+      "linear": 111.58959594757691,
+      "naive_residual": 4.071428571428569,
+      "linear_residual": -0.946738804719772
     },
     {
       "respondent_id": "SIM017",
       "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
       "actual": 124.25,
       "naive": 121.25,
-      "linear": 123.03
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-19",
-      "actual": 124.0,
-      "naive": 121.57,
-      "linear": 123.78
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-20",
-      "actual": 124.36,
-      "naive": 121.21,
-      "linear": 123.51
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-21",
-      "actual": 125.39,
-      "naive": 121.57,
-      "linear": 123.78
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-22",
-      "actual": 125.29,
-      "naive": 122.18,
-      "linear": 124.65
-    },
-    {
-      "respondent_id": "SIM017",
-      "date": "2026-09-23",
-      "actual": 124.14,
-      "naive": 123.57,
-      "linear": 123.51
+      "linear": 125.5293375498286,
+      "naive_residual": 3.0,
+      "linear_residual": -1.279337549828597
     }
   ],
-  "limitation": "Evaluasi hanya pada dataset SINTETIS; peserta uji sedikit; target dan kebijakan pengukuran harus disetujui dosen. Tidak boleh diklaim sebagai hasil penelitian aktual.",
-  "as_of": "2026-11-09",
+  "audit": {
+    "subject_overlap": [],
+    "shared_measurement_id_dates": 0,
+    "train_target_end_max": "2026-09-18",
+    "test_origin_min": "2026-09-18",
+    "labels_available_before_test": true,
+    "test_overlapping_target_id_days": 0,
+    "imputer_matches_training_only": true,
+    "scaler_matches_training_only": true,
+    "training_overlapping_target_id_days": 288
+  },
+  "provenance": {
+    "profile_sha256": "e08d7bcbfc1130d7fbe1d098f33c4a8229d78c7b2afac8ddfc8a4861062ca53f",
+    "daily_sha256": "a7814c628642c82c51e9ed05c11da56f4441f3a211c721a0e83b0414e163ad2d",
+    "prepared_content_sha256": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+    "code_sha256": "81af925b49bea0e0a8d22d079466e9664f63d2e782b4f7d249a7e2e50bf60e0d",
+    "versions": {
+      "python": "3.13.7",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "sklearn": "1.9.1",
+      "joblib": "1.6.0"
+    }
+  },
   "model": "Linear Regression (pembanding baseline naif)",
   "tuned": false,
-  "real_model_validated": false
+  "real_model_validated": false,
+  "as_of": "2026-11-09",
+  "limitation": "DATA SINTETIS; hanya 7 origin uji pada 7 ID. Target belum disetujui. Training windows masih berkorelasi; profil statis diasumsikan diketahui sebelum origin. Bukan validasi klinis atau diagnosis.",
+  "secondary_evaluations": {
+    "legacy_subject_only": {
+      "rows_train": 204,
+      "rows_test": 119,
+      "scores": [
+        {
+          "model": "Naive 7-day mean",
+          "mae": 1.9399759903961593,
+          "rmse": 2.3181549547216416,
+          "r2": 0.8570573032970953
+        },
+        {
+          "model": "Linear Regression",
+          "mae": 2.2615658338598505,
+          "rmse": 2.92488130254983,
+          "r2": 0.7724412505522058
+        }
+      ],
+      "overlapping_test_target_id_days": 672,
+      "limitation": "Same-calendar group split; overlapping test labels. Not a strict future-forecast estimate."
+    },
+    "purged_rolling": {
+      "rows_test": 42,
+      "scores": [
+        {
+          "model": "Naive 7-day mean",
+          "mae": 1.8971088435374153,
+          "rmse": 2.2624574154779826,
+          "r2": 0.8610877581249015
+        },
+        {
+          "model": "Linear Regression",
+          "mae": 2.16496226319436,
+          "rmse": 2.7011093821610808,
+          "r2": 0.8020005262070382
+        }
+      ],
+      "limitation": "Held-out IDs/time, but adjacent test target windows overlap. Sensitivity only."
+    }
+  },
+  "model_sha256": "50c8b1e49f2fbc68615ee56f82ceb235271a4ccf3a8ea6b960cd51e4e255b7ca"
 }

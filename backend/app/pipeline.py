@@ -35,133 +35,169 @@ def verify_headers(df, expected, name):
             raise DataQualityError(f"{name}: header kolom {i+1} berbeda (diharapkan {want[:45]!r}, didapat {str(current)[:45]!r})")
 
 
-def clean_str(v):
-    if v is None or pd.isna(v): return None
-    s = str(v).strip()
-    return s if s and s.lower() not in ('nan','none','nat') else None
+from .survey_schema import PROFILE_FIELDS, DAILY_FIELDS, CONDITION_NAMES, parse_value, parse_numeric, text
 
-def numeric(v, lo=None, hi=None):
-    s=clean_str(v)
-    if s is None: return None
-    s=s.replace(',','.')
-    match=re.fullmatch(r'\s*(-?\d+(?:\.\d+)?)\s*(?:cm|kg|menit|tahun)?\s*',s,re.I)
-    if not match: return None
-    n=float(match.group(1))
-    return n if (lo is None or n >= lo) and (hi is None or n <= hi) else None
+def clean_str(v):
+    return text(v)
+
+
+def numeric(v, lo=None, hi=None, unit=None, integer=False):
+    return parse_numeric(v, unit, [lo, hi] if lo is not None and hi is not None else None, integer)
+
 
 def sleep_hours(v, synthetic=True):
-    s=clean_str(v)
-    if not s: return None
-    if re.fullmatch(r'\d{1,2}:\d{2}',s):
-        if not synthetic: return None  # real survey field meaning requires confirmation
-        h,m=map(int,s.split(':'))
-        return round(h+m/60,3) if h<=18 and m<60 else None
-    return numeric(s,0,18) if synthetic else None
+    return parse_value(v, DAILY_FIELDS[19], synthetic)[0]
+
 
 def clean_date(v):
-    try:
-        dt=pd.to_datetime(v,errors='coerce')
-        return dt.date() if pd.notna(dt) else None
-    except (ValueError,TypeError): return None
+    return parse_value(v, DAILY_FIELDS[2])[0]
 
-def parse_profiles(df):
-    verify_headers(df,EXPECTED_PROFILE_HEADERS,'Form Awal')
-    if 'ID Responden' not in str(df.columns[1]): raise DataQualityError('Kolom kedua formulir awal bukan ID Responden')
-    output=[]; errors=[]; seen=set()
-    for i, record in enumerate(df.itertuples(index=False,name=None),start=2):
-        rid=clean_str(record[1])
-        if not rid: errors.append({'row':i,'reason':'ID responden kosong'}); continue
-        if rid in seen: errors.append({'row':i,'reason':'ID responden duplikat'}); continue
+
+def _canonical_rows(df, specs, source, synthetic=True):
+    rows, issues, changes = [], [], []
+    for number, values in enumerate(df.itertuples(index=False, name=None), start=2):
+        row = {}
+        for index, spec in enumerate(specs):
+            value, code = parse_value(values[index], spec, synthetic)
+            row[spec['technical']] = value
+            if code:
+                issues.append({'source':source, 'row':number, 'column':index+1,
+                               'field':spec['technical'], 'code':code,
+                               'action':'retain_for_review' if code == 'unmapped_other_category_review' else 'set_null'})
+            if value is not None and str(values[index]) != str(value):
+                changes.append({'source':source, 'row':number, 'field':spec['technical']})
+        rows.append((number, row))
+    return rows, issues, changes
+
+
+def parse_profiles(df, audit=None, synthetic=True):
+    verify_headers(df, EXPECTED_PROFILE_HEADERS, 'Form Awal')
+    canonical, issues, changes = _canonical_rows(df, PROFILE_FIELDS, 'profiles', synthetic)
+    output, errors, accepted, seen = [], [], [], set()
+    for number, row in canonical:
+        rid = row['respondent_id']
+        reason = 'ID responden kosong/tidak valid' if not rid else 'ID responden duplikat' if rid in seen else None
+        if reason:
+            errors.append({'row':number, 'reason':reason}); continue
         seen.add(rid)
-        row={name:clean_str(record[idx]) for name,idx in PROFILE_INDEX.items()}
-        row['age']=numeric(record[3],0,120)
-        row['height_cm']=numeric(record[20],80,250)
-        row['weight_kg']=numeric(record[21],15,300)
-        row['bmi']=(round(row['weight_kg']/((row['height_cm']/100)**2),3) if row['height_cm'] and row['weight_kg'] else None)
-        row['active_days_week']=numeric(record[23],0,7)
-        row['conditions_json']=json.dumps(dict(zip(CONDITIONS,[clean_str(v) for v in record[9:20]])),ensure_ascii=False)
-        output.append(row)
-    return output,errors
+        profile = {key:row[key] for key in PROFILE_INDEX}
+        profile['bmi'] = (round(profile['weight_kg'] / (profile['height_cm']/100)**2, 3)
+                          if profile['weight_kg'] and profile['height_cm'] else None)
+        profile['conditions_json'] = json.dumps({key:row[key] for key in CONDITION_NAMES}, ensure_ascii=False)
+        output.append(profile); accepted.append(row)
+    if audit is not None:
+        audit.update(profile_clean=accepted, profile_issues=issues, profile_changes=changes)
+    return output, errors
 
-def parse_days(df, profile_ids, synthetic=True):
-    verify_headers(df,EXPECTED_DAILY_HEADERS,'Form Harian')
-    if 'ID Responden' not in str(df.columns[1]): raise DataQualityError('Kolom kedua formulir harian bukan ID Responden')
-    all_days=[]; sessions=[]; errors=[]; duplicates=set(); keys=set(); missing_sleep=0; missing_sitting=0; suspicious_dates=[]; invalid_bp=[]
-    for i, rec in enumerate(df.itertuples(index=False,name=None),start=2):
-        rid=clean_str(rec[1]); d=clean_date(rec[2])
-        if not rid or not d or rid not in profile_ids:
-            errors.append({'row':i,'reason':'ID kosong/tidak ditemukan di form awal atau tanggal tidak valid'}); continue
-        key=(rid,d)
+
+def parse_days(df, profile_ids, synthetic=True, audit=None):
+    verify_headers(df, EXPECTED_DAILY_HEADERS, 'Form Harian')
+    canonical, issues, changes = _canonical_rows(df, DAILY_FIELDS, 'daily', synthetic)
+    days, sessions, errors, accepted, suspicious, consistency = [], [], [], [], [], []
+    session_source_rows = []
+    keys, duplicate_keys = set(), set()
+    for number, row in canonical:
+        rid, day = row['respondent_id'], row['date']
+        if not rid or not day or rid not in profile_ids:
+            errors.append({'row':number, 'reason':'ID kosong/tidak cocok profil diterima atau tanggal tidak valid'}); continue
+        key = rid, day
         if key in keys:
-            duplicates.add(key); errors.append({'row':i,'reason':'Duplikasi ID + tanggal (ditahan untuk pemeriksaan)'});continue
+            duplicate_keys.add(key)
+            errors.append({'row':number, 'reason':'Duplikasi ID-tanggal: baris berikutnya dikarantina; baris pertama dipertahankan'})
+            continue
         keys.add(key)
-        if d.year<2024 or d.year>2030:
-            suspicious_dates.append({'row':i,'date':str(d),'reason':'Tanggal di luar periode kerja yang diharapkan; periksa sumber'})
-        day={'respondent_id':rid,'date':d}
-        day.update({k:clean_str(rec[ix]) for k,ix in DAY_INDEX.items() if k not in ('respondent_id','date')})
-        for col in ('activity_minutes','heavy_minutes','smoke_count'):
-            val=numeric(day[col],0,1440 if col!='smoke_count' else 100)
-            day[col]=int(val) if val is not None else None
-        stress=clean_str(rec[27]); m=re.match(r'^([1-5])\b',stress or '')
-        day['stress']=int(m.group(1)) if m else None
-        day['sleep_hours']=sleep_hours(rec[19], synthetic=synthetic)
-        if day['sleep_hours'] is None: missing_sleep+=1
-        if day['sitting'] is None: missing_sitting+=1
-        all_days.append({k:v for k,v in day.items() if k not in [n for n in DAY_INDEX if n.startswith('morning_') or n.startswith('evening_')] and k!='sleep'})
-        for session,prefix in [('Pagi','morning'),('Malam','evening')]:
-            part=[]
-            for suffix,lo,hi in [('sbp1',60,260),('dbp1',35,170),('sbp2',60,260),('dbp2',35,170)]:
-                v=numeric(day[f'{prefix}_{suffix}'],lo,hi)
-                if clean_str(day[f'{prefix}_{suffix}']) is not None and v is None:
-                    invalid_bp.append({'row':i,'session':session,'field':suffix,'raw':clean_str(day[f'{prefix}_{suffix}'])})
-                part.append(v)
-            a,b,c,e=part; sbp=[n for n in (a,c) if n is not None]; dbp=[n for n in (b,e) if n is not None]
-            sessions.append({'respondent_id':rid,'date':d,'session':session,'measured_at':day[f'{prefix}_time'],
-                'sbp1':a,'dbp1':b,'sbp2':c,'dbp2':e,'sbp_mean':float(np.mean(sbp)) if sbp else None,
-                'dbp_mean':float(np.mean(dbp)) if dbp else None,'valid_sbp_count':len(sbp),'valid_dbp_count':len(dbp),
-                'before_activity':day[f'{prefix}_context']})
-    quality={'raw_profiles':len(profile_ids),'raw_daily':len(df),'accepted_daily':len(all_days),'rejected_daily':len(errors),
-             'valid_sessions':sum(1 for x in sessions if x['sbp_mean'] is not None and x['dbp_mean'] is not None),
-             'missing_sleep':missing_sleep,'missing_sitting':missing_sitting,'duplicate_pairs':len(duplicates),
-             'rejections':errors[:40], 'suspicious_dates':suspicious_dates[:40], 'invalid_bp_readings':invalid_bp[:40],
-             'invalid_bp_count':len(invalid_bp), 'assumption_sleep':'HH:MM pada CSV SINTETIS ditafsirkan durasi jam:menit; untuk data aktual tidak otomatis dikonversi.'}
-    return all_days,sessions,quality
+        if day.year < 2024 or day.year > 2030:
+            suspicious.append({'row':number, 'date':str(day), 'reason':'Tanggal di luar rentang audit 2024?2030; perlu verifikasi, tidak dikoreksi otomatis'})
+        if row['submitted_at'] and day > datetime.fromisoformat(row['submitted_at']).date():
+            consistency.append({'source':'daily','row':number,'field':'date','code':'observation_after_submission','action':'retain_for_review'})
+        if row['smoked'] in ('Tidak', 'Tidak berlaku karena saya tidak merokok') and (row['smoke_count'] or 0) > 0:
+            consistency.append({'source':'daily','row':number,'field':'smoke_count','code':'smoking_status_count_conflict','action':'retain_for_review'})
+        if row['smoked'] == 'Ya' and row['smoke_count'] is None:
+            consistency.append({'source':'daily','row':number,'field':'smoke_count','code':'smoker_count_missing','action':'retain_for_review'})
+        days.append({key:row[key] for key in ['respondent_id','date','activity_type','activity_minutes','heavy_minutes',
+            'sitting','sleep_hours','salty_food','fruit','vegetable','caffeine','smoked','smoke_count','medication','stress']})
+        accepted.append(row)
+        for session, prefix in [('Pagi','morning'), ('Malam','evening')]:
+            session_source_rows.append(number)
+            sbp1, dbp1, sbp2, dbp2 = [row[f'{prefix}_{x}'] for x in ('sbp1','dbp1','sbp2','dbp2')]
+            sbp = [v for v in (sbp1,sbp2) if v is not None]
+            dbp = [v for v in (dbp1,dbp2) if v is not None]
+            for reading, a, b in [(1,sbp1,dbp1),(2,sbp2,dbp2)]:
+                if a is not None and b is not None and a <= b:
+                    consistency.append({'source':'daily','row':number,'field':f'{prefix}_reading{reading}',
+                                        'code':'sbp_not_above_dbp','action':'retain_for_review'})
+            sessions.append(dict(respondent_id=rid,date=day,session=session,measured_at=row[f'{prefix}_time'],
+                sbp1=sbp1,dbp1=dbp1,sbp2=sbp2,dbp2=dbp2,
+                sbp_mean=float(np.mean(sbp)) if sbp else None, dbp_mean=float(np.mean(dbp)) if dbp else None,
+                valid_sbp_count=len(sbp),valid_dbp_count=len(dbp),before_activity=row[f'{prefix}_context']))
+    invalid_bp = [i for i in issues if re.fullmatch(r'(morning|evening)_(sbp|dbp)[12]',i['field'])]
+    quality = dict(raw_daily=len(df), accepted_daily=len(days), rejected_daily=len(errors),
+        valid_sessions=sum(s['sbp_mean'] is not None and s['dbp_mean'] is not None for s in sessions),
+        missing_sleep=sum(d['sleep_hours'] is None for d in days), missing_sitting=sum(d['sitting'] is None for d in days),
+        duplicate_pairs=len(duplicate_keys), rejections=errors, suspicious_dates=suspicious,
+        invalid_bp_readings=invalid_bp, invalid_bp_count=len(invalid_bp),
+        assumption_sleep='HH:MM sintetis = durasi jam:menit; data aktual tetap NA sampai definisi disetujui.')
+    if audit is not None:
+        audit.update(daily_clean=accepted, daily_issues=issues, daily_changes=changes,
+                     consistency_issues=consistency, session_source_rows=session_source_rows)
+    return days, sessions, quality
 
-def prepare(profiles_df,days_df,synthetic=True):
-    profiles,profile_errors=parse_profiles(profiles_df)
-    days,sessions,quality=parse_days(days_df,{r['respondent_id'] for r in profiles},synthetic)
-    quality['rejected_profiles']=len(profile_errors)
-    quality['profile_rejections']=profile_errors[:40]
-    quality['accepted_profiles']=len(profiles)
-    if not profiles or not days: raise DataQualityError('Tidak ada data profil/harian valid yang dapat dimuat')
-    return profiles,days,sessions,quality
 
-def load_warehouse(db:Session,profiles,days,sessions,quality,source_name='CSV sintetis',kind='synthetic'):
-    """Transaction with explicitly separated profile, daily and session facts."""
-    for model in (BPSession,DailyBehavior,Participant,CalendarDate,SessionType,SourceState):
-        db.execute(delete(model))
-    db.flush()
-    for row in profiles: db.add(Participant(**row))
-    for d in sorted({x['date'] for x in days}): db.add(CalendarDate(date=d,year=d.year,month=d.month,day=d.day))
-    db.add_all([SessionType(name='Pagi'),SessionType(name='Malam')]);db.flush()
-    pids={p.respondent_id:p.id for p in db.scalars(select(Participant)).all()}
-    dates={d.date:d.id for d in db.scalars(select(CalendarDate)).all()}
-    sids={s.name:s.id for s in db.scalars(select(SessionType)).all()}
-    for row in days:
-        r=dict(row);rid=r.pop('respondent_id');d=r.pop('date')
-        db.add(DailyBehavior(participant_id=pids[rid],date_id=dates[d],**r))
-    for row in sessions:
-        r=dict(row);rid=r.pop('respondent_id');d=r.pop('date');s=r.pop('session')
-        db.add(BPSession(participant_id=pids[rid],date_id=dates[d],session_id=sids[s],**r))
-    db.add(SourceState(id=1,source_name=source_name,source_kind=kind,row_count=len(days),quality_json=json.dumps(quality,ensure_ascii=False)))
-    db.commit()
+def prepare(profiles_df, days_df, synthetic=True):
+    audit = {}
+    profiles, profile_errors = parse_profiles(profiles_df, audit, synthetic)
+    days, sessions, quality = parse_days(days_df, {r['respondent_id'] for r in profiles}, synthetic, audit)
+    quality.update(raw_profiles=len(profiles_df), rejected_profiles=len(profile_errors),
+                   profile_rejections=profile_errors, accepted_profiles=len(profiles),
+                   source_kind='synthetic' if synthetic else 'uploaded')
+    from .quality import build_quality
+    quality.update(build_quality(profiles_df, days_df, profiles, days, sessions, audit, quality, synthetic))
+    if not profiles or not days:
+        error = DataQualityError('Tidak ada data profil/harian valid yang dapat dimuat')
+        error.quality = quality
+        raise error
+    return profiles, days, sessions, quality
+
+
+def load_warehouse(db:Session, profiles, days, sessions, quality, source_name='CSV sintetis', kind='synthetic'):
+    """Replace only v2 data, atomically. Call only on an explicitly selected database.
+
+    Idempotency means the same natural keys/values/counts after reloading, not stable
+    surrogate IDs. Invalid input and DB errors roll the entire replacement back.
+    """
+    try:
+        if not profiles or not days:
+            raise DataQualityError('Menolak memuat dataset kosong')
+        if kind == 'synthetic' and any(not p['respondent_id'].startswith('SIM') for p in profiles):
+            raise DataQualityError('Sumber sintetis wajib memakai ID SIM; jangan labeli data aktual sebagai simulasi')
+        for model in (BPSession,DailyBehavior,Participant,CalendarDate,SessionType,SourceState):
+            db.execute(delete(model))
+        db.flush()
+        db.add_all([Participant(**row) for row in profiles])
+        db.add_all([CalendarDate(date=d,year=d.year,month=d.month,day=d.day) for d in sorted({r['date'] for r in days})])
+        db.add_all([SessionType(name='Pagi'),SessionType(name='Malam')]); db.flush()
+        pids={p.respondent_id:p.id for p in db.scalars(select(Participant)).all()}
+        dates={d.date:d.id for d in db.scalars(select(CalendarDate)).all()}
+        sids={s.name:s.id for s in db.scalars(select(SessionType)).all()}
+        for row in days:
+            r=dict(row); rid=r.pop('respondent_id'); day=r.pop('date')
+            db.add(DailyBehavior(participant_id=pids[rid],date_id=dates[day],**r))
+        for row in sessions:
+            r=dict(row); rid=r.pop('respondent_id'); day=r.pop('date'); session=r.pop('session')
+            db.add(BPSession(participant_id=pids[rid],date_id=dates[day],session_id=sids[session],**r))
+        db.add(SourceState(id=1,source_name=source_name,source_kind=kind,row_count=len(days),quality_json=json.dumps(quality,ensure_ascii=False)))
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
     return quality
 
-def seed_if_empty(db:Session,root=None):
+
+def seed_if_empty(db:Session, root=None):
     if db.get(SourceState,1): return False
     folder=Path(root or __import__('os').getenv('SAMPLE_DATA_DIR','/app/data/sample'))
-    a=folder/'Data_Responden_Sintetis.csv';b=folder/'Data_Harian_Sintetis.csv'
+    a=folder/'Data_Responden_Sintetis.csv'; b=folder/'Data_Harian_Sintetis.csv'
     if not a.exists() or not b.exists(): raise FileNotFoundError(f'Synthetic fixtures missing in {folder}')
     profiles,days,sessions,quality=prepare(pd.read_csv(a,dtype=str,keep_default_na=False),pd.read_csv(b,dtype=str,keep_default_na=False))
-    load_warehouse(db,profiles,days,sessions,quality,'Data sintetis dua formulir (SIM001–SIM019)','synthetic')
+    load_warehouse(db,profiles,days,sessions,quality,'Data sintetis dua formulir (SIM001?SIM019)','synthetic')
     return True

@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
+    "test": "node --test tests/dashboard.test.mjs",
+    "test:browser": "playwright test",
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {
@@ -16,7 +18,10 @@
     "react-plotly.js": "^2.6.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "esbuild": "^0.25.12",
+    "react-test-renderer": "^18.3.1",
     "vite": "^6.0.5"
   }
 }

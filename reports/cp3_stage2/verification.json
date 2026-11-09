@@ -1,0 +1,81 @@
+{
+  "stage": "CP3 Tahap 2",
+  "verified_at_utc": "2026-11-09T07:28:49.273002+00:00",
+  "status": "workspace_implemented_and_tested_not_deployed",
+  "tests": {
+    "backend": {
+      "passed": 51,
+      "skipped_legacy_v1_module": 1,
+      "database": "isolated SQLite in-memory"
+    },
+    "frontend_components": {
+      "passed": 9
+    },
+    "browser": {
+      "passed": 6,
+      "browser": "Microsoft Edge",
+      "desktop": "1440x1000",
+      "mobile": "390x844",
+      "production_plotly": true,
+      "postgresql_access": "read-only live synthetic warehouse"
+    },
+    "production_build": "passed",
+    "backend_preview_image_build": "passed",
+    "git_diff_check": "passed"
+  },
+  "active_warehouse": {
+    "unchanged": true,
+    "natural_content_sha256_before": "2c72512aed5d6c4f1e124f1be7ec47a03d0635fe2a6579fe6c3a7edd9c14c267",
+    "natural_content_sha256_after": "2c72512aed5d6c4f1e124f1be7ec47a03d0635fe2a6579fe6c3a7edd9c14c267",
+    "counts": {
+      "dim_participant_v2": 19,
+      "dim_date_v2": 30,
+      "dim_session_v2": 2,
+      "fact_bp_session_v2": 1140,
+      "fact_daily_behavior_v2": 570,
+      "dataset_state_v2": 1
+    },
+    "missing_active_days_week": 19,
+    "etl_commit_performed": false,
+    "active_services_restarted": false,
+    "preview_transaction_read_only_verified": true,
+    "preview_startup_ddl_disabled": true
+  },
+  "protected_files_unchanged": {
+    ".env": true,
+    "backend/app/pipeline.py": true,
+    "backend/app/survey_schema.py": true,
+    "backend/app/quality.py": true,
+    "backend/app/baseline.py": true,
+    "etl/import_data.py": true,
+    "models/baseline_metrics.json": true,
+    "models/linear_regression_synthetic.joblib": true,
+    "models/README.md": true,
+    "notebooks/01_baseline_regresi.ipynb": true,
+    "notebooks/02_eda_data_readiness.ipynb": true,
+    "notebooks/README.md": true,
+    "data/sample/Data_Harian_Sintetis.csv": true,
+    "data/sample/Data_Responden_Sintetis.csv": true
+  },
+  "temporary_preview_container_stopped": true,
+  "visualizations": {
+    "panel_count_including_repeated_contexts": 34,
+    "advanced_families": [
+      "heatmap",
+      "treemap",
+      "small multiples",
+      "violin/boxplot"
+    ],
+    "final_five_advanced_types_claimed": false
+  },
+  "limitations": [
+    "Synthetic data only; actual data and approvals remain pending.",
+    "Live warehouse still uses earlier ETL; weekly active days missing on 19 profiles.",
+    "Existing baseline and artifacts unchanged; metrics are experiment artifacts via API.",
+    "Vite production Plotly bundle about 4.91 MB / 1.49 MB gzip; chunk warning remains.",
+    "Empty/error browser scenarios use response simulation, not destructive DB changes.",
+    "Not a full accessibility/security audit or user usability study.",
+    "Active Compose services were not rebuilt/restarted."
+  ],
+  "baseline_endpoint_implementation_unchanged": true
+}

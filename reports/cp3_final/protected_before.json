@@ -1,0 +1,12 @@
+{
+  ".env": null,
+  "backend/app/pipeline.py": "2593d6cc8d1ce4275f801726e32976e513495176d39d4c924c2feccdbbd65519",
+  "backend/app/survey_schema.py": "724fcefd9ba47953699fed203ca3ba6f4e17214f29e79b8756f41b48f063e337",
+  "backend/app/quality.py": "4e280f14dea0e38b4199bf3670a2404cbba7431fe8239d753b6be5cbfdf74440",
+  "etl/import_data.py": "a77caf851b83d1a90f68633c5405aa1f8efcf8796d63a52a5562a9470c7227aa",
+  "notebooks/02_eda_data_readiness.ipynb": "9d8c172dcbe8666412c7b2b794633f4ba92405f634f278777f03a7d21f62f6c8",
+  "data/Dataset_Sintetis_Tekanan_Darah_REFERENSI.xlsx": "23bdbd74d39ea03d3fb53c7908b513a02b726d965e00a0a83f7ebbaa16791156",
+  "data/README.md": "8dac05ce514708c8fb8f17596861934e0fd654b9f3e0e950763c9701bde6d45c",
+  "data/sample/Data_Harian_Sintetis.csv": "a7814c628642c82c51e9ed05c11da56f4441f3a211c721a0e83b0414e163ad2d",
+  "data/sample/Data_Responden_Sintetis.csv": "e08d7bcbfc1130d7fbe1d098f33c4a8229d78c7b2afac8ddfc8a4861062ca53f"
+}

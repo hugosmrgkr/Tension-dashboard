@@ -1,4 +1,6 @@
 .env
+reports/.matplotlib/
+reports/.jupyter/
 __pycache__/
 .pytest_cache/
 *.pyc

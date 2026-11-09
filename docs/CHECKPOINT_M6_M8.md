@@ -1,5 +1,7 @@
 # Progres terhadap deskripsi proyek IT Del — M6–M8 (bukan penilaian dosen)
 
+**Catatan historis:** verifikasi terbaru dan bukti lengkap berada di [CP3_FINAL_REPORT.md](CP3_FINAL_REPORT.md). Jangan memakai split/hasil awal sebagai evaluasi utama.
+
 Sumber: `Deskripsi_Proyek_DA_DS.pdf` tabel timeline halaman 6; `Daftar yang harus diperbaiki.pdf` P0–P2; `Panduan_Utama_Proyek_Tekanan_Darah_DALIS_DASI(1).pdf`.
 
 | Luaran jadwal | Implementasi yang tersedia | Batasan |
@@ -8,7 +10,7 @@ Sumber: `Deskripsi_Proyek_DA_DS.pdf` tabel timeline halaman 6; `Daftar yang haru
 | M6 Feature engineering & split | Feature `past_7d_*`, target `future_7d_mean_sbp` sintetis, pembagian responden tanpa overlap | Target masih **usulan**, belum disetujui dosen. |
 | M7 Baseline + pembanding | Baseline mean 7-hari terakhir dan Linear Regression; metrik MAE, RMSE, R² awal dihitung, notebook & model artefak tersedia | Tidak ada tuning atau tiga model final. |
 | M7 Analisis mendalam & filter dasar | Perbandingan sesi, hubungan gaya hidup, filter tanggal dan profil, trend per ID | Visualisasi advance interaktif final M9–M10 masih perlu evaluasi. |
-| M8 Dashboard v1 + warehouse | 3 dimensi (`participant`, `date`, `session`) dan 2 fakta (`bp_session`, `daily_behavior`), seed dua dataset | Audit aktual, deployment publik, RBAC belum selesai. |
+| M8 Dashboard v1 + warehouse | 3 dimensi (`participant`, `date`, `session`) dan 2 fakta (`bp_session`, `daily_behavior`), ETL manual dua dataset | Audit aktual, deployment publik, RBAC belum selesai. |
 | M8 Laporan baseline dan rencana eksperimen | `models/baseline_metrics.json`, notebook, dokumentasi; rencana tambah model lanjutan setelah data readiness | Metrik adalah **data sintetis** dan tidak mengukur generalisasi pasien. |
 
 ## P0 yang diperbaiki

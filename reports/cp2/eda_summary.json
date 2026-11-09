@@ -1,0 +1,246 @@
+{
+  "label": "SIMULASI — BUKAN DATA PENELITIAN AKTUAL",
+  "demographics": {
+    "respondents": 19,
+    "days": 570,
+    "sessions": 1140,
+    "valid_sessions": 1140,
+    "dates": 30,
+    "provinces": 9,
+    "cities": 16,
+    "mean_age": 41.421052631578945,
+    "min_age": 20,
+    "max_age": 59,
+    "gender": {
+      "Perempuan": 12,
+      "Laki-laki": 7
+    }
+  },
+  "session_summary": {
+    "columns": [
+      [
+        "session",
+        ""
+      ],
+      [
+        "sbp_mean",
+        "count"
+      ],
+      [
+        "sbp_mean",
+        "mean"
+      ],
+      [
+        "sbp_mean",
+        "std"
+      ],
+      [
+        "sbp_mean",
+        "min"
+      ],
+      [
+        "sbp_mean",
+        "max"
+      ],
+      [
+        "dbp_mean",
+        "count"
+      ],
+      [
+        "dbp_mean",
+        "mean"
+      ],
+      [
+        "dbp_mean",
+        "std"
+      ],
+      [
+        "dbp_mean",
+        "min"
+      ],
+      [
+        "dbp_mean",
+        "max"
+      ]
+    ],
+    "index": [
+      0,
+      1
+    ],
+    "data": [
+      [
+        "Malam",
+        570,
+        119.150877193,
+        7.3441660026,
+        100.5,
+        140.5,
+        570,
+        72.7236842105,
+        3.8270451562,
+        61.5,
+        84.5
+      ],
+      [
+        "Pagi",
+        570,
+        118.6807017544,
+        7.2691040004,
+        102.0,
+        144.5,
+        570,
+        72.4359649123,
+        4.1098520063,
+        61.5,
+        87.0
+      ]
+    ]
+  },
+  "paired_sbp_difference": 0.47017543859649125,
+  "paired_rows": 570,
+  "findings": [
+    {
+      "title": "Cakupan profil dan variasi demografi",
+      "figure": "01_profile_age.png",
+      "text": "SIMULASI: 19 ID, 30 tanggal, 570 catatan harian dan 1140 sesi valid. Usia 20–59 tahun, rerata 41.42; 9 provinsi dan 16 kabupaten/kota. Jumlah catatan berulang tidak sama dengan jumlah orang."
+    },
+    {
+      "title": "Perbandingan pagi–malam berpasangan",
+      "figure": "05_session_comparison.png",
+      "text": "SIMULASI: 570 pasangan ID-tanggal lengkap; rerata selisih Malam−Pagi 0.470 mmHg. Perbandingan memasangkan orang dan tanggal yang sama; ini statistik deskriptif, bukan efek kausal waktu."
+    },
+    {
+      "title": "Perubahan rerata harian selama periode simulasi",
+      "figure": "06_daily_trend.png",
+      "text": "SIMULASI: rerata sistolik sesi pada 2026-09-01 adalah 117.816 mmHg dan pada 2026-09-30 118.711 mmHg (selisih +0.895 mmHg). Dua titik ini bukan bukti tren populasi atau perubahan klinis."
+    },
+    {
+      "title": "Hubungan gaya hidup pada grain harian",
+      "figure": "08_numeric_correlation.png",
+      "text": "SIMULASI: korelasi Pearson aktivitas menit–SBP harian -0.012; tidur–SBP harian 0.059. Perhitungan satu baris per ID-tanggal, bukan menduplikasi perilaku ke dua sesi. Catatan dari orang yang sama saling berkaitan; tidak digunakan untuk uji kausal atau signifikansi populasi."
+    },
+    {
+      "title": "Missing tetap terlihat setelah cleaning",
+      "figure": "09_missing_before_after.png",
+      "text": "SIMULASI: tidur kosong 6/570 (1.053%), duduk kosong 3/570 (0.526%). Jumlah merokok NA 550/570; status merokok tidak dipakai untuk mengisi nol. 25 sesi diberi flag IQR; tidak ada sesi yang dihapus hanya karena flag statistik."
+    }
+  ],
+  "stress_summary": [
+    {
+      "stress": 1,
+      "count": 64,
+      "mean": 117.1953125,
+      "std": 7.152736843
+    },
+    {
+      "stress": 2,
+      "count": 114,
+      "mean": 118.649122807,
+      "std": 6.683647931
+    },
+    {
+      "stress": 3,
+      "count": 206,
+      "mean": 118.6468446602,
+      "std": 6.243531462
+    },
+    {
+      "stress": 4,
+      "count": 128,
+      "mean": 119.681640625,
+      "std": 7.5201641565
+    },
+    {
+      "stress": 5,
+      "count": 58,
+      "mean": 120.6034482759,
+      "std": 8.1137789564
+    }
+  ],
+  "correlation": {
+    "age": {
+      "age": 1.0,
+      "bmi": -0.2565594544,
+      "sleep_hours": 0.0198947881,
+      "activity_minutes": 0.0725721009,
+      "heavy_minutes": -0.0388325615,
+      "stress": 0.0536767221,
+      "sbp_mean": 0.5370649635,
+      "dbp_mean": 0.502428187
+    },
+    "bmi": {
+      "age": -0.2565594544,
+      "bmi": 1.0,
+      "sleep_hours": 0.0545057246,
+      "activity_minutes": -0.0078524645,
+      "heavy_minutes": -0.0132433736,
+      "stress": 0.0415296334,
+      "sbp_mean": 0.3214266275,
+      "dbp_mean": 0.2755301243
+    },
+    "sleep_hours": {
+      "age": 0.0198947881,
+      "bmi": 0.0545057246,
+      "sleep_hours": 1.0,
+      "activity_minutes": -0.0277081426,
+      "heavy_minutes": -0.0200131056,
+      "stress": 0.0226958597,
+      "sbp_mean": 0.0588206944,
+      "dbp_mean": 0.076277106
+    },
+    "activity_minutes": {
+      "age": 0.0725721009,
+      "bmi": -0.0078524645,
+      "sleep_hours": -0.0277081426,
+      "activity_minutes": 1.0,
+      "heavy_minutes": 0.1433032204,
+      "stress": 0.0153529748,
+      "sbp_mean": -0.0123273578,
+      "dbp_mean": 0.0300792386
+    },
+    "heavy_minutes": {
+      "age": -0.0388325615,
+      "bmi": -0.0132433736,
+      "sleep_hours": -0.0200131056,
+      "activity_minutes": 0.1433032204,
+      "heavy_minutes": 1.0,
+      "stress": 0.0190093059,
+      "sbp_mean": -0.0397093937,
+      "dbp_mean": -0.0481048698
+    },
+    "stress": {
+      "age": 0.0536767221,
+      "bmi": 0.0415296334,
+      "sleep_hours": 0.0226958597,
+      "activity_minutes": 0.0153529748,
+      "heavy_minutes": 0.0190093059,
+      "stress": 1.0,
+      "sbp_mean": 0.1211792319,
+      "dbp_mean": 0.0926834537
+    },
+    "sbp_mean": {
+      "age": 0.5370649635,
+      "bmi": 0.3214266275,
+      "sleep_hours": 0.0588206944,
+      "activity_minutes": -0.0123273578,
+      "heavy_minutes": -0.0397093937,
+      "stress": 0.1211792319,
+      "sbp_mean": 1.0,
+      "dbp_mean": 0.8144364837
+    },
+    "dbp_mean": {
+      "age": 0.502428187,
+      "bmi": 0.2755301243,
+      "sleep_hours": 0.076277106,
+      "activity_minutes": 0.0300792386,
+      "heavy_minutes": -0.0481048698,
+      "stress": 0.0926834537,
+      "sbp_mean": 0.8144364837,
+      "dbp_mean": 1.0
+    }
+  },
+  "completeness": {
+    "sleep_missing": 6,
+    "sitting_missing": 3
+  }
+}

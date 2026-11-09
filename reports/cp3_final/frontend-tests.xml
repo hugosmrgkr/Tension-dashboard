@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="empty warehouse shows a useful message without KPI or plot fixtures" time="0.050305" classname="test"/>
+	<testcase name="dashboard reads arbitrary API values; filters and exports preserve exact ID and session" time="0.071405" classname="test"/>
+	<testcase name="all eight pages render with API data and baseline remains an explicit artifact experiment" time="0.040432" classname="test"/>
+	<testcase name="analytics failure remains visible while evaluation and management can still open" time="0.018525" classname="test"/>
+	<testcase name="pagination exposes rows past the old 200-row cut-off and preserves nulls" time="0.009850" classname="test"/>
+	<testcase name="incomplete sessions remain in the raw table without fabricated charts" time="0.002917" classname="test"/>
+	<testcase name="clicking a trend point applies date/session globally and reset clears it" time="0.044761" classname="test"/>
+	<testcase name="date errors prevent incompatible analytics requests and never retain old KPI" time="0.019275" classname="test"/>
+	<testcase name="risk page explains smoking, medication, nulls and observed sample sizes" time="0.015160" classname="test"/>
+	<!-- tests 9 -->
+	<!-- suites 0 -->
+	<!-- pass 9 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 2376.3358 -->
+</testsuites>

@@ -1,0 +1,115 @@
+{
+  "stage": "CP3 Tahap 1",
+  "verified_at_utc": "2026-11-09T06:43:01.271768+00:00",
+  "status": "implemented_and_verified_isolated_not_promoted",
+  "tests": {
+    "backend_sqlite": {
+      "passed": 46,
+      "skipped_legacy_v1_module": 1
+    },
+    "backend_postgresql16": {
+      "passed": 46,
+      "skipped_legacy_v1_module": 1
+    },
+    "backend_docker_linux": {
+      "passed": 46,
+      "skipped_legacy_v1_module": 1
+    },
+    "frontend_components": {
+      "passed": 6
+    },
+    "frontend_production_build": "passed",
+    "docker_backend_build": "passed",
+    "docker_frontend_build": "passed"
+  },
+  "docker_http_checks": {
+    "nginx_spa_and_built_asset": true,
+    "api_counts_and_sql_averages": true,
+    "latest_cp2_and_nulls": true,
+    "combined_id_date_morning_evening_filters": true,
+    "csv_export_counts_and_nulls": true,
+    "empty_filter_no_fake_values": true,
+    "no_website_import_endpoint": true,
+    "existing_baseline_artifact_accessible": true
+  },
+  "empty_warehouse_observed_before_explicit_test_load": {
+    "participants": 0,
+    "daily_records": 0,
+    "session_records": 0,
+    "mean_sbp": null,
+    "trend": []
+  },
+  "synthetic_fixture": {
+    "profiles": 19,
+    "daily_records": 570,
+    "sessions": 1140,
+    "morning_sessions": 570,
+    "evening_sessions": 570,
+    "etl_audit_version": "cp2-1",
+    "prepared_content_sha256": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+    "kpis": {
+      "respondents": 19,
+      "daily_records": 570,
+      "sessions": 1140,
+      "mean_sbp": 118.9,
+      "mean_dbp": 72.6,
+      "dates": 30
+    },
+    "filtered_quality": {
+      "daily_records": 570,
+      "session_records": 1140,
+      "valid_sessions": 1140,
+      "incomplete_sessions": 0,
+      "missing_sleep_hours": 6,
+      "missing_sitting": 3,
+      "missing_stress": 0,
+      "missing_activity_minutes": 0,
+      "missing_smoke_count": 550
+    },
+    "export_rows": {
+      "participants": 19,
+      "daily": 570,
+      "sessions": 1140
+    }
+  },
+  "active_warehouse": {
+    "reload_performed": false,
+    "service_restarted": false,
+    "read_only_verified": true,
+    "before_natural_content_sha256": "2c72512aed5d6c4f1e124f1be7ec47a03d0635fe2a6579fe6c3a7edd9c14c267",
+    "after_natural_content_sha256": "2c72512aed5d6c4f1e124f1be7ec47a03d0635fe2a6579fe6c3a7edd9c14c267",
+    "unchanged": true,
+    "counts": {
+      "dim_participant_v2": 19,
+      "dim_date_v2": 30,
+      "dim_session_v2": 2,
+      "fact_bp_session_v2": 1140,
+      "fact_daily_behavior_v2": 570,
+      "dataset_state_v2": 1
+    },
+    "missing_active_days_week": 19,
+    "pending_action": "Manual approval and ETL promotion; active service has not been rebuilt/restarted"
+  },
+  "limitations": [
+    "React component tests substitute only the browser-only Plotly renderer; no full browser visual test.",
+    "Plotly production bundle approximately 4.89 MB (1.48 MB gzip); build warning, not failure.",
+    "Legacy API v1 module explicitly skipped; active contracts are CP2/v2/CP3.",
+    "Actual data remains blocked by the existing public-access guard until access control is implemented.",
+    "Baseline experiment and its artifacts unchanged; metrics are not recalculated by analytics filters."
+  ],
+  "docker_test_images": [
+    "toba-cp3-stage1-backend",
+    "toba-cp3-stage1-frontend"
+  ],
+  "protected_files_unchanged": {
+    ".env": true,
+    "backend/app/baseline.py": true,
+    "models/baseline_metrics.json": true,
+    "models/linear_regression_synthetic.joblib": true,
+    "notebooks/01_baseline_regresi.ipynb": true,
+    "notebooks/02_eda_data_readiness.ipynb": true
+  },
+  "source_csv_git_diff_empty": true,
+  "temporary_test_resources_cleaned_up": true,
+  "unchanged_baseline_route_and_page_blocks_compared_to_git_head": true
+}

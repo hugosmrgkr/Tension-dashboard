@@ -1,0 +1,155 @@
+{
+  "counts": {
+    "dim_participant_v2": 19,
+    "dim_date_v2": 30,
+    "dim_session_v2": 2,
+    "fact_bp_session_v2": 1140,
+    "fact_daily_behavior_v2": 570,
+    "dataset_state_v2": 1
+  },
+  "keys": {
+    "dim_participant_v2": {
+      "pk": [
+        "id"
+      ],
+      "foreign_keys": [],
+      "unique": [],
+      "unique_indexes": [
+        [
+          "respondent_id"
+        ]
+      ]
+    },
+    "dim_date_v2": {
+      "pk": [
+        "id"
+      ],
+      "foreign_keys": [],
+      "unique": [],
+      "unique_indexes": [
+        [
+          "date"
+        ]
+      ]
+    },
+    "dim_session_v2": {
+      "pk": [
+        "id"
+      ],
+      "foreign_keys": [],
+      "unique": [
+        [
+          "name"
+        ]
+      ],
+      "unique_indexes": [
+        [
+          "name"
+        ]
+      ]
+    },
+    "fact_bp_session_v2": {
+      "pk": [
+        "id"
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "date_id"
+          ],
+          "table": "dim_date_v2",
+          "referred": [
+            "id"
+          ]
+        },
+        {
+          "columns": [
+            "participant_id"
+          ],
+          "table": "dim_participant_v2",
+          "referred": [
+            "id"
+          ]
+        },
+        {
+          "columns": [
+            "session_id"
+          ],
+          "table": "dim_session_v2",
+          "referred": [
+            "id"
+          ]
+        }
+      ],
+      "unique": [
+        [
+          "participant_id",
+          "date_id",
+          "session_id"
+        ]
+      ],
+      "unique_indexes": [
+        [
+          "participant_id",
+          "date_id",
+          "session_id"
+        ]
+      ]
+    },
+    "fact_daily_behavior_v2": {
+      "pk": [
+        "id"
+      ],
+      "foreign_keys": [
+        {
+          "columns": [
+            "date_id"
+          ],
+          "table": "dim_date_v2",
+          "referred": [
+            "id"
+          ]
+        },
+        {
+          "columns": [
+            "participant_id"
+          ],
+          "table": "dim_participant_v2",
+          "referred": [
+            "id"
+          ]
+        }
+      ],
+      "unique": [
+        [
+          "participant_id",
+          "date_id"
+        ]
+      ],
+      "unique_indexes": [
+        [
+          "participant_id",
+          "date_id"
+        ]
+      ]
+    },
+    "dataset_state_v2": {
+      "pk": [
+        "id"
+      ],
+      "foreign_keys": [],
+      "unique": [],
+      "unique_indexes": []
+    }
+  },
+  "orphans": {
+    "fact_bp_session_v2.participant_id": 0,
+    "fact_bp_session_v2.date_id": 0,
+    "fact_bp_session_v2.session_id": 0,
+    "fact_daily_behavior_v2.participant_id": 0,
+    "fact_daily_behavior_v2.date_id": 0
+  },
+  "missing_active_days_week": 0,
+  "source_kind": "synthetic",
+  "natural_content_sha256": "0a91e24fecb8482092b2687cf144e84cf64fccfadbb46c7653d061fbbb2deefc"
+}

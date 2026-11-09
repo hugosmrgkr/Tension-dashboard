@@ -1,0 +1,43 @@
+{
+  "scope": "CP2 technical readiness on synthetic fixtures only",
+  "tests": [
+    {
+      "environment": "Windows Python 3.13 / SQLite memory",
+      "passed": 27,
+      "seconds": 13.16
+    },
+    {
+      "environment": "Windows Python 3.13 / isolated PostgreSQL 16",
+      "passed": 27,
+      "seconds": 16.47
+    },
+    {
+      "environment": "Docker Python 3.12 / SQLite memory",
+      "passed": 27,
+      "seconds": 14.0
+    }
+  ],
+  "test_command": "python -m pytest backend/tests/test_cp2.py backend/tests/test_api_v2.py -q -p no:cacheprovider",
+  "notebook": {
+    "path": "notebooks/02_eda_data_readiness.ipynb",
+    "executed_code_cells": 10,
+    "embedded_pngs": 10,
+    "errors": 0
+  },
+  "checks": {
+    "raw_sha256_unchanged": true,
+    "dry_run_quality_equals_eda": true,
+    "source_fields": 52,
+    "active_warehouse_unchanged": true,
+    "temporary_postgres_container_removed": true,
+    "docker_tooling_build_succeeded": true,
+    "git_diff_check_passed": true
+  },
+  "active_initial_sha256": "2c72512aed5d6c4f1e124f1be7ec47a03d0635fe2a6579fe6c3a7edd9c14c267",
+  "active_final_sha256": "2c72512aed5d6c4f1e124f1be7ec47a03d0635fe2a6579fe6c3a7edd9c14c267",
+  "warnings": [
+    "Starlette/httpx TestClient deprecation: one warning per pytest run",
+    "Temporary Jupyter kernel TCP transport warning; execution succeeded"
+  ],
+  "excluded": "Legacy v1 tests are not part of this selected CP2/v2 suite; no production data reload or model training"
+}

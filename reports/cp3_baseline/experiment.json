@@ -1,0 +1,215 @@
+{
+  "schema_version": 2,
+  "run_id": "242a4f84499a00fc1028",
+  "status": "DATA SINTETIS / SIMULASI - EKSPERIMEN",
+  "target": "future_7d_mean_sbp",
+  "target_approved": false,
+  "description": "Rerata SBP harian t+1..t+7; origin akhir hari t. Usulan target, belum disetujui dosen.",
+  "dataset": "19 ID sintetis, 570 ID-tanggal, 1140 sesi; 323 complete windows.",
+  "rows_training": 60,
+  "rows_test": 7,
+  "respondents_train": [
+    "SIM003",
+    "SIM005",
+    "SIM007",
+    "SIM008",
+    "SIM010",
+    "SIM011",
+    "SIM013",
+    "SIM014",
+    "SIM015",
+    "SIM016",
+    "SIM018",
+    "SIM019"
+  ],
+  "respondents_test": [
+    "SIM001",
+    "SIM002",
+    "SIM004",
+    "SIM006",
+    "SIM009",
+    "SIM012",
+    "SIM017"
+  ],
+  "features": [
+    "past_7d_sbp",
+    "past_7d_dbp",
+    "past_7d_sbp_std",
+    "age",
+    "bmi",
+    "past_7d_activity",
+    "past_7d_sleep",
+    "past_7d_stress"
+  ],
+  "config": {
+    "seed": 42,
+    "heldout_id_fraction": 0.32,
+    "calendar_train_fraction": 0.6,
+    "test_target_stride_days": 7
+  },
+  "cutoff": "2026-09-18",
+  "split": "Held-out respondent IDs + chronological label purge + non-overlapping 7-day test targets (seed=42)",
+  "scores": [
+    {
+      "model": "Naive 7-day mean",
+      "mae": 1.933673469387758,
+      "rmse": 2.2347229985988153,
+      "r2": 0.8503092921859248
+    },
+    {
+      "model": "Linear Regression",
+      "mae": 2.575491601598052,
+      "rmse": 3.1139849025417368,
+      "r2": 0.7093432252178669
+    }
+  ],
+  "actual_vs_predicted": [
+    {
+      "respondent_id": "SIM001",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 122.53571428571429,
+      "naive": 121.17857142857143,
+      "linear": 123.38319812652209,
+      "naive_residual": 1.357142857142861,
+      "linear_residual": -0.847483840807797
+    },
+    {
+      "respondent_id": "SIM002",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 122.07142857142857,
+      "naive": 120.17857142857143,
+      "linear": 117.66939610537716,
+      "naive_residual": 1.892857142857139,
+      "linear_residual": 4.402032466051409
+    },
+    {
+      "respondent_id": "SIM004",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 130.32142857142858,
+      "naive": 128.67857142857142,
+      "linear": 126.16438830314577,
+      "naive_residual": 1.642857142857167,
+      "linear_residual": 4.157040268282813
+    },
+    {
+      "respondent_id": "SIM006",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 116.03571428571429,
+      "naive": 116.92857142857143,
+      "linear": 114.77623871090437,
+      "naive_residual": -0.892857142857139,
+      "linear_residual": 1.259475574809926
+    },
+    {
+      "respondent_id": "SIM009",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 121.85714285714286,
+      "naive": 121.17857142857143,
+      "linear": 116.72081015045681,
+      "naive_residual": 0.678571428571431,
+      "linear_residual": 5.136332706686048
+    },
+    {
+      "respondent_id": "SIM012",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 110.64285714285714,
+      "naive": 106.57142857142857,
+      "linear": 111.58959594757691,
+      "naive_residual": 4.071428571428569,
+      "linear_residual": -0.946738804719772
+    },
+    {
+      "respondent_id": "SIM017",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 124.25,
+      "naive": 121.25,
+      "linear": 125.5293375498286,
+      "naive_residual": 3.0,
+      "linear_residual": -1.279337549828597
+    }
+  ],
+  "audit": {
+    "subject_overlap": [],
+    "shared_measurement_id_dates": 0,
+    "train_target_end_max": "2026-09-18",
+    "test_origin_min": "2026-09-18",
+    "labels_available_before_test": true,
+    "test_overlapping_target_id_days": 0,
+    "imputer_matches_training_only": true,
+    "scaler_matches_training_only": true,
+    "training_overlapping_target_id_days": 288
+  },
+  "provenance": {
+    "profile_sha256": "e08d7bcbfc1130d7fbe1d098f33c4a8229d78c7b2afac8ddfc8a4861062ca53f",
+    "daily_sha256": "a7814c628642c82c51e9ed05c11da56f4441f3a211c721a0e83b0414e163ad2d",
+    "prepared_content_sha256": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+    "code_sha256": "81af925b49bea0e0a8d22d079466e9664f63d2e782b4f7d249a7e2e50bf60e0d",
+    "versions": {
+      "python": "3.13.7",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "sklearn": "1.9.1",
+      "joblib": "1.6.0"
+    }
+  },
+  "model": "Linear Regression (pembanding baseline naif)",
+  "tuned": false,
+  "real_model_validated": false,
+  "as_of": "2026-11-09",
+  "limitation": "DATA SINTETIS; hanya 7 origin uji pada 7 ID. Target belum disetujui. Training windows masih berkorelasi; profil statis diasumsikan diketahui sebelum origin. Bukan validasi klinis atau diagnosis.",
+  "secondary_evaluations": {
+    "legacy_subject_only": {
+      "rows_train": 204,
+      "rows_test": 119,
+      "scores": [
+        {
+          "model": "Naive 7-day mean",
+          "mae": 1.9399759903961593,
+          "rmse": 2.3181549547216416,
+          "r2": 0.8570573032970953
+        },
+        {
+          "model": "Linear Regression",
+          "mae": 2.2615658338598505,
+          "rmse": 2.92488130254983,
+          "r2": 0.7724412505522058
+        }
+      ],
+      "overlapping_test_target_id_days": 672,
+      "limitation": "Same-calendar group split; overlapping test labels. Not a strict future-forecast estimate."
+    },
+    "purged_rolling": {
+      "rows_test": 42,
+      "scores": [
+        {
+          "model": "Naive 7-day mean",
+          "mae": 1.8971088435374153,
+          "rmse": 2.2624574154779826,
+          "r2": 0.8610877581249015
+        },
+        {
+          "model": "Linear Regression",
+          "mae": 2.16496226319436,
+          "rmse": 2.7011093821610808,
+          "r2": 0.8020005262070382
+        }
+      ],
+      "limitation": "Held-out IDs/time, but adjacent test target windows overlap. Sensitivity only."
+    }
+  },
+  "model_sha256": "50c8b1e49f2fbc68615ee56f82ceb235271a4ccf3a8ea6b960cd51e4e255b7ca"
+}
