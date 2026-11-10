@@ -1,0 +1,46 @@
+{
+  "dataset_state": {
+    "count": 1,
+    "sha256": "68f4bb88a316e850a9a4820bf970ccbe9f2470a3b03323a28b1d29845fce96b2"
+  },
+  "dim_partisipan": {
+    "count": 25,
+    "sha256": "77972dd9c880a6e6fb7ade1b6454e14cf898ca5091cded3e0dd8fd86f5e5f71e"
+  },
+  "fact_pengukuran": {
+    "count": 750,
+    "sha256": "f158f56579e5272067016c4b922e60e59a3ade8e8cd06082cf7052056454290c"
+  },
+  "dim_tanggal": {
+    "count": 30,
+    "sha256": "9371593a6c499d90321f68be87bb40d64b1beb7cd88e7abb20402abfcdd44ad9"
+  },
+  "dim_kecamatan": {
+    "count": 5,
+    "sha256": "4583e01b481527582c12e1c809964fa566a67756b3da0dd0e99dc1549578d26c"
+  },
+  "dataset_state_v2": {
+    "count": 1,
+    "sha256": "f76445e7e64b2621b4ffb7328731c98c943640c580cf8ecddfee89eb897f4edc"
+  },
+  "dim_participant_v2": {
+    "count": 19,
+    "sha256": "7d39c91477229b64c725dd539f7120e77c437af748b43f0d31ca656eb0d438c2"
+  },
+  "fact_bp_session_v2": {
+    "count": 1140,
+    "sha256": "69960424c4375464a3d89c57277e599002b6563ef2f9d1738dd8432abc9d0d10"
+  },
+  "dim_date_v2": {
+    "count": 30,
+    "sha256": "f1232feb686495ef5992ab8fa3f673831fee9a9d6c11120037101c4284cfc350"
+  },
+  "dim_session_v2": {
+    "count": 2,
+    "sha256": "d0cee8fec140fb15f42e0b879dbdc0fd17b5b9322c83f47c9ba9f8e36a9a806b"
+  },
+  "fact_daily_behavior_v2": {
+    "count": 570,
+    "sha256": "82df00451ea868cca4f729c900bf6d24abdf539996c8a5fc81488d845585ba19"
+  }
+}

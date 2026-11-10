@@ -27,6 +27,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health',timeout=3)"]
+      interval: 3s
+      timeout: 5s
+      retries: 30
 
   frontend:
     build: ./frontend
@@ -34,7 +39,23 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+
+  maintenance:
+    # Explicit CLI only; never starts or imports automatically with the app.
+    profiles: [tools]
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.cp2
+    environment:
+      DATABASE_URL: postgresql+psycopg://toba:${POSTGRES_PASSWORD:-change-me-local-only}@db:5432/toba_health
+    volumes:
+      - .:/workspace:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["python", "-m", "etl.sync_main_warehouse", "--dry-run"]
 
 volumes:
   postgres_data:

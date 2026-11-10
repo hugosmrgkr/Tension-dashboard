@@ -1,6 +1,7 @@
 
 import os
 import zipfile
+from fnmatch import fnmatch
 from pathlib import Path
 
 # Folder utama proyek
@@ -25,6 +26,12 @@ EXCLUDE_DIRS = {
     "coverage",
     "htmlcov",
     ".idea",
+    ".aws",
+    ".codex",
+    ".agents",
+    "actual",
+    "private",
+    "raw",
 }
 
 # File yang tidak perlu dimasukkan
@@ -35,6 +42,12 @@ EXCLUDE_FILES = {
 EXCLUDE_SUFFIXES = {
     ".pyc",
     ".pyo",
+    ".pem",
+    ".key",
+    ".dump",
+    ".db",
+    ".db-shm",
+    ".db-wal",
 }
 
 count = 0
@@ -48,7 +61,7 @@ with zipfile.ZipFile(
         # Abaikan folder tertentu
         dirs[:] = [
             d for d in dirs
-            if d not in EXCLUDE_DIRS
+            if d.lower() not in EXCLUDE_DIRS and not d.startswith('pytest-cache-files-')
         ]
 
         for filename in files:
@@ -59,10 +72,13 @@ with zipfile.ZipFile(
             if filename in EXCLUDE_FILES:
                 continue
 
+            if any(fnmatch(filename.lower(), pattern) for pattern in ('credentials*.json', 'service-account*.json')):
+                continue
+
             if filename.startswith(".env.") and filename != ".env.example":
                 continue
 
-            if filepath.suffix in EXCLUDE_SUFFIXES:
+            if filepath.suffix.lower() in EXCLUDE_SUFFIXES or filepath.is_symlink():
                 continue
 
             if filepath.resolve() == OUTPUT.resolve():

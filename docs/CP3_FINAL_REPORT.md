@@ -1,5 +1,7 @@
 # CP3 Final Report - Minggu 8
 
+> **Penerapan utama terbaru:** CP3 kini memakai satu stack `tension-dashboard` di **8080** dengan volume PostgreSQL permanen. Hasil sinkronisasi yang diotorisasi, backup/staging, serta pengujian 81 backend / 10 frontend / 7 browser ada di [CP3_MAIN_CONSOLIDATION_REPORT.md](CP3_MAIN_CONSOLIDATION_REPORT.md). Angka dan petunjuk 8081 di bawah adalah riwayat finalisasi awal.
+
 > **CATATAN SINKRONISASI (10 Nov 2026, CP3-K01):** Laporan ini bersifat historis per tanggal penulisannya. Definisi teknis, hasil tes, dan run ID artefak ML **terbaru dan otoritatif** ada di [`P0_P1_FINAL_AUDIT.md`](P0_P1_FINAL_AUDIT.md). Secara khusus: run artefak ML pada dokumen ini (`242a4f84499a00fc1028`) **sudah digantikan** oleh run `5d3bed0d6591cd2bc09d` yang diverifikasi ulang pada audit P0/P1 dan dikonfirmasi ulang pada [`reports/p0_p1_final_verification.md`](../reports/p0_p1_final_verification.md). Skor metrik (MAE/RMSE/R²) tidak berubah antara kedua run tersebut — hanya provenance/fingerprint yang berbeda. Gunakan dokumen ini untuk riwayat tahapan CP3, bukan untuk angka run ID atau jumlah tes terbaru.
 
 **SELESAI SECARA TEKNIS PADA DATA SINTETIS / SIMULASI.** Tahap 3-4 telah diimplementasikan dan diuji; target belum disetujui final oleh dosen. Tidak menyatakan data primer cukup, validitas klinis, diagnosis hipertensi, deployment publik atau CP4/CP5 selesai.

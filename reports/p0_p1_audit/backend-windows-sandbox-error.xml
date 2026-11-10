@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="4" failures="0" skipped="1" tests="74" time="73.439" timestamp="2026-11-09T19:53:15.758092+07:00" hostname="HUGO-HMS10"><testcase classname="" name="backend.tests.test_api" time="0.000"><skipped message="collection skipped">('D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\backend\\tests\\test_api.py', 3, 'Skipped: API v1 retired; run the CP2/v2/CP3 serving contracts')</skipped></testcase><testcase classname="backend.tests.test_api_v2" name="test_01_api_seed_and_grain" time="1.482" /><testcase classname="backend.tests.test_api_v2" name="test_02_filters_and_date_grain" time="1.533" /><testcase classname="backend.tests.test_api_v2" name="test_03_baseline_metrics_are_real_and_split_by_id" time="0.665" /><testcase classname="backend.tests.test_api_v2" name="test_04_import_secure_by_default_and_export_anonymized" time="1.052" /><testcase classname="backend.tests.test_api_v2" name="test_05_duplicate_id_date_is_quarantined_not_autofixed" time="0.870" /><testcase classname="backend.tests.test_cp2" name="test_contract_counts_units_and_no_source_mutation" time="0.360" /><testcase classname="backend.tests.test_cp2" name="test_missing_categories_and_identity" time="0.794" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[0-23-3.5 hari-active_days_week]" time="0.416" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[0-20-165 kg-height_cm]" time="0.426" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-16-45 kg-activity_minutes]" time="0.260" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-16-0.5-activity_minutes]" time="0.302" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-27-5.9-stress]" time="0.411" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-27-5 arbitrary text-stress]" time="0.296" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-24-Unknown smoking category-smoked]" time="0.237" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-3-25:72-morning_time]" time="0.334" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-19-0.25-sleep_hours]" time="0.340" /><testcase classname="backend.tests.test_cp2" name="test_normalize_case_units_and_decimal_separator" time="0.363" /><testcase classname="backend.tests.test_cp2" name="test_actual_sleep_is_not_inferred" time="0.770" /><testcase classname="backend.tests.test_cp2" name="test_duplicate_keys_and_unmatched_ids_are_quarantined" time="0.630" /><testcase classname="backend.tests.test_cp2" name="test_invalid_daily_keys_are_not_loaded[1-]" time="0.232" /><testcase classname="backend.tests.test_cp2" name="test_invalid_daily_keys_are_not_loaded[2-2026-02-30]" time="0.212" /><testcase classname="backend.tests.test_cp2" name="test_invalid_daily_keys_are_not_loaded[2-not-a-date]" time="0.392" /><testcase classname="backend.tests.test_cp2" name="test_schema_mismatch" time="0.019" /><testcase classname="backend.tests.test_cp2" name="test_pressure_readings_mean_counts_and_anomalies" time="0.881" /><testcase classname="backend.tests.test_cp2" name="test_inverted_pressure_is_flagged_not_deleted" time="0.349" /><testcase classname="backend.tests.test_cp2" name="test_cli_dry_run_never_connects_and_modes_are_exclusive" time="3.766" /><testcase classname="backend.tests.test_cp2" name="test_warehouse_keys_counts_idempotency_and_atomicity" time="0.653" /><testcase classname="backend.tests.test_cp3_baseline" name="test_complete_windows_and_strict_id_time_partition" time="1.467" /><testcase classname="backend.tests.test_cp3_baseline" name="test_future_measurements_and_behaviors_never_enter_features" time="3.547" /><testcase classname="backend.tests.test_cp3_baseline" name="test_post_cutoff_values_do_not_change_fitted_model" time="2.521" /><testcase classname="backend.tests.test_cp3_baseline" name="test_missing_calendar_day_or_sbp_excludes_window" time="3.178" /><testcase classname="backend.tests.test_cp3_baseline" name="test_empty_training_feature_is_imputed_from_train_only" time="2.359" /><testcase classname="backend.tests.test_cp3_baseline" name="test_artifacts_metrics_and_reload_are_reproducible" time="0.026"><error message="failed on setup with &quot;PermissionError: [Errno 13] Permission denied: 'C:\\Users\\TUF GAMING\\AppData\\Local\\Temp\\pytest-of-TUF GAMING\\pytest-37\\.lock'&quot;">cls = &lt;class '_pytest.runner.CallInfo'&gt;
+func = &lt;function call_and_report.&lt;locals&gt;.&lt;lambda&gt; at 0x000001FC3C923B00&gt;
+when = 'setup'
+reraise = (&lt;class '_pytest.outcomes.Exit'&gt;, &lt;class 'KeyboardInterrupt'&gt;)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -&gt; CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+    
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+&gt;           result: TResult | None = func()
+                                     ^^^^^^
+
+.venv\Lib\site-packages\_pytest\runner.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\runner.py:250: in &lt;lambda&gt;
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\logging.py:871: in pytest_runtest_setup
+    yield
+.venv\Lib\site-packages\_pytest\capture.py:901: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+.venv\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+.venv\Lib\site-packages\_pytest\python.py:1801: in setup
+    self._request._fillfixtures()
+.venv\Lib\site-packages\_pytest\fixtures.py:877: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:701: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:797: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+.venv\Lib\site-packages\_pytest\fixtures.py:1301: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:64: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:49: in run_old_style_hookwrapper
+    res = yield
+          ^^^^^
+.venv\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1407: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1067: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:338: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:325: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:138: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:118: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:253: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:464: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:448: in make_numbered_dir_with_cleanup
+    lock_path = create_cleanup_lock(p)
+                ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+p = WindowsPath('C:/Users/TUF GAMING/AppData/Local/Temp/pytest-of-TUF GAMING/pytest-37')
+
+    def create_cleanup_lock(p: Path) -&gt; Path:
+        """Create a lock to prevent premature directory cleanup."""
+        lock_path = get_lock_path(p)
+        try:
+&gt;           fd = os.open(str(lock_path), os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           PermissionError: [Errno 13] Permission denied: 'C:\\Users\\TUF GAMING\\AppData\\Local\\Temp\\pytest-of-TUF GAMING\\pytest-37\\.lock'
+
+.venv\Lib\site-packages\_pytest\pathlib.py:293: PermissionError</error></testcase><testcase classname="backend.tests.test_cp3_baseline" name="test_api_origin_prediction_matches_experiment_history" time="2.228" /><testcase classname="backend.tests.test_cp3_baseline" name="test_api_rejects_corrupt_or_missing_artifacts_without_dummy_metrics" time="0.549"><error message="failed on setup with &quot;PermissionError: [Errno 13] Permission denied: 'C:\\Users\\TUF GAMING\\AppData\\Local\\Temp\\pytest-of-TUF GAMING\\pytest-47\\.lock'&quot;">cls = &lt;class '_pytest.runner.CallInfo'&gt;
+func = &lt;function call_and_report.&lt;locals&gt;.&lt;lambda&gt; at 0x000001FC3C452C00&gt;
+when = 'setup'
+reraise = (&lt;class '_pytest.outcomes.Exit'&gt;, &lt;class 'KeyboardInterrupt'&gt;)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -&gt; CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+    
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+&gt;           result: TResult | None = func()
+                                     ^^^^^^
+
+.venv\Lib\site-packages\_pytest\runner.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\runner.py:250: in &lt;lambda&gt;
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\logging.py:871: in pytest_runtest_setup
+    yield
+.venv\Lib\site-packages\_pytest\capture.py:901: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+.venv\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+.venv\Lib\site-packages\_pytest\python.py:1801: in setup
+    self._request._fillfixtures()
+.venv\Lib\site-packages\_pytest\fixtures.py:877: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:701: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:797: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+.venv\Lib\site-packages\_pytest\fixtures.py:1301: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:64: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:49: in run_old_style_hookwrapper
+    res = yield
+          ^^^^^
+.venv\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1407: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1067: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:338: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:325: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:138: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:118: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:253: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:464: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:448: in make_numbered_dir_with_cleanup
+    lock_path = create_cleanup_lock(p)
+                ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+p = WindowsPath('C:/Users/TUF GAMING/AppData/Local/Temp/pytest-of-TUF GAMING/pytest-47')
+
+    def create_cleanup_lock(p: Path) -&gt; Path:
+        """Create a lock to prevent premature directory cleanup."""
+        lock_path = get_lock_path(p)
+        try:
+&gt;           fd = os.open(str(lock_path), os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           PermissionError: [Errno 13] Permission denied: 'C:\\Users\\TUF GAMING\\AppData\\Local\\Temp\\pytest-of-TUF GAMING\\pytest-47\\.lock'
+
+.venv\Lib\site-packages\_pytest\pathlib.py:293: PermissionError</error></testcase><testcase classname="backend.tests.test_cp3_stage1" name="test_empty_database_has_no_seed_or_fallback" time="0.211" /><testcase classname="backend.tests.test_cp3_stage1" name="test_cp2_results_are_visible_in_api_and_match_sql" time="0.856" /><testcase classname="backend.tests.test_cp3_stage1" name="test_filter_contract_kpi_rows_quality_and_export[params0-19-38]" time="1.501" /><testcase classname="backend.tests.test_cp3_stage1" name="test_filter_contract_kpi_rows_quality_and_export[params1-570-570]" time="2.039" /><testcase classname="backend.tests.test_cp3_stage1" name="test_filter_contract_kpi_rows_quality_and_export[params2-570-570]" time="2.386" /><testcase classname="backend.tests.test_cp3_stage1" name="test_filter_contract_kpi_rows_quality_and_export[params3-30-60]" time="2.080" /><testcase classname="backend.tests.test_cp3_stage1" name="test_filter_contract_kpi_rows_quality_and_export[params4-3-3]" time="1.884" /><testcase classname="backend.tests.test_cp3_stage1" name="test_profile_filters_match_warehouse" time="1.376" /><testcase classname="backend.tests.test_cp3_stage1" name="test_no_measurements_under_filter_means_no_fake_graphs" time="0.460" /><testcase classname="backend.tests.test_cp3_stage1" name="test_invalid_filters_rejected[params0]" time="0.353" /><testcase classname="backend.tests.test_cp3_stage1" name="test_invalid_filters_rejected[params1]" time="0.399" /><testcase classname="backend.tests.test_cp3_stage1" name="test_invalid_filters_rejected[params2]" time="0.483" /><testcase classname="backend.tests.test_cp3_stage1" name="test_invalid_filters_rejected[params3]" time="0.367" /><testcase classname="backend.tests.test_cp3_stage1" name="test_incomplete_sessions_and_scoped_missing_stay_null" time="0.706" /><testcase classname="backend.tests.test_cp3_stage1" name="test_database_updates_are_read_dynamically_and_id_is_exact" time="1.040" /><testcase classname="backend.tests.test_cp3_stage1" name="test_actual_source_is_protected_with_same_serving_contract" time="0.369" /><testcase classname="backend.tests.test_cp3_stage1" name="test_website_has_no_write_endpoints" time="0.548" /><testcase classname="backend.tests.test_cp3_stage1" name="test_exports_are_not_silently_limited_to_5000" time="0.008" /><testcase classname="backend.tests.test_cp3_stage1" name="test_manual_promotion_requires_current_hash_and_source_confirmation" time="0.777" /><testcase classname="backend.tests.test_cp3_stage2" name="test_demographics_count_people_once_and_follow_education_filter" time="1.162" /><testcase classname="backend.tests.test_cp3_stage2" name="test_risk_categories_and_correlations_use_daily_grain" time="0.957" /><testcase classname="backend.tests.test_cp3_stage2" name="test_constant_numeric_field_and_empty_filters_do_not_invent_statistics" time="0.891" /><testcase classname="backend.tests.test_cp3_stage2" name="test_location_hierarchy_is_derived_from_profiles" time="0.378" /><testcase classname="backend.tests.test_cp3_stage2" name="test_empty_warehouse_demographics_and_associations_remain_empty" time="0.081" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_artifacts_survive_lf_and_crlf_checkout" time="0.011"><error message="failed on setup with &quot;PermissionError: [Errno 13] Permission denied: 'C:\\Users\\TUF GAMING\\AppData\\Local\\Temp\\pytest-of-TUF GAMING\\pytest-57\\.lock'&quot;">cls = &lt;class '_pytest.runner.CallInfo'&gt;
+func = &lt;function call_and_report.&lt;locals&gt;.&lt;lambda&gt; at 0x000001FC413D44A0&gt;
+when = 'setup'
+reraise = (&lt;class '_pytest.outcomes.Exit'&gt;, &lt;class 'KeyboardInterrupt'&gt;)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -&gt; CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+    
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+&gt;           result: TResult | None = func()
+                                     ^^^^^^
+
+.venv\Lib\site-packages\_pytest\runner.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\runner.py:250: in &lt;lambda&gt;
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\logging.py:871: in pytest_runtest_setup
+    yield
+.venv\Lib\site-packages\_pytest\capture.py:901: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+.venv\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+.venv\Lib\site-packages\_pytest\python.py:1801: in setup
+    self._request._fillfixtures()
+.venv\Lib\site-packages\_pytest\fixtures.py:877: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:701: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:797: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+.venv\Lib\site-packages\_pytest\fixtures.py:1301: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:64: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:49: in run_old_style_hookwrapper
+    res = yield
+          ^^^^^
+.venv\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1407: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1067: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:338: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:325: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:138: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:118: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:253: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:464: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:448: in make_numbered_dir_with_cleanup
+    lock_path = create_cleanup_lock(p)
+                ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+p = WindowsPath('C:/Users/TUF GAMING/AppData/Local/Temp/pytest-of-TUF GAMING/pytest-57')
+
+    def create_cleanup_lock(p: Path) -&gt; Path:
+        """Create a lock to prevent premature directory cleanup."""
+        lock_path = get_lock_path(p)
+        try:
+&gt;           fd = os.open(str(lock_path), os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           PermissionError: [Errno 13] Permission denied: 'C:\\Users\\TUF GAMING\\AppData\\Local\\Temp\\pytest-of-TUF GAMING\\pytest-57\\.lock'
+
+.venv\Lib\site-packages\_pytest\pathlib.py:293: PermissionError</error></testcase><testcase classname="backend.tests.test_p0_p1_audit" name="test_cross_reading_components_are_pending_review" time="0.324" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_contradictory_bp_is_retained_but_not_aggregated" time="0.214" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_conflicting_duplicate_does_not_choose_first_answer" time="0.418" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_active_respondents_are_daily_ids_even_without_bp" time="0.609" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_private_paths_cannot_be_accidentally_added_to_git" time="0.178" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_public_metadata_does_not_disclose_actual_source_name" time="0.553" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_csv_formula_text_is_escaped" time="0.809" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_api_rechecks_legacy_cross_readings_and_exposes_review" time="0.990" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_conflicting_profiles_do_not_choose_first_demographics" time="0.226" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_model_bytes_and_metric_values_still_have_strict_integrity" time="0.013"><error message="failed on setup with &quot;PermissionError: [Errno 13] Permission denied: 'C:\\Users\\TUF GAMING\\AppData\\Local\\Temp\\pytest-of-TUF GAMING\\pytest-67\\.lock'&quot;">cls = &lt;class '_pytest.runner.CallInfo'&gt;
+func = &lt;function call_and_report.&lt;locals&gt;.&lt;lambda&gt; at 0x000001FC3E9A4EA0&gt;
+when = 'setup'
+reraise = (&lt;class '_pytest.outcomes.Exit'&gt;, &lt;class 'KeyboardInterrupt'&gt;)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -&gt; CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+    
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+&gt;           result: TResult | None = func()
+                                     ^^^^^^
+
+.venv\Lib\site-packages\_pytest\runner.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\runner.py:250: in &lt;lambda&gt;
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\logging.py:871: in pytest_runtest_setup
+    yield
+.venv\Lib\site-packages\_pytest\capture.py:901: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+.venv\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+.venv\Lib\site-packages\_pytest\python.py:1801: in setup
+    self._request._fillfixtures()
+.venv\Lib\site-packages\_pytest\fixtures.py:877: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:701: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:797: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+.venv\Lib\site-packages\_pytest\fixtures.py:1301: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:64: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:49: in run_old_style_hookwrapper
+    res = yield
+          ^^^^^
+.venv\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1407: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1067: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:338: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:325: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:138: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:118: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:253: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:464: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:448: in make_numbered_dir_with_cleanup
+    lock_path = create_cleanup_lock(p)
+                ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+p = WindowsPath('C:/Users/TUF GAMING/AppData/Local/Temp/pytest-of-TUF GAMING/pytest-67')
+
+    def create_cleanup_lock(p: Path) -&gt; Path:
+        """Create a lock to prevent premature directory cleanup."""
+        lock_path = get_lock_path(p)
+        try:
+&gt;           fd = os.open(str(lock_path), os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           PermissionError: [Errno 13] Permission denied: 'C:\\Users\\TUF GAMING\\AppData\\Local\\Temp\\pytest-of-TUF GAMING\\pytest-67\\.lock'
+
+.venv\Lib\site-packages\_pytest\pathlib.py:293: PermissionError</error></testcase><testcase classname="backend.tests.test_p0_p1_audit" name="test_header_contract_accepts_whitespace_but_never_guesses_order" time="0.277" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_actual_quality_gate_blocks_unreviewed_issues" time="0.218" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_extreme_and_suspicious_inputs_are_not_silently_used" time="0.426" /></testsuite></testsuites>

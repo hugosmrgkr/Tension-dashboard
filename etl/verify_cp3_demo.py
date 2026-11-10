@@ -8,8 +8,8 @@ from datetime import datetime,timezone
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--url',default='http://127.0.0.1:8081')
-    parser.add_argument('--output',default='reports/cp3_final/http-verification.json')
+    parser.add_argument('--url',default='http://127.0.0.1:8080')
+    parser.add_argument('--output',default='reports/cp3_main_consolidation/http-verification.json')
     args=parser.parse_args()
     def raw(path):
         with urlopen(args.url+path,timeout=30) as response:return response.read()

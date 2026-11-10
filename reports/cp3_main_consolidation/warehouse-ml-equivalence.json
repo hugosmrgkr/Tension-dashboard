@@ -1,0 +1,8 @@
+{
+  "warehouse_windows_equal_offline_csv": true,
+  "windows": 323,
+  "primary_test_rows": 7,
+  "warehouse_linear_predictions_equal_artifact": true,
+  "max_abs_prediction_difference": 0.0,
+  "model_run_id": "5d3bed0d6591cd2bc09d"
+}

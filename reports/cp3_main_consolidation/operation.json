@@ -1,0 +1,15 @@
+{
+  "backup_path": "data/private/backups/cp3_main_20261110_202856/toba_health_before.dump",
+  "backup_sha256": "e0fef5281e8cf30b415ef711c9ec9fcb6cb3df8ff5960e65c7276581835a060c",
+  "backup_bytes": 67995,
+  "archive_list_verified": true,
+  "protected_before": {
+    ".env": null,
+    "data/sample/Data_Responden_Sintetis.csv": "e08d7bcbfc1130d7fbe1d098f33c4a8229d78c7b2afac8ddfc8a4861062ca53f",
+    "data/sample/Data_Harian_Sintetis.csv": "a7814c628642c82c51e9ed05c11da56f4441f3a211c721a0e83b0414e163ad2d",
+    "notebooks/02_eda_data_readiness.ipynb": "9d8c172dcbe8666412c7b2b794633f4ba92405f634f278777f03a7d21f62f6c8",
+    "models/baseline_metrics.json": "e832a810675fcdccc537d3ad7ac28aa5bf6e4f42f1d213981fa6b9912af84000",
+    "models/baseline_manifest.json": "6dd068b07d503b16985c1725085833f378ad1da9d93dcf9a3a1efec43cc06815",
+    "models/linear_regression_synthetic.joblib": "50c8b1e49f2fbc68615ee56f82ceb235271a4ccf3a8ea6b960cd51e4e255b7ca"
+  }
+}

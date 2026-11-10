@@ -1,0 +1,56 @@
+﻿source,column,original_name,field,policy,rows,missing,missing_percent,invalid,noncanonical
+profiles,1,Timestamp,submitted_at,audit_metadata,19,0.0,0.0,0.0,
+profiles,2,1. ID Responden,respondent_id,analytic,19,0.0,0.0,0.0,
+profiles,3,2. Nama lengkap,direct_identity,excluded_identity,19,,,,
+profiles,4,3. Berapa usia anda saat ini (Contoh: 22 tahun),age,analytic,19,0.0,0.0,0.0,
+profiles,5,4. Apa jenis kelamin anda?,gender,analytic,19,0.0,0.0,0.0,0.0
+profiles,6,5. Di provinsi mana Anda tinggal saat ini? (Contoh: Sumatera Utara),province,analytic,19,0.0,0.0,0.0,
+profiles,7,6. Di kabupaten atau kota mana Anda tinggal saat ini? (Contoh: Toba Samosir),city,analytic,19,0.0,0.0,0.0,
+profiles,8,7. Apa pekerjaan atau kegiatan utama Anda saat ini?,occupation,analytic,19,0.0,0.0,0.0,
+profiles,9,9. Apa pendidikan terakhir yang telah Anda selesaikan?,education,analytic,19,0.0,0.0,0.0,
+profiles,10,10. Apakah Anda pernah didiagnosis memiliki tekanan darah tinggi oleh tenaga kesehatan?,diagnosed_bp,analytic,19,0.0,0.0,0.0,0.0
+profiles,11,11. Apakah saat ini Anda menggunakan obat yang diresepkan untuk tekanan darah tinggi?,bp_medication,analytic,19,0.0,0.0,0.0,0.0
+profiles,12,12. Apakah Anda pernah didiagnosis diabetes oleh tenaga kesehatan?,diabetes,analytic,19,0.0,0.0,0.0,0.0
+profiles,13,13. Apakah Anda pernah didiagnosis penyakit ginjal oleh tenaga kesehatan?,kidney,analytic,19,0.0,0.0,0.0,0.0
+profiles,14,14. Apakah Anda pernah didiagnosis kolesterol tinggi atau gangguan lemak darah oleh tenaga kesehatan?,cholesterol,analytic,19,0.0,0.0,0.0,0.0
+profiles,15,15. Apakah Anda pernah didiagnosis penyakit jantung oleh tenaga kesehatan?,heart,analytic,19,0.0,0.0,0.0,0.0
+profiles,16,16. Apakah Anda pernah didiagnosis mengalami stroke oleh tenaga kesehatan?,stroke,analytic,19,0.0,0.0,0.0,0.0
+profiles,17,17. Apakah ibu kandung Anda pernah didiagnosis memiliki tekanan darah tinggi?,mother_bp,analytic,19,0.0,0.0,0.0,0.0
+profiles,18,18. Apakah ayah kandung Anda pernah didiagnosis memiliki tekanan darah tinggi?,father_bp,analytic,19,0.0,0.0,0.0,0.0
+profiles,19,20. Apakah orang tua kandung atau saudara kandung Anda pernah didiagnosis diabetes?,family_diabetes,analytic,19,0.0,0.0,0.0,0.0
+profiles,20,21. Apakah orang tua kandung atau saudara kandung Anda pernah didiagnosis penyakit jantung atau mengalami stroke?,family_heart,analytic,19,0.0,0.0,0.0,0.0
+profiles,21,"22. Berapa tinggi badan Anda? (Masukkan dalam sentimeter (cm), misalnya 165 cm)",height_cm,analytic,19,0.0,0.0,0.0,
+profiles,22,23. Berapa berat badan Anda? (Masukkan dalam kilogram misalnya 45 kg),weight_kg,analytic,19,0.0,0.0,0.0,
+profiles,23,24. Aktivitas fisik atau olahraga apa yang biasanya Anda lakukan? (boleh memilih lebih dari satu),usual_activity,analytic,19,0.0,0.0,0.0,
+profiles,24,"25. Dalam satu minggu biasa, berapa hari Anda melakukan aktivitas fisik yang membuat napas atau denyut jantung sedikit lebih cepat?",active_days_week,analytic,19,0.0,0.0,0.0,
+daily,1,Timestamp,submitted_at,audit_metadata,570,0.0,0.0,0.0,
+daily,2,1. ID Responden,respondent_id,analytic,570,0.0,0.0,0.0,
+daily,3,2. Tanggal pengamatan,date,analytic,570,0.0,0.0,0.0,
+daily,4,3. Pukul berapa Anda mengukur tekanan darah pagi ini?,morning_time,analytic,570,0.0,0.0,0.0,
+daily,5,4. Berapa angka atas (sistolik) pada pembacaan pertama?,morning_sbp1,analytic,570,0.0,0.0,0.0,
+daily,6,6. Berapa angka bawah (diastolik) pada pembacaan pertama?,morning_dbp1,analytic,570,0.0,0.0,0.0,
+daily,7,7. Berapa angka atas (sistolik) pada pembacaan kedua?,morning_sbp2,analytic,570,0.0,0.0,0.0,
+daily,8,8. Berapa angka bawah (diastolik) pada pembacaan kedua?,morning_dbp2,analytic,570,0.0,0.0,0.0,
+daily,9,"9. Dalam 30 menit sebelum pengukuran pagi, apakah Anda melakukan salah satu kegiatan berikut?",morning_context,analytic,570,0.0,0.0,0.0,0.0
+daily,10,10. Pukul berapa Anda mengukur tekanan darah malam ini?,evening_time,analytic,570,0.0,0.0,0.0,
+daily,11,11. Berapa angka atas (sistolik) pada pembacaan pertama?,evening_sbp1,analytic,570,0.0,0.0,0.0,
+daily,12,12. Berapa angka bawah (diastolik) pada pembacaan pertama?,evening_dbp1,analytic,570,0.0,0.0,0.0,
+daily,13,13. Berapa angka atas (sistolik) pada pembacaan kedua?,evening_sbp2,analytic,570,0.0,0.0,0.0,
+daily,14,14. Berapa angka bawah (diastolik) pada pembacaan kedua?,evening_dbp2,analytic,570,0.0,0.0,0.0,
+daily,15,"15. Dalam 30 menit sebelum pengukuran malam, apakah Anda melakukan salah satu kegiatan berikut?",evening_context,analytic,570,0.0,0.0,0.0,0.0
+daily,16,16. Aktivitas fisik atau olahraga apa yang Anda lakukan hari ini?,activity_type,analytic,570,0.0,0.0,0.0,0.0
+daily,17,"17. Berapa total menit yang Anda gunakan untuk aktivitas fisik hari ini? 
+Contoh: Jalan cepat atau kegiatan yang membuat napas sedikit lebih cepat, tetapi Anda masih bisa berbicara. Hitung total waktu dan jangan menghitung menit yang sama dua kali. Jika tidak ada, isi 0.",activity_minutes,analytic,570,0.0,0.0,0.0,
+daily,18,"18. Berapa total menit yang Anda gunakan untuk aktivitas fisik berat hari ini?
+(contoh: lari cepat atau aktivitas fisik yang membuat napas jauh lebih cepat dan membuat Anda sulit berbicara panjang. Jika tidak ada, isi 0. Jika tidak tahu, jangan mengira-ngira.)",heavy_minutes,analytic,570,0.0,0.0,0.0,
+daily,19,"19. Kira-kira berapa lama total Anda duduk atau hanya sedikit bergerak hari ini, di luar waktu tidur?",sitting,analytic,570,3.0,0.526,0.0,0.0
+daily,20,20. Berapa jam Anda tidur tadi malam?,sleep_hours,analytic,570,6.0,1.053,0.0,
+daily,21,"21. Hari ini, berapa kali Anda makan makanan asin atau makanan olahan?",salty_food,analytic,570,0.0,0.0,0.0,0.0
+daily,22,"22. Hari ini, berapa porsi buah yang Anda makan?",fruit,analytic,570,0.0,0.0,0.0,0.0
+daily,23,"23. Hari ini, berapa porsi sayur yang Anda makan?",vegetable,analytic,570,0.0,0.0,0.0,0.0
+daily,24,"24. Hari ini, berapa gelas atau cangkir minuman berkafein yang Anda konsumsi?
+Contoh: kopi, teh, atau minuman energi.",caffeine,analytic,570,0.0,0.0,0.0,0.0
+daily,25,25. Apakah anda merokok hari ini?,smoked,analytic,570,0.0,0.0,0.0,0.0
+daily,26,Berapa kali anda merokok hari ini?,smoke_count,analytic,570,550.0,96.491,0.0,
+daily,27,"26. Jika Anda menggunakan obat yang diresepkan untuk tekanan darah, apakah Anda minum obat sesuai petunjuk hari ini?",medication,analytic,570,0.0,0.0,0.0,0.0
+daily,28,27. Seberapa besar stres yang Anda rasakan hari ini?,stress,analytic,570,0.0,0.0,0.0,

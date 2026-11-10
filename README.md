@@ -6,6 +6,16 @@ Prototipe interaktif untuk eksplorasi pola pengukuran tekanan darah **pagi dan m
 
 > **STATUS: DATA SINTETIS / SIMULASI.** Hasil tidak boleh dipakai sebagai kesimpulan kesehatan masyarakat maupun klaim performa pada pasien nyata.
 
+## Jalur utama CP3 — satu aplikasi dan satu database permanen
+
+Gunakan **project Docker `tension-dashboard`**, dashboard **http://127.0.0.1:8080**, dan PostgreSQL pada volume utama yang sudah ada. Panduan terkini: [docs/CP3_MAIN_STACK.md](docs/CP3_MAIN_STACK.md). Laporan penerapan: [docs/CP3_MAIN_CONSOLIDATION_REPORT.md](docs/CP3_MAIN_CONSOLIDATION_REPORT.md).
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start_main.ps1
+```
+
+Script ini membangun/menjalankan aplikasi dan memeriksa metadata; tidak memuat data otomatis. `scripts/start_cp3_demo.ps1` sekarang merupakan alias ke jalur utama ini. Konfigurasi 8081/8082 dipertahankan sebagai histori/pengujian terisolasi, bukan aplikasi harian. Jangan menggabungkan volume atau menjalankan impor ulang untuk memindahkan port.
+
 ## Audit final P0/P1 setelah commit CP3
 
 **Ringkasan + panduan instalasi (10 Nov 2026):** [docs/RINGKASAN_PERBAIKAN_P0_P1_DAN_INSTALASI.md](docs/RINGKASAN_PERBAIKAN_P0_P1_DAN_INSTALASI.md) — penjelasan status tiap item P0/P1, apa yang masih butuh keputusan dosen, dan cara instalasi Python/Node/PostgreSQL untuk jalur Docker maupun non-Docker.
@@ -23,10 +33,10 @@ Laporan final: [CP3_FINAL_REPORT.md](docs/CP3_FINAL_REPORT.md). Baseline: [CP3_B
 Dari root dengan Docker Desktop aktif, tanpa mengubah `.env` atau warehouse aktif:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start_cp3_demo.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start_main.ps1
 ```
 
-Buka **http://127.0.0.1:8081**; Swagger **http://127.0.0.1:8001/api/docs**. Stack `toba-cp3-demo` memiliki PostgreSQL RAM terpisah. Script hanya memuat fixture bila DB demo kosong; DB berisi data tidak diganti. Jangan hentikan db demo saat presentasi. Service/volume lama pada 8080 tidak dipakai untuk demo final.
+Buka **http://127.0.0.1:8080**; Swagger **http://127.0.0.1:8080/api/docs**. Stack utama menggunakan volume PostgreSQL permanen. Startup tidak memuat fixture atau mengganti data. Keterangan stack demo RAM pada laporan lama adalah riwayat sebelum konsolidasi.
 
 Baseline terverifikasi: target usulan tetap `future_7d_mean_sbp`, **belum disetujui final dosen**. Split utama memisahkan ID dan waktu serta target test non-overlap: **60 train / 7 test**; test sintetis sangat kecil. Metrik diperoleh dari eksperimen aktual dan manifest, bukan angka UI. Skema lama 204/119 hanya sensitivitas. Notebook utama [03_verifikasi_baseline_cp3.ipynb](notebooks/03_verifikasi_baseline_cp3.ipynb); notebook 01 merupakan catatan awal.
 
@@ -35,14 +45,14 @@ Baseline terverifikasi: target usulan tetap `future_7d_mean_sbp`, **belum disetu
 .\.venv\Scripts\python.exe -m pip install -r backend/requirements-cp3.txt
 .\.venv\Scripts\python.exe -m etl.execute_cp3_notebook
 # Alternatif tanpa Jupyter: python -m etl.verify_baseline
-.\.venv\Scripts\python.exe -m etl.verify_cp3_demo
+.\.venv\Scripts\python.exe -m etl.verify_cp3_demo --url http://127.0.0.1:8080 --output reports/cp3_main_consolidation/http-verification.json
 .\.venv\Scripts\python.exe -m pytest backend/tests -q -p no:cacheprovider
 Push-Location frontend
 npm ci --no-audit --no-fund
 npm test
 npm run build
-$env:CP3_BROWSER_BASE_URL='http://127.0.0.1:8081'
-$env:CP3_REPORT_DIR='../reports/cp3_final'
+$env:CP3_BROWSER_BASE_URL='http://127.0.0.1:8080'
+$env:CP3_REPORT_DIR='../reports/cp3_main_consolidation'
 npm run test:browser
 Pop-Location
 ```

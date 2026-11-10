@@ -1,5 +1,7 @@
 # CP3 Demo Script - 8 menit (fleksibel 5-10 menit)
 
+> **Jalur terkini setelah konsolidasi:** gunakan satu stack `tension-dashboard` di 8080. `start_cp3_demo.ps1` adalah alias `start_main.ps1`; tidak lagi membuat DB demo RAM. Detail dan batas operasional: [CP3_MAIN_STACK.md](CP3_MAIN_STACK.md).
+
 > **CATATAN SINKRONISASI (10 Nov 2026, CP3-K01/K02):** Gladi bersih penuh via Docker Compose (8081/8082) **belum dapat dijalankan ulang** pada sesi perbaikan 10 Nov 2026 karena Docker daemon tidak tersedia di environment kerja. Sebagai gantinya, backend (`uvicorn`) dan frontend (`vite preview`) dijalankan langsung di luar Docker terhadap database PostgreSQL disposable terisolasi, dimuat dengan fixture sintetis yang sama (19 profil/570 harian/1.140 sesi) melalui `etl.import_data --commit`, lalu seluruh endpoint API (meta, analytics, quality, model/baseline, predict-baseline, data/export) diuji manual dan lulus. Playwright/browser E2E tidak dapat dijalankan (unduhan Chromium diblokir jaringan sandbox). Detail lengkap ada di [`reports/p0_p1_final_verification.md`](../reports/p0_p1_final_verification.md). Ini BUKAN pengganti gladi bersih Docker penuh — tim tetap perlu menjalankan `scripts/start_cp3_demo.ps1` dan `npm run test:browser` sungguhan sebelum presentasi dosen.
 
 Demo **DATA SINTETIS / SIMULASI** untuk dosen. Target `future_7d_mean_sbp` masih usulan. Jangan menyatakan akurasi klinis, diagnosis, 570 responden unik atau persetujuan target yang belum ada.
@@ -7,9 +9,9 @@ Demo **DATA SINTETIS / SIMULASI** untuk dosen. Target `future_7d_mean_sbp` masih
 ## Persiapan sebelum presentasi
 
 1. Baca [CP3_FINAL_REPORT.md](CP3_FINAL_REPORT.md) dan [CP3_BASELINE_REPORT.md](CP3_BASELINE_REPORT.md); bagi bagian presentasi sesuai kontribusi anggota.
-2. Pastikan Docker Desktop berjalan. Dari root: `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start_cp3_demo.ps1`. Script hanya load awal bila database **demo terpisah** kosong; bila sudah berisi, mempertahankannya. Tidak ada `.env` yang harus diubah.
-3. Buka `http://127.0.0.1:8081`, API `http://127.0.0.1:8001/api/docs`, notebook 03 dan dokumen laporan. Gunakan 8081, bukan service lama 8080.
-4. Reset filter, cek label sumber, 19 profil / 570 harian / 1.140 sesi. Cek Evaluasi Model: artefak tersedia dan fingerprint batch cocok. `python -m etl.verify_cp3_demo` menyediakan smoke check tanpa penulisan DB.
+2. Pastikan Docker Desktop berjalan. Dari root: `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start_main.ps1`. Script tidak melakukan ETL atau mengubah `.env`; data berada di volume PostgreSQL utama yang permanen.
+3. Buka `http://127.0.0.1:8080`, API `http://127.0.0.1:8080/api/docs`, notebook 03 dan dokumen laporan.
+4. Reset filter, cek label sumber, 19 profil / 570 harian / 1.140 sesi. Cek Evaluasi Model: artefak tersedia dan fingerprint batch cocok. `python -m etl.verify_cp3_demo --url http://127.0.0.1:8080 --output reports/cp3_main_consolidation/http-verification.json` menyediakan smoke check tanpa penulisan DB.
 5. Siapkan screenshot nyata pada `reports/cp3_final/screenshots/` dan 3 grafik di `reports/cp3_baseline/figures/` sebagai bukti cadangan. Jangan menyebut screenshot sebagai demo live bila live gagal.
 
 ## Alur utama
@@ -38,6 +40,6 @@ Untuk 5 menit: gabungkan profil/faktor/tren menjadi 90 detik, tampilkan notebook
 
 ## Cadangan bila ada gangguan
 
-API kosong: jangan isi angka manual. Periksa `docker compose -f compose.cp3-demo.yaml -p toba-cp3-demo ps` dan log backend; gunakan script start hanya untuk stack demo. Jika artefak tidak tersedia, periksa manifest/hasil verifikasi offline; jangan menyunting JSON metrik. Jika Docker/browser tidak dapat berjalan, tampilkan bukti tes dan screenshot yang benar-benar tersedia sambil menyebut bahwa itu bukti rekaman pengujian, bukan live demo.
+API kosong: jangan isi angka manual. Periksa `docker compose -p tension-dashboard ps` dan log backend. Startup tidak otomatis memuat data; jangan menjalankan ETL commit untuk menghilangkan empty state tanpa pemeriksaan dan persetujuan. Jika artefak tidak tersedia, periksa manifest tanpa menyunting JSON metrik. Jika Docker/browser tidak dapat berjalan, tampilkan bukti tes dan screenshot yang benar-benar tersedia sambil menyebut bahwa itu bukti rekaman pengujian, bukan live demo.
 
-Database demo berada di RAM. Jangan menghentikan/recreate service db selama presentasi. Tidak perlu menyentuh service aktif, volume, data aktual, `.env`, atau menjalankan ETL aktif untuk memperbaiki demo.
+Database utama memakai volume permanen. Jangan menghapus volume, mereset data, mengubah `.env` atau menjalankan ETL aktif untuk memperbaiki tampilan demo. Konfigurasi demo RAM lama tidak digunakan untuk presentasi utama.

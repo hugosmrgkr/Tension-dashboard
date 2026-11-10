@@ -1,5 +1,7 @@
 # Audit dan perbaikan final P0/P1 — Toba Health Insight
 
+> **Catatan setelah audit:** laporan ini merekam audit sebelum sinkronisasi database utama. Pada 10 November 2026 pengguna mengotorisasi penerapan teruji ke stack 8080; bukti baru berada di [CP3_MAIN_CONSOLIDATION_REPORT.md](CP3_MAIN_CONSOLIDATION_REPORT.md). Klaim warehouse aktif tidak berubah pada audit ini berlaku pada sesi audit tersebut, bukan pada sesi konsolidasi sesudahnya.
+
 Tanggal penyelesaian: 9 November 2026 (Asia/Bangkok). Cakupan: source CP2–CP3 setelah HEAD awal `ad22898`, beserta perubahan working tree audit ini. **DATA SINTETIS / SIMULASI**, bukan penelitian aktual, diagnosis, atau validasi klinis.
 
 ## Kesimpulan dan batas cakupan

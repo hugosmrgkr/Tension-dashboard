@@ -1,0 +1,167 @@
+{
+  "source_kind": "synthetic",
+  "before": {
+    "counts": {
+      "dim_participant_v2": 19,
+      "dim_date_v2": 30,
+      "dim_session_v2": 2,
+      "fact_bp_session_v2": 1140,
+      "fact_daily_behavior_v2": 570,
+      "dataset_state_v2": 1
+    },
+    "keys": {
+      "dim_participant_v2": {
+        "pk": [
+          "id"
+        ],
+        "foreign_keys": [],
+        "unique": [],
+        "unique_indexes": [
+          [
+            "respondent_id"
+          ]
+        ]
+      },
+      "dim_date_v2": {
+        "pk": [
+          "id"
+        ],
+        "foreign_keys": [],
+        "unique": [],
+        "unique_indexes": [
+          [
+            "date"
+          ]
+        ]
+      },
+      "dim_session_v2": {
+        "pk": [
+          "id"
+        ],
+        "foreign_keys": [],
+        "unique": [
+          [
+            "name"
+          ]
+        ],
+        "unique_indexes": [
+          [
+            "name"
+          ]
+        ]
+      },
+      "fact_bp_session_v2": {
+        "pk": [
+          "id"
+        ],
+        "foreign_keys": [
+          {
+            "columns": [
+              "date_id"
+            ],
+            "table": "dim_date_v2",
+            "referred": [
+              "id"
+            ]
+          },
+          {
+            "columns": [
+              "participant_id"
+            ],
+            "table": "dim_participant_v2",
+            "referred": [
+              "id"
+            ]
+          },
+          {
+            "columns": [
+              "session_id"
+            ],
+            "table": "dim_session_v2",
+            "referred": [
+              "id"
+            ]
+          }
+        ],
+        "unique": [
+          [
+            "participant_id",
+            "date_id",
+            "session_id"
+          ]
+        ],
+        "unique_indexes": [
+          [
+            "participant_id",
+            "date_id",
+            "session_id"
+          ]
+        ]
+      },
+      "fact_daily_behavior_v2": {
+        "pk": [
+          "id"
+        ],
+        "foreign_keys": [
+          {
+            "columns": [
+              "date_id"
+            ],
+            "table": "dim_date_v2",
+            "referred": [
+              "id"
+            ]
+          },
+          {
+            "columns": [
+              "participant_id"
+            ],
+            "table": "dim_participant_v2",
+            "referred": [
+              "id"
+            ]
+          }
+        ],
+        "unique": [
+          [
+            "participant_id",
+            "date_id"
+          ]
+        ],
+        "unique_indexes": [
+          [
+            "participant_id",
+            "date_id"
+          ]
+        ]
+      },
+      "dataset_state_v2": {
+        "pk": [
+          "id"
+        ],
+        "foreign_keys": [],
+        "unique": [],
+        "unique_indexes": []
+      }
+    },
+    "orphans": {
+      "fact_bp_session_v2.participant_id": 0,
+      "fact_bp_session_v2.date_id": 0,
+      "fact_bp_session_v2.session_id": 0,
+      "fact_daily_behavior_v2.participant_id": 0,
+      "fact_daily_behavior_v2.date_id": 0
+    },
+    "missing_active_days_week": 19,
+    "source_kind": "synthetic",
+    "natural_content_sha256": "2c72512aed5d6c4f1e124f1be7ec47a03d0635fe2a6579fe6c3a7edd9c14c267"
+  },
+  "expected_content_sha256": "0a91e24fecb8482092b2687cf144e84cf64fccfadbb46c7653d061fbbb2deefc",
+  "prepared_content_sha256": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+  "weekly_activity_rows_to_fill": 19,
+  "equivalent_time_formats_to_normalize": 1140,
+  "metadata_refresh_needed": true,
+  "surrogate_ids_preserved": true,
+  "committed": false,
+  "artifact_run_id": "5d3bed0d6591cd2bc09d",
+  "backup_sha256": null
+}

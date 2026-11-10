@@ -1,0 +1,1569 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="8" skipped="1" tests="68" time="54.002" timestamp="2026-11-09T15:49:58.785268+07:00" hostname="HUGO-HMS10"><testcase classname="" name="backend.tests.test_api" time="0.000"><skipped message="collection skipped">('D:\\SEMESTER 5_TRPL\\Data Analyst (DALIS)\\PROYEK DASI_DALIS\\Tension-dashboard\\backend\\tests\\test_api.py', 3, 'Skipped: API v1 retired; run the CP2/v2/CP3 serving contracts')</skipped></testcase><testcase classname="backend.tests.test_api_v2" name="test_01_api_seed_and_grain" time="0.798" /><testcase classname="backend.tests.test_api_v2" name="test_02_filters_and_date_grain" time="1.095"><failure message="KeyError: 'respondent_id'">def test_02_filters_and_date_grain():
+        with TestClient(app) as c:
+            a=c.get('/api/analytics',params={'start_date':'2026-09-01','end_date':'2026-09-01'}).json()
+            assert a['kpis']['daily_records']==19;assert a['kpis']['sessions']==38
+            b=c.get('/api/analytics',params={'session':'Pagi'}).json()
+            assert b['kpis']['sessions']==570;assert b['kpis']['daily_records']==570
+            c2=c.get('/api/analytics',params={'respondent_id':'SIM001'}).json()
+&gt;           assert c2['kpis']['respondents']==1;c3=c.get('/api/analytics',params={'province':'PROVINSI PALSU'}).json();assert c3['empty']
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_api_v2.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\httpx\_client.py:1053: in get
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:463: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:360: in handle_request
+    raise exc
+.venv\Lib\site-packages\starlette\testclient.py:357: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\TUF GAMING\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Users\TUF GAMING\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\applications.py:1194: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\fastapi\telemetry\_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:91: in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+.venv\Lib\site-packages\starlette\middleware\cors.py:149: in simple_response
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:676: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2811: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1330: in handle
+    await super().handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:282: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:166: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:152: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:745: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:374: in run_endpoint_function
+    return await run_in_threadpool(
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\telemetry\_api.py:244: in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend\app\main.py:71: in get_analytics
+    return analytics(db,q)
+           ^^^^^^^^^^^^^^^
+backend\app\analytics_v2.py:124: in analytics
+    daily_sbp=valid.groupby(['respondent_id','date'],as_index=False).agg(sbp_mean=('sbp_mean','mean'),dbp_mean=('dbp_mean','mean'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pandas\util\_decorators.py:336: in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pandas\core\frame.py:10835: in groupby
+    return DataFrameGroupBy(
+.venv\Lib\site-packages\pandas\core\groupby\groupby.py:1095: in __init__
+    grouper, exclusions, obj = get_grouper(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+obj = Empty DataFrame
+Columns: []
+Index: [], key = ['respondent_id', 'date']
+level = None, sort = True, observed = True, validate = True, dropna = True
+
+    def get_grouper(
+        obj: NDFrameT,
+        key=None,
+        level=None,
+        sort: bool = True,
+        observed: bool = False,
+        validate: bool = True,
+        dropna: bool = True,
+    ) -&gt; tuple[ops.BaseGrouper, frozenset[Hashable], NDFrameT]:
+        """
+        Create and return a BaseGrouper, which is an internal
+        mapping of how to create the grouper indexers.
+        This may be composed of multiple Grouping objects, indicating
+        multiple groupers
+    
+        Groupers are ultimately index mappings. They can originate as:
+        index mappings, keys to columns, functions, or Groupers
+    
+        Groupers enable local references to level,sort, while
+        the passed in level, and sort are 'global'.
+    
+        This routine tries to figure out what the passing in references
+        are and then creates a Grouping for each one, combined into
+        a BaseGrouper.
+    
+        If observed &amp; we have a categorical grouper, only show the observed
+        values.
+    
+        If validate, then check for key/level overlaps.
+    
+        """
+        group_axis = obj.index
+    
+        # validate that the passed single level is compatible with the passed
+        # index of the object
+        if level is not None:
+            # TODO: These if-block and else-block are almost same.
+            # MultiIndex instance check is removable, but it seems that there are
+            # some processes only for non-MultiIndex in else-block,
+            # eg. `obj.index.name != level`. We have to consider carefully whether
+            # these are applicable for MultiIndex. Even if these are applicable,
+            # we need to check if it makes no side effect to subsequent processes
+            # on the outside of this condition.
+            # (GH 17621)
+            if isinstance(group_axis, MultiIndex):
+                if is_list_like(level) and len(level) == 1:
+                    level = level[0]
+    
+                if key is None and is_scalar(level):
+                    # Get the level values from group_axis
+                    key = group_axis.get_level_values(level)
+                    level = None
+    
+            else:
+                # allow level to be a length-one list-like object
+                # (e.g., level=[0])
+                # GH 13901
+                if is_list_like(level):
+                    nlevels = len(level)
+                    if nlevels == 1:
+                        level = level[0]
+                    elif nlevels == 0:
+                        raise ValueError("No group keys passed!")
+                    else:
+                        raise ValueError("multiple levels only valid with MultiIndex")
+    
+                if isinstance(level, str):
+                    if obj.index.name != level:
+                        raise ValueError(f"level name {level} is not the name of the index")
+                elif level &gt; 0 or level &lt; -1:
+                    raise ValueError("level &gt; 0 or level &lt; -1 only valid with MultiIndex")
+    
+                # NOTE: `group_axis` and `group_axis.get_level_values(level)`
+                # are same in this section.
+                level = None
+                key = group_axis
+    
+        # a passed-in Grouper, directly convert
+        if isinstance(key, Grouper):
+            grouper, obj = key._get_grouper(obj, validate=False, observed=observed)
+            if key.key is None:
+                return grouper, frozenset(), obj
+            else:
+                return grouper, frozenset({key.key}), obj
+    
+        # already have a BaseGrouper, just return it
+        elif isinstance(key, ops.BaseGrouper):
+            return key, frozenset(), obj
+    
+        if not isinstance(key, list):
+            keys = [key]
+            match_axis_length = False
+        else:
+            keys = key
+            match_axis_length = len(keys) == len(group_axis)
+    
+        # what are we after, exactly?
+        any_callable = any(callable(g) or isinstance(g, dict) for g in keys)
+        any_groupers = any(isinstance(g, (Grouper, Grouping)) for g in keys)
+        any_arraylike = any(
+            isinstance(g, (list, tuple, Series, Index, np.ndarray)) for g in keys
+        )
+    
+        # is this an index replacement?
+        if (
+            not any_callable
+            and not any_arraylike
+            and not any_groupers
+            and match_axis_length
+            and level is None
+        ):
+            if isinstance(obj, DataFrame):
+                all_in_columns_index = all(
+                    g in obj.columns or g in obj.index.names for g in keys
+                )
+            else:
+                assert isinstance(obj, Series)
+                all_in_columns_index = all(g in obj.index.names for g in keys)
+    
+            if not all_in_columns_index:
+                keys = [com.asarray_tuplesafe(keys)]
+    
+        if isinstance(level, (tuple, list)):
+            if key is None:
+                keys = [None] * len(level)
+            levels = level
+        else:
+            levels = [level] * len(keys)
+    
+        groupings: list[Grouping] = []
+        exclusions: set[Hashable] = set()
+    
+        # if the actual grouper should be obj[key]
+        def is_in_axis(key) -&gt; bool:
+            if not _is_label_like(key):
+                if obj.ndim == 1:
+                    return False
+    
+                # items -&gt; .columns for DataFrame, .index for Series
+                items = obj.axes[-1]
+                try:
+                    items.get_loc(key)
+                except (KeyError, TypeError, InvalidIndexError):
+                    # TypeError shows up here if we pass e.g. an Index
+                    return False
+    
+            return True
+    
+        # if the grouper is obj[name]
+        def is_in_obj(gpr) -&gt; bool:
+            if not hasattr(gpr, "name"):
+                return False
+            # We check the references to determine if the
+            # series is part of the object
+            try:
+                obj_gpr_column = obj[gpr.name]
+            except (KeyError, IndexError, InvalidIndexError, OutOfBoundsDatetime):
+                return False
+            if isinstance(gpr, Series) and isinstance(obj_gpr_column, Series):
+                return gpr._mgr.references_same_values(obj_gpr_column._mgr, 0)
+            return False
+    
+        for gpr, level in zip(keys, levels, strict=True):
+            if is_in_obj(gpr):  # df.groupby(df['name'])
+                in_axis = True
+                exclusions.add(gpr.name)
+    
+            elif is_in_axis(gpr):  # df.groupby('name')
+                if obj.ndim != 1 and gpr in obj:
+                    if validate:
+                        obj._check_label_or_level_ambiguity(gpr, axis=0)
+                    in_axis, name, gpr = True, gpr, obj[gpr]
+                    if gpr.ndim != 1:
+                        # non-unique columns; raise here to get the name in the
+                        # exception message
+                        raise ValueError(f"Grouper for '{name}' not 1-dimensional")
+                    exclusions.add(name)
+                elif obj._is_level_reference(gpr, axis=0):
+                    in_axis, level, gpr = False, gpr, None
+                else:
+&gt;                   raise KeyError(gpr)
+E                   KeyError: 'respondent_id'
+
+.venv\Lib\site-packages\pandas\core\groupby\grouper.py:901: KeyError</failure></testcase><testcase classname="backend.tests.test_api_v2" name="test_03_baseline_metrics_are_real_and_split_by_id" time="0.441" /><testcase classname="backend.tests.test_api_v2" name="test_04_import_secure_by_default_and_export_anonymized" time="0.592" /><testcase classname="backend.tests.test_api_v2" name="test_05_duplicate_id_date_is_quarantined_not_autofixed" time="0.578" /><testcase classname="backend.tests.test_cp2" name="test_contract_counts_units_and_no_source_mutation" time="0.233" /><testcase classname="backend.tests.test_cp2" name="test_missing_categories_and_identity" time="0.416" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[0-23-3.5 hari-active_days_week]" time="0.209" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[0-20-165 kg-height_cm]" time="0.246" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-16-45 kg-activity_minutes]" time="0.206" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-16-0.5-activity_minutes]" time="0.218" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-27-5.9-stress]" time="0.324" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-27-5 arbitrary text-stress]" time="0.227" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-24-Unknown smoking category-smoked]" time="0.225" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-3-25:72-morning_time]" time="0.230" /><testcase classname="backend.tests.test_cp2" name="test_invalid_nonkey_cells_are_null_and_reported[1-19-0.25-sleep_hours]" time="0.226" /><testcase classname="backend.tests.test_cp2" name="test_normalize_case_units_and_decimal_separator" time="0.220" /><testcase classname="backend.tests.test_cp2" name="test_actual_sleep_is_not_inferred" time="0.489" /><testcase classname="backend.tests.test_cp2" name="test_duplicate_keys_and_unmatched_ids_are_quarantined" time="0.428" /><testcase classname="backend.tests.test_cp2" name="test_invalid_daily_keys_are_not_loaded[1-]" time="0.286" /><testcase classname="backend.tests.test_cp2" name="test_invalid_daily_keys_are_not_loaded[2-2026-02-30]" time="0.207" /><testcase classname="backend.tests.test_cp2" name="test_invalid_daily_keys_are_not_loaded[2-not-a-date]" time="0.217" /><testcase classname="backend.tests.test_cp2" name="test_schema_mismatch" time="0.015" /><testcase classname="backend.tests.test_cp2" name="test_pressure_readings_mean_counts_and_anomalies" time="0.214"><failure message="AssertionError: assert (None is None and None == 120.0)&#10; +  where 120.0 = float('120')">source_pair = (              Timestamp  ... 25. Dalam satu minggu biasa, berapa hari Anda melakukan aktivitas fisik yang membuat nap...= Rendah  
+569  2026-09-30 21:47:00  ...                                         2 = Rendah  
+
+[570 rows x 28 columns])
+
+    def test_pressure_readings_mean_counts_and_anomalies(source_pair):
+        source_pair[1].iloc[0,4]='invalid'
+        p,d,s,q=prepare(*source_pair)
+&gt;       assert s[0]['sbp1'] is None and s[0]['sbp_mean']==float(source_pair[1].iloc[0,6])
+E       AssertionError: assert (None is None and None == 120.0)
+E        +  where 120.0 = float('120')
+
+backend\tests\test_cp2.py:108: AssertionError</failure></testcase><testcase classname="backend.tests.test_cp2" name="test_inverted_pressure_is_flagged_not_deleted" time="0.230" /><testcase classname="backend.tests.test_cp2" name="test_cli_dry_run_never_connects_and_modes_are_exclusive" time="3.777" /><testcase classname="backend.tests.test_cp2" name="test_warehouse_keys_counts_idempotency_and_atomicity" time="0.620" /><testcase classname="backend.tests.test_cp3_baseline" name="test_complete_windows_and_strict_id_time_partition" time="1.370" /><testcase classname="backend.tests.test_cp3_baseline" name="test_future_measurements_and_behaviors_never_enter_features" time="2.551"><failure message="assert np.float64(120.67857142857143) == 145.67857142857144 ± 1.5e-04&#10;  &#10;  comparison failed&#10;  Obtained: 120.67857142857143&#10;  Expected: 145.67857142857144 ± 1.5e-04">prepared = ([{'respondent_id': 'SIM001', 'age': 55, 'gender': 'Laki-laki', 'province': 'Sumatera Utara', ...}, {'respondent_id': ...': '20:41:00', ...}, ...], {'raw_daily': 570, 'accepted_daily': 570, 'rejected_daily': 0, 'valid_sessions': 1140, ...})
+
+    def test_future_measurements_and_behaviors_never_enter_features(prepared):
+        p,d,s,_=copy.deepcopy(prepared);original=make_training(p,d,s)
+        origin='2026-09-10';rid=original.respondent_id.iloc[0]
+        for row in s:
+            if row['respondent_id']==rid and str(row['date'])&gt;origin:
+                row['sbp_mean']+=25;row['dbp_mean']+=10
+        for row in d:
+            if row['respondent_id']==rid and str(row['date'])&gt;origin:
+                row['activity_minutes']=1000;row['sleep_hours']=20;row['stress']=5
+        changed=make_training(p,d,s)
+        a=original[(original.respondent_id==rid)&amp;(original.asof_date==origin)].iloc[0]
+        b=changed[(changed.respondent_id==rid)&amp;(changed.asof_date==origin)].iloc[0]
+        np.testing.assert_allclose(a[FEATURES].to_numpy(dtype=float),b[FEATURES].to_numpy(dtype=float),equal_nan=True)
+&gt;       assert b.target==pytest.approx(a.target+25)
+E       assert np.float64(120.67857142857143) == 145.67857142857144 ± 1.5e-04
+E         
+E         comparison failed
+E         Obtained: 120.67857142857143
+E         Expected: 145.67857142857144 ± 1.5e-04
+
+backend\tests\test_cp3_baseline.py:38: AssertionError</failure></testcase><testcase classname="backend.tests.test_cp3_baseline" name="test_post_cutoff_values_do_not_change_fitted_model" time="2.461"><failure message="assert np.float64(121.10204081632652) != np.float64(121.10204081632652)&#10; +  where np.float64(121.10204081632652) = mean()&#10; +    where mean = 11     122.535714\n28     122.071429\n62     130.321429\n96     116.035714\n147    121.857143\n198    110.642857\n283    124.250000\nName: target, dtype: float64.mean&#10;[+4 more lines; full report in element text]">prepared = ([{'respondent_id': 'SIM001', 'age': 55, 'gender': 'Laki-laki', 'province': 'Sumatera Utara', ...}, {'respondent_id': ...': '20:41:00', ...}, ...], {'raw_daily': 570, 'accepted_daily': 570, 'rejected_daily': 0, 'valid_sessions': 1140, ...})
+
+    def test_post_cutoff_values_do_not_change_fitted_model(prepared):
+        p,d,s,_=copy.deepcopy(prepared)
+        before=partitions(make_training(p,d,s));model=fit_model(before['train'])
+        for row in s:
+            if str(row['date'])&gt;before['cutoff']:row['sbp_mean']+=100
+        after=partitions(make_training(p,d,s));other=fit_model(after['train'])
+        np.testing.assert_allclose(model.named_steps['regressor'].coef_,other.named_steps['regressor'].coef_)
+&gt;       assert before['test'].target.mean()!=after['test'].target.mean()
+E       assert np.float64(121.10204081632652) != np.float64(121.10204081632652)
+E        +  where np.float64(121.10204081632652) = mean()
+E        +    where mean = 11     122.535714\n28     122.071429\n62     130.321429\n96     116.035714\n147    121.857143\n198    110.642857\n283    124.250000\nName: target, dtype: float64.mean
+E        +      where 11     122.535714\n28     122.071429\n62     130.321429\n96     116.035714\n147    121.857143\n198    110.642857\n283    124.250000\nName: target, dtype: float64 =     respondent_id   asof_date  ... past_7d_stress      target\n11         SIM001  2026-09-18  ...       3.000000  122.5...18  ...       2.857143  110.642857\n283        SIM017  2026-09-18  ...       2.857143  124.250000\n\n[7 rows x 14 columns].target
+E        +  and   np.float64(121.10204081632652) = mean()
+E        +    where mean = 11     122.535714\n28     122.071429\n62     130.321429\n96     116.035714\n147    121.857143\n198    110.642857\n283    124.250000\nName: target, dtype: float64.mean
+E        +      where 11     122.535714\n28     122.071429\n62     130.321429\n96     116.035714\n147    121.857143\n198    110.642857\n283    124.250000\nName: target, dtype: float64 =     respondent_id   asof_date  ... past_7d_stress      target\n11         SIM001  2026-09-18  ...       3.000000  122.5...18  ...       2.857143  110.642857\n283        SIM017  2026-09-18  ...       2.857143  124.250000\n\n[7 rows x 14 columns].target
+
+backend\tests\test_cp3_baseline.py:48: AssertionError</failure></testcase><testcase classname="backend.tests.test_cp3_baseline" name="test_missing_calendar_day_or_sbp_excludes_window" time="2.231" /><testcase classname="backend.tests.test_cp3_baseline" name="test_empty_training_feature_is_imputed_from_train_only" time="1.286" /><testcase classname="backend.tests.test_cp3_baseline" name="test_artifacts_metrics_and_reload_are_reproducible" time="2.771" /><testcase classname="backend.tests.test_cp3_baseline" name="test_api_origin_prediction_matches_experiment_history" time="1.545" /><testcase classname="backend.tests.test_cp3_baseline" name="test_api_rejects_corrupt_or_missing_artifacts_without_dummy_metrics" time="0.433" /><testcase classname="backend.tests.test_cp3_stage1" name="test_empty_database_has_no_seed_or_fallback" time="0.054"><failure message="KeyError: 'respondent_id'">client = &lt;starlette.testclient.TestClient object at 0x00000191BE0BAAD0&gt;
+warehouse_engine = Engine(sqlite://)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000191C32ECAA0&gt;
+
+    def test_empty_database_has_no_seed_or_fallback(client,warehouse_engine,monkeypatch):
+        monkeypatch.setattr(pd,'read_csv',lambda *a,**k:pytest.fail('Serving must not read CSV'))
+        metadata=client.get('/api/meta').json()
+        assert metadata['warehouse_empty'] and metadata['respondent_ids']==[]
+        assert metadata['participants']==metadata['daily_records']==metadata['session_records']==0
+&gt;       response=client.get('/api/analytics')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_cp3_stage1.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\httpx\_client.py:1053: in get
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:463: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:360: in handle_request
+    raise exc
+.venv\Lib\site-packages\starlette\testclient.py:357: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\TUF GAMING\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Users\TUF GAMING\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\applications.py:1194: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\fastapi\telemetry\_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:91: in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+.venv\Lib\site-packages\starlette\middleware\cors.py:149: in simple_response
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:676: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2811: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1330: in handle
+    await super().handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:282: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:166: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:152: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:745: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:374: in run_endpoint_function
+    return await run_in_threadpool(
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\telemetry\_api.py:244: in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend\app\main.py:71: in get_analytics
+    return analytics(db,q)
+           ^^^^^^^^^^^^^^^
+backend\app\analytics_v2.py:124: in analytics
+    daily_sbp=valid.groupby(['respondent_id','date'],as_index=False).agg(sbp_mean=('sbp_mean','mean'),dbp_mean=('dbp_mean','mean'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pandas\util\_decorators.py:336: in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pandas\core\frame.py:10835: in groupby
+    return DataFrameGroupBy(
+.venv\Lib\site-packages\pandas\core\groupby\groupby.py:1095: in __init__
+    grouper, exclusions, obj = get_grouper(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+obj = Empty DataFrame
+Columns: []
+Index: [], key = ['respondent_id', 'date']
+level = None, sort = True, observed = True, validate = True, dropna = True
+
+    def get_grouper(
+        obj: NDFrameT,
+        key=None,
+        level=None,
+        sort: bool = True,
+        observed: bool = False,
+        validate: bool = True,
+        dropna: bool = True,
+    ) -&gt; tuple[ops.BaseGrouper, frozenset[Hashable], NDFrameT]:
+        """
+        Create and return a BaseGrouper, which is an internal
+        mapping of how to create the grouper indexers.
+        This may be composed of multiple Grouping objects, indicating
+        multiple groupers
+    
+        Groupers are ultimately index mappings. They can originate as:
+        index mappings, keys to columns, functions, or Groupers
+    
+        Groupers enable local references to level,sort, while
+        the passed in level, and sort are 'global'.
+    
+        This routine tries to figure out what the passing in references
+        are and then creates a Grouping for each one, combined into
+        a BaseGrouper.
+    
+        If observed &amp; we have a categorical grouper, only show the observed
+        values.
+    
+        If validate, then check for key/level overlaps.
+    
+        """
+        group_axis = obj.index
+    
+        # validate that the passed single level is compatible with the passed
+        # index of the object
+        if level is not None:
+            # TODO: These if-block and else-block are almost same.
+            # MultiIndex instance check is removable, but it seems that there are
+            # some processes only for non-MultiIndex in else-block,
+            # eg. `obj.index.name != level`. We have to consider carefully whether
+            # these are applicable for MultiIndex. Even if these are applicable,
+            # we need to check if it makes no side effect to subsequent processes
+            # on the outside of this condition.
+            # (GH 17621)
+            if isinstance(group_axis, MultiIndex):
+                if is_list_like(level) and len(level) == 1:
+                    level = level[0]
+    
+                if key is None and is_scalar(level):
+                    # Get the level values from group_axis
+                    key = group_axis.get_level_values(level)
+                    level = None
+    
+            else:
+                # allow level to be a length-one list-like object
+                # (e.g., level=[0])
+                # GH 13901
+                if is_list_like(level):
+                    nlevels = len(level)
+                    if nlevels == 1:
+                        level = level[0]
+                    elif nlevels == 0:
+                        raise ValueError("No group keys passed!")
+                    else:
+                        raise ValueError("multiple levels only valid with MultiIndex")
+    
+                if isinstance(level, str):
+                    if obj.index.name != level:
+                        raise ValueError(f"level name {level} is not the name of the index")
+                elif level &gt; 0 or level &lt; -1:
+                    raise ValueError("level &gt; 0 or level &lt; -1 only valid with MultiIndex")
+    
+                # NOTE: `group_axis` and `group_axis.get_level_values(level)`
+                # are same in this section.
+                level = None
+                key = group_axis
+    
+        # a passed-in Grouper, directly convert
+        if isinstance(key, Grouper):
+            grouper, obj = key._get_grouper(obj, validate=False, observed=observed)
+            if key.key is None:
+                return grouper, frozenset(), obj
+            else:
+                return grouper, frozenset({key.key}), obj
+    
+        # already have a BaseGrouper, just return it
+        elif isinstance(key, ops.BaseGrouper):
+            return key, frozenset(), obj
+    
+        if not isinstance(key, list):
+            keys = [key]
+            match_axis_length = False
+        else:
+            keys = key
+            match_axis_length = len(keys) == len(group_axis)
+    
+        # what are we after, exactly?
+        any_callable = any(callable(g) or isinstance(g, dict) for g in keys)
+        any_groupers = any(isinstance(g, (Grouper, Grouping)) for g in keys)
+        any_arraylike = any(
+            isinstance(g, (list, tuple, Series, Index, np.ndarray)) for g in keys
+        )
+    
+        # is this an index replacement?
+        if (
+            not any_callable
+            and not any_arraylike
+            and not any_groupers
+            and match_axis_length
+            and level is None
+        ):
+            if isinstance(obj, DataFrame):
+                all_in_columns_index = all(
+                    g in obj.columns or g in obj.index.names for g in keys
+                )
+            else:
+                assert isinstance(obj, Series)
+                all_in_columns_index = all(g in obj.index.names for g in keys)
+    
+            if not all_in_columns_index:
+                keys = [com.asarray_tuplesafe(keys)]
+    
+        if isinstance(level, (tuple, list)):
+            if key is None:
+                keys = [None] * len(level)
+            levels = level
+        else:
+            levels = [level] * len(keys)
+    
+        groupings: list[Grouping] = []
+        exclusions: set[Hashable] = set()
+    
+        # if the actual grouper should be obj[key]
+        def is_in_axis(key) -&gt; bool:
+            if not _is_label_like(key):
+                if obj.ndim == 1:
+                    return False
+    
+                # items -&gt; .columns for DataFrame, .index for Series
+                items = obj.axes[-1]
+                try:
+                    items.get_loc(key)
+                except (KeyError, TypeError, InvalidIndexError):
+                    # TypeError shows up here if we pass e.g. an Index
+                    return False
+    
+            return True
+    
+        # if the grouper is obj[name]
+        def is_in_obj(gpr) -&gt; bool:
+            if not hasattr(gpr, "name"):
+                return False
+            # We check the references to determine if the
+            # series is part of the object
+            try:
+                obj_gpr_column = obj[gpr.name]
+            except (KeyError, IndexError, InvalidIndexError, OutOfBoundsDatetime):
+                return False
+            if isinstance(gpr, Series) and isinstance(obj_gpr_column, Series):
+                return gpr._mgr.references_same_values(obj_gpr_column._mgr, 0)
+            return False
+    
+        for gpr, level in zip(keys, levels, strict=True):
+            if is_in_obj(gpr):  # df.groupby(df['name'])
+                in_axis = True
+                exclusions.add(gpr.name)
+    
+            elif is_in_axis(gpr):  # df.groupby('name')
+                if obj.ndim != 1 and gpr in obj:
+                    if validate:
+                        obj._check_label_or_level_ambiguity(gpr, axis=0)
+                    in_axis, name, gpr = True, gpr, obj[gpr]
+                    if gpr.ndim != 1:
+                        # non-unique columns; raise here to get the name in the
+                        # exception message
+                        raise ValueError(f"Grouper for '{name}' not 1-dimensional")
+                    exclusions.add(name)
+                elif obj._is_level_reference(gpr, axis=0):
+                    in_axis, level, gpr = False, gpr, None
+                else:
+&gt;                   raise KeyError(gpr)
+E                   KeyError: 'respondent_id'
+
+.venv\Lib\site-packages\pandas\core\groupby\grouper.py:901: KeyError</failure></testcase><testcase classname="backend.tests.test_cp3_stage1" name="test_cp2_results_are_visible_in_api_and_match_sql" time="0.840" /><testcase classname="backend.tests.test_cp3_stage1" name="test_filter_contract_kpi_rows_quality_and_export[params0-19-38]" time="1.198" /><testcase classname="backend.tests.test_cp3_stage1" name="test_filter_contract_kpi_rows_quality_and_export[params1-570-570]" time="1.499" /><testcase classname="backend.tests.test_cp3_stage1" name="test_filter_contract_kpi_rows_quality_and_export[params2-570-570]" time="1.453" /><testcase classname="backend.tests.test_cp3_stage1" name="test_filter_contract_kpi_rows_quality_and_export[params3-30-60]" time="1.240" /><testcase classname="backend.tests.test_cp3_stage1" name="test_filter_contract_kpi_rows_quality_and_export[params4-3-3]" time="1.223" /><testcase classname="backend.tests.test_cp3_stage1" name="test_profile_filters_match_warehouse" time="1.373" /><testcase classname="backend.tests.test_cp3_stage1" name="test_no_measurements_under_filter_means_no_fake_graphs" time="0.424"><failure message="KeyError: 'respondent_id'">loaded = &lt;starlette.testclient.TestClient object at 0x00000191C0981AE0&gt;
+
+    def test_no_measurements_under_filter_means_no_fake_graphs(loaded):
+&gt;       data=loaded.get('/api/analytics',params={'start_date':'2026-10-01','end_date':'2026-10-02'}).json()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_cp3_stage1.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\httpx\_client.py:1053: in get
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:463: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:360: in handle_request
+    raise exc
+.venv\Lib\site-packages\starlette\testclient.py:357: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\TUF GAMING\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Users\TUF GAMING\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\applications.py:1194: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\fastapi\telemetry\_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:91: in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+.venv\Lib\site-packages\starlette\middleware\cors.py:149: in simple_response
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:676: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2811: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1330: in handle
+    await super().handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:282: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:166: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:152: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:745: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:374: in run_endpoint_function
+    return await run_in_threadpool(
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\telemetry\_api.py:244: in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend\app\main.py:71: in get_analytics
+    return analytics(db,q)
+           ^^^^^^^^^^^^^^^
+backend\app\analytics_v2.py:124: in analytics
+    daily_sbp=valid.groupby(['respondent_id','date'],as_index=False).agg(sbp_mean=('sbp_mean','mean'),dbp_mean=('dbp_mean','mean'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pandas\util\_decorators.py:336: in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pandas\core\frame.py:10835: in groupby
+    return DataFrameGroupBy(
+.venv\Lib\site-packages\pandas\core\groupby\groupby.py:1095: in __init__
+    grouper, exclusions, obj = get_grouper(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+obj = Empty DataFrame
+Columns: []
+Index: [], key = ['respondent_id', 'date']
+level = None, sort = True, observed = True, validate = True, dropna = True
+
+    def get_grouper(
+        obj: NDFrameT,
+        key=None,
+        level=None,
+        sort: bool = True,
+        observed: bool = False,
+        validate: bool = True,
+        dropna: bool = True,
+    ) -&gt; tuple[ops.BaseGrouper, frozenset[Hashable], NDFrameT]:
+        """
+        Create and return a BaseGrouper, which is an internal
+        mapping of how to create the grouper indexers.
+        This may be composed of multiple Grouping objects, indicating
+        multiple groupers
+    
+        Groupers are ultimately index mappings. They can originate as:
+        index mappings, keys to columns, functions, or Groupers
+    
+        Groupers enable local references to level,sort, while
+        the passed in level, and sort are 'global'.
+    
+        This routine tries to figure out what the passing in references
+        are and then creates a Grouping for each one, combined into
+        a BaseGrouper.
+    
+        If observed &amp; we have a categorical grouper, only show the observed
+        values.
+    
+        If validate, then check for key/level overlaps.
+    
+        """
+        group_axis = obj.index
+    
+        # validate that the passed single level is compatible with the passed
+        # index of the object
+        if level is not None:
+            # TODO: These if-block and else-block are almost same.
+            # MultiIndex instance check is removable, but it seems that there are
+            # some processes only for non-MultiIndex in else-block,
+            # eg. `obj.index.name != level`. We have to consider carefully whether
+            # these are applicable for MultiIndex. Even if these are applicable,
+            # we need to check if it makes no side effect to subsequent processes
+            # on the outside of this condition.
+            # (GH 17621)
+            if isinstance(group_axis, MultiIndex):
+                if is_list_like(level) and len(level) == 1:
+                    level = level[0]
+    
+                if key is None and is_scalar(level):
+                    # Get the level values from group_axis
+                    key = group_axis.get_level_values(level)
+                    level = None
+    
+            else:
+                # allow level to be a length-one list-like object
+                # (e.g., level=[0])
+                # GH 13901
+                if is_list_like(level):
+                    nlevels = len(level)
+                    if nlevels == 1:
+                        level = level[0]
+                    elif nlevels == 0:
+                        raise ValueError("No group keys passed!")
+                    else:
+                        raise ValueError("multiple levels only valid with MultiIndex")
+    
+                if isinstance(level, str):
+                    if obj.index.name != level:
+                        raise ValueError(f"level name {level} is not the name of the index")
+                elif level &gt; 0 or level &lt; -1:
+                    raise ValueError("level &gt; 0 or level &lt; -1 only valid with MultiIndex")
+    
+                # NOTE: `group_axis` and `group_axis.get_level_values(level)`
+                # are same in this section.
+                level = None
+                key = group_axis
+    
+        # a passed-in Grouper, directly convert
+        if isinstance(key, Grouper):
+            grouper, obj = key._get_grouper(obj, validate=False, observed=observed)
+            if key.key is None:
+                return grouper, frozenset(), obj
+            else:
+                return grouper, frozenset({key.key}), obj
+    
+        # already have a BaseGrouper, just return it
+        elif isinstance(key, ops.BaseGrouper):
+            return key, frozenset(), obj
+    
+        if not isinstance(key, list):
+            keys = [key]
+            match_axis_length = False
+        else:
+            keys = key
+            match_axis_length = len(keys) == len(group_axis)
+    
+        # what are we after, exactly?
+        any_callable = any(callable(g) or isinstance(g, dict) for g in keys)
+        any_groupers = any(isinstance(g, (Grouper, Grouping)) for g in keys)
+        any_arraylike = any(
+            isinstance(g, (list, tuple, Series, Index, np.ndarray)) for g in keys
+        )
+    
+        # is this an index replacement?
+        if (
+            not any_callable
+            and not any_arraylike
+            and not any_groupers
+            and match_axis_length
+            and level is None
+        ):
+            if isinstance(obj, DataFrame):
+                all_in_columns_index = all(
+                    g in obj.columns or g in obj.index.names for g in keys
+                )
+            else:
+                assert isinstance(obj, Series)
+                all_in_columns_index = all(g in obj.index.names for g in keys)
+    
+            if not all_in_columns_index:
+                keys = [com.asarray_tuplesafe(keys)]
+    
+        if isinstance(level, (tuple, list)):
+            if key is None:
+                keys = [None] * len(level)
+            levels = level
+        else:
+            levels = [level] * len(keys)
+    
+        groupings: list[Grouping] = []
+        exclusions: set[Hashable] = set()
+    
+        # if the actual grouper should be obj[key]
+        def is_in_axis(key) -&gt; bool:
+            if not _is_label_like(key):
+                if obj.ndim == 1:
+                    return False
+    
+                # items -&gt; .columns for DataFrame, .index for Series
+                items = obj.axes[-1]
+                try:
+                    items.get_loc(key)
+                except (KeyError, TypeError, InvalidIndexError):
+                    # TypeError shows up here if we pass e.g. an Index
+                    return False
+    
+            return True
+    
+        # if the grouper is obj[name]
+        def is_in_obj(gpr) -&gt; bool:
+            if not hasattr(gpr, "name"):
+                return False
+            # We check the references to determine if the
+            # series is part of the object
+            try:
+                obj_gpr_column = obj[gpr.name]
+            except (KeyError, IndexError, InvalidIndexError, OutOfBoundsDatetime):
+                return False
+            if isinstance(gpr, Series) and isinstance(obj_gpr_column, Series):
+                return gpr._mgr.references_same_values(obj_gpr_column._mgr, 0)
+            return False
+    
+        for gpr, level in zip(keys, levels, strict=True):
+            if is_in_obj(gpr):  # df.groupby(df['name'])
+                in_axis = True
+                exclusions.add(gpr.name)
+    
+            elif is_in_axis(gpr):  # df.groupby('name')
+                if obj.ndim != 1 and gpr in obj:
+                    if validate:
+                        obj._check_label_or_level_ambiguity(gpr, axis=0)
+                    in_axis, name, gpr = True, gpr, obj[gpr]
+                    if gpr.ndim != 1:
+                        # non-unique columns; raise here to get the name in the
+                        # exception message
+                        raise ValueError(f"Grouper for '{name}' not 1-dimensional")
+                    exclusions.add(name)
+                elif obj._is_level_reference(gpr, axis=0):
+                    in_axis, level, gpr = False, gpr, None
+                else:
+&gt;                   raise KeyError(gpr)
+E                   KeyError: 'respondent_id'
+
+.venv\Lib\site-packages\pandas\core\groupby\grouper.py:901: KeyError</failure></testcase><testcase classname="backend.tests.test_cp3_stage1" name="test_invalid_filters_rejected[params0]" time="0.496" /><testcase classname="backend.tests.test_cp3_stage1" name="test_invalid_filters_rejected[params1]" time="0.411" /><testcase classname="backend.tests.test_cp3_stage1" name="test_invalid_filters_rejected[params2]" time="0.372" /><testcase classname="backend.tests.test_cp3_stage1" name="test_invalid_filters_rejected[params3]" time="0.381" /><testcase classname="backend.tests.test_cp3_stage1" name="test_incomplete_sessions_and_scoped_missing_stay_null" time="0.573" /><testcase classname="backend.tests.test_cp3_stage1" name="test_database_updates_are_read_dynamically_and_id_is_exact" time="1.041" /><testcase classname="backend.tests.test_cp3_stage1" name="test_actual_source_is_protected_with_same_serving_contract" time="0.402" /><testcase classname="backend.tests.test_cp3_stage1" name="test_website_has_no_write_endpoints" time="0.351" /><testcase classname="backend.tests.test_cp3_stage1" name="test_exports_are_not_silently_limited_to_5000" time="0.005" /><testcase classname="backend.tests.test_cp3_stage1" name="test_manual_promotion_requires_current_hash_and_source_confirmation" time="0.743" /><testcase classname="backend.tests.test_cp3_stage2" name="test_demographics_count_people_once_and_follow_education_filter" time="1.273" /><testcase classname="backend.tests.test_cp3_stage2" name="test_risk_categories_and_correlations_use_daily_grain" time="0.992" /><testcase classname="backend.tests.test_cp3_stage2" name="test_constant_numeric_field_and_empty_filters_do_not_invent_statistics" time="0.743"><failure message="KeyError: 'respondent_id'">loaded = &lt;starlette.testclient.TestClient object at 0x00000191C0981BF0&gt;
+warehouse_engine = Engine(sqlite://)
+
+    def test_constant_numeric_field_and_empty_filters_do_not_invent_statistics(loaded,warehouse_engine):
+        with Session(warehouse_engine) as db:
+            db.execute(update(DailyBehavior).values(activity_minutes=0));db.commit()
+        data=loaded.get('/api/analytics').json()
+        result=next(row for row in data['correlations'] if row['field']=='activity_minutes')
+        assert result['n']==570 and result['r'] is None
+&gt;       empty=loaded.get('/api/analytics',params={'respondent_id':'UNKNOWN'}).json()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_cp3_stage2.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\httpx\_client.py:1053: in get
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:463: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:360: in handle_request
+    raise exc
+.venv\Lib\site-packages\starlette\testclient.py:357: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\TUF GAMING\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Users\TUF GAMING\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\applications.py:1194: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\fastapi\telemetry\_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:91: in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+.venv\Lib\site-packages\starlette\middleware\cors.py:149: in simple_response
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:676: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2811: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1330: in handle
+    await super().handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:282: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:166: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:152: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:745: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:374: in run_endpoint_function
+    return await run_in_threadpool(
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\telemetry\_api.py:244: in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend\app\main.py:71: in get_analytics
+    return analytics(db,q)
+           ^^^^^^^^^^^^^^^
+backend\app\analytics_v2.py:124: in analytics
+    daily_sbp=valid.groupby(['respondent_id','date'],as_index=False).agg(sbp_mean=('sbp_mean','mean'),dbp_mean=('dbp_mean','mean'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pandas\util\_decorators.py:336: in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pandas\core\frame.py:10835: in groupby
+    return DataFrameGroupBy(
+.venv\Lib\site-packages\pandas\core\groupby\groupby.py:1095: in __init__
+    grouper, exclusions, obj = get_grouper(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+obj = Empty DataFrame
+Columns: []
+Index: [], key = ['respondent_id', 'date']
+level = None, sort = True, observed = True, validate = True, dropna = True
+
+    def get_grouper(
+        obj: NDFrameT,
+        key=None,
+        level=None,
+        sort: bool = True,
+        observed: bool = False,
+        validate: bool = True,
+        dropna: bool = True,
+    ) -&gt; tuple[ops.BaseGrouper, frozenset[Hashable], NDFrameT]:
+        """
+        Create and return a BaseGrouper, which is an internal
+        mapping of how to create the grouper indexers.
+        This may be composed of multiple Grouping objects, indicating
+        multiple groupers
+    
+        Groupers are ultimately index mappings. They can originate as:
+        index mappings, keys to columns, functions, or Groupers
+    
+        Groupers enable local references to level,sort, while
+        the passed in level, and sort are 'global'.
+    
+        This routine tries to figure out what the passing in references
+        are and then creates a Grouping for each one, combined into
+        a BaseGrouper.
+    
+        If observed &amp; we have a categorical grouper, only show the observed
+        values.
+    
+        If validate, then check for key/level overlaps.
+    
+        """
+        group_axis = obj.index
+    
+        # validate that the passed single level is compatible with the passed
+        # index of the object
+        if level is not None:
+            # TODO: These if-block and else-block are almost same.
+            # MultiIndex instance check is removable, but it seems that there are
+            # some processes only for non-MultiIndex in else-block,
+            # eg. `obj.index.name != level`. We have to consider carefully whether
+            # these are applicable for MultiIndex. Even if these are applicable,
+            # we need to check if it makes no side effect to subsequent processes
+            # on the outside of this condition.
+            # (GH 17621)
+            if isinstance(group_axis, MultiIndex):
+                if is_list_like(level) and len(level) == 1:
+                    level = level[0]
+    
+                if key is None and is_scalar(level):
+                    # Get the level values from group_axis
+                    key = group_axis.get_level_values(level)
+                    level = None
+    
+            else:
+                # allow level to be a length-one list-like object
+                # (e.g., level=[0])
+                # GH 13901
+                if is_list_like(level):
+                    nlevels = len(level)
+                    if nlevels == 1:
+                        level = level[0]
+                    elif nlevels == 0:
+                        raise ValueError("No group keys passed!")
+                    else:
+                        raise ValueError("multiple levels only valid with MultiIndex")
+    
+                if isinstance(level, str):
+                    if obj.index.name != level:
+                        raise ValueError(f"level name {level} is not the name of the index")
+                elif level &gt; 0 or level &lt; -1:
+                    raise ValueError("level &gt; 0 or level &lt; -1 only valid with MultiIndex")
+    
+                # NOTE: `group_axis` and `group_axis.get_level_values(level)`
+                # are same in this section.
+                level = None
+                key = group_axis
+    
+        # a passed-in Grouper, directly convert
+        if isinstance(key, Grouper):
+            grouper, obj = key._get_grouper(obj, validate=False, observed=observed)
+            if key.key is None:
+                return grouper, frozenset(), obj
+            else:
+                return grouper, frozenset({key.key}), obj
+    
+        # already have a BaseGrouper, just return it
+        elif isinstance(key, ops.BaseGrouper):
+            return key, frozenset(), obj
+    
+        if not isinstance(key, list):
+            keys = [key]
+            match_axis_length = False
+        else:
+            keys = key
+            match_axis_length = len(keys) == len(group_axis)
+    
+        # what are we after, exactly?
+        any_callable = any(callable(g) or isinstance(g, dict) for g in keys)
+        any_groupers = any(isinstance(g, (Grouper, Grouping)) for g in keys)
+        any_arraylike = any(
+            isinstance(g, (list, tuple, Series, Index, np.ndarray)) for g in keys
+        )
+    
+        # is this an index replacement?
+        if (
+            not any_callable
+            and not any_arraylike
+            and not any_groupers
+            and match_axis_length
+            and level is None
+        ):
+            if isinstance(obj, DataFrame):
+                all_in_columns_index = all(
+                    g in obj.columns or g in obj.index.names for g in keys
+                )
+            else:
+                assert isinstance(obj, Series)
+                all_in_columns_index = all(g in obj.index.names for g in keys)
+    
+            if not all_in_columns_index:
+                keys = [com.asarray_tuplesafe(keys)]
+    
+        if isinstance(level, (tuple, list)):
+            if key is None:
+                keys = [None] * len(level)
+            levels = level
+        else:
+            levels = [level] * len(keys)
+    
+        groupings: list[Grouping] = []
+        exclusions: set[Hashable] = set()
+    
+        # if the actual grouper should be obj[key]
+        def is_in_axis(key) -&gt; bool:
+            if not _is_label_like(key):
+                if obj.ndim == 1:
+                    return False
+    
+                # items -&gt; .columns for DataFrame, .index for Series
+                items = obj.axes[-1]
+                try:
+                    items.get_loc(key)
+                except (KeyError, TypeError, InvalidIndexError):
+                    # TypeError shows up here if we pass e.g. an Index
+                    return False
+    
+            return True
+    
+        # if the grouper is obj[name]
+        def is_in_obj(gpr) -&gt; bool:
+            if not hasattr(gpr, "name"):
+                return False
+            # We check the references to determine if the
+            # series is part of the object
+            try:
+                obj_gpr_column = obj[gpr.name]
+            except (KeyError, IndexError, InvalidIndexError, OutOfBoundsDatetime):
+                return False
+            if isinstance(gpr, Series) and isinstance(obj_gpr_column, Series):
+                return gpr._mgr.references_same_values(obj_gpr_column._mgr, 0)
+            return False
+    
+        for gpr, level in zip(keys, levels, strict=True):
+            if is_in_obj(gpr):  # df.groupby(df['name'])
+                in_axis = True
+                exclusions.add(gpr.name)
+    
+            elif is_in_axis(gpr):  # df.groupby('name')
+                if obj.ndim != 1 and gpr in obj:
+                    if validate:
+                        obj._check_label_or_level_ambiguity(gpr, axis=0)
+                    in_axis, name, gpr = True, gpr, obj[gpr]
+                    if gpr.ndim != 1:
+                        # non-unique columns; raise here to get the name in the
+                        # exception message
+                        raise ValueError(f"Grouper for '{name}' not 1-dimensional")
+                    exclusions.add(name)
+                elif obj._is_level_reference(gpr, axis=0):
+                    in_axis, level, gpr = False, gpr, None
+                else:
+&gt;                   raise KeyError(gpr)
+E                   KeyError: 'respondent_id'
+
+.venv\Lib\site-packages\pandas\core\groupby\grouper.py:901: KeyError</failure></testcase><testcase classname="backend.tests.test_cp3_stage2" name="test_location_hierarchy_is_derived_from_profiles" time="0.375" /><testcase classname="backend.tests.test_cp3_stage2" name="test_empty_warehouse_demographics_and_associations_remain_empty" time="0.046"><failure message="KeyError: 'respondent_id'">client = &lt;starlette.testclient.TestClient object at 0x00000191C029DBF0&gt;
+
+    def test_empty_warehouse_demographics_and_associations_remain_empty(client):
+&gt;       response=client.get('/api/analytics')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_cp3_stage2.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\httpx\_client.py:1053: in get
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:463: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:360: in handle_request
+    raise exc
+.venv\Lib\site-packages\starlette\testclient.py:357: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\TUF GAMING\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Users\TUF GAMING\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\applications.py:1194: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\fastapi\telemetry\_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:91: in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+.venv\Lib\site-packages\starlette\middleware\cors.py:149: in simple_response
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:676: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2811: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1330: in handle
+    await super().handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:282: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:166: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:152: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:745: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:374: in run_endpoint_function
+    return await run_in_threadpool(
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\telemetry\_api.py:244: in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend\app\main.py:71: in get_analytics
+    return analytics(db,q)
+           ^^^^^^^^^^^^^^^
+backend\app\analytics_v2.py:124: in analytics
+    daily_sbp=valid.groupby(['respondent_id','date'],as_index=False).agg(sbp_mean=('sbp_mean','mean'),dbp_mean=('dbp_mean','mean'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pandas\util\_decorators.py:336: in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pandas\core\frame.py:10835: in groupby
+    return DataFrameGroupBy(
+.venv\Lib\site-packages\pandas\core\groupby\groupby.py:1095: in __init__
+    grouper, exclusions, obj = get_grouper(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+obj = Empty DataFrame
+Columns: []
+Index: [], key = ['respondent_id', 'date']
+level = None, sort = True, observed = True, validate = True, dropna = True
+
+    def get_grouper(
+        obj: NDFrameT,
+        key=None,
+        level=None,
+        sort: bool = True,
+        observed: bool = False,
+        validate: bool = True,
+        dropna: bool = True,
+    ) -&gt; tuple[ops.BaseGrouper, frozenset[Hashable], NDFrameT]:
+        """
+        Create and return a BaseGrouper, which is an internal
+        mapping of how to create the grouper indexers.
+        This may be composed of multiple Grouping objects, indicating
+        multiple groupers
+    
+        Groupers are ultimately index mappings. They can originate as:
+        index mappings, keys to columns, functions, or Groupers
+    
+        Groupers enable local references to level,sort, while
+        the passed in level, and sort are 'global'.
+    
+        This routine tries to figure out what the passing in references
+        are and then creates a Grouping for each one, combined into
+        a BaseGrouper.
+    
+        If observed &amp; we have a categorical grouper, only show the observed
+        values.
+    
+        If validate, then check for key/level overlaps.
+    
+        """
+        group_axis = obj.index
+    
+        # validate that the passed single level is compatible with the passed
+        # index of the object
+        if level is not None:
+            # TODO: These if-block and else-block are almost same.
+            # MultiIndex instance check is removable, but it seems that there are
+            # some processes only for non-MultiIndex in else-block,
+            # eg. `obj.index.name != level`. We have to consider carefully whether
+            # these are applicable for MultiIndex. Even if these are applicable,
+            # we need to check if it makes no side effect to subsequent processes
+            # on the outside of this condition.
+            # (GH 17621)
+            if isinstance(group_axis, MultiIndex):
+                if is_list_like(level) and len(level) == 1:
+                    level = level[0]
+    
+                if key is None and is_scalar(level):
+                    # Get the level values from group_axis
+                    key = group_axis.get_level_values(level)
+                    level = None
+    
+            else:
+                # allow level to be a length-one list-like object
+                # (e.g., level=[0])
+                # GH 13901
+                if is_list_like(level):
+                    nlevels = len(level)
+                    if nlevels == 1:
+                        level = level[0]
+                    elif nlevels == 0:
+                        raise ValueError("No group keys passed!")
+                    else:
+                        raise ValueError("multiple levels only valid with MultiIndex")
+    
+                if isinstance(level, str):
+                    if obj.index.name != level:
+                        raise ValueError(f"level name {level} is not the name of the index")
+                elif level &gt; 0 or level &lt; -1:
+                    raise ValueError("level &gt; 0 or level &lt; -1 only valid with MultiIndex")
+    
+                # NOTE: `group_axis` and `group_axis.get_level_values(level)`
+                # are same in this section.
+                level = None
+                key = group_axis
+    
+        # a passed-in Grouper, directly convert
+        if isinstance(key, Grouper):
+            grouper, obj = key._get_grouper(obj, validate=False, observed=observed)
+            if key.key is None:
+                return grouper, frozenset(), obj
+            else:
+                return grouper, frozenset({key.key}), obj
+    
+        # already have a BaseGrouper, just return it
+        elif isinstance(key, ops.BaseGrouper):
+            return key, frozenset(), obj
+    
+        if not isinstance(key, list):
+            keys = [key]
+            match_axis_length = False
+        else:
+            keys = key
+            match_axis_length = len(keys) == len(group_axis)
+    
+        # what are we after, exactly?
+        any_callable = any(callable(g) or isinstance(g, dict) for g in keys)
+        any_groupers = any(isinstance(g, (Grouper, Grouping)) for g in keys)
+        any_arraylike = any(
+            isinstance(g, (list, tuple, Series, Index, np.ndarray)) for g in keys
+        )
+    
+        # is this an index replacement?
+        if (
+            not any_callable
+            and not any_arraylike
+            and not any_groupers
+            and match_axis_length
+            and level is None
+        ):
+            if isinstance(obj, DataFrame):
+                all_in_columns_index = all(
+                    g in obj.columns or g in obj.index.names for g in keys
+                )
+            else:
+                assert isinstance(obj, Series)
+                all_in_columns_index = all(g in obj.index.names for g in keys)
+    
+            if not all_in_columns_index:
+                keys = [com.asarray_tuplesafe(keys)]
+    
+        if isinstance(level, (tuple, list)):
+            if key is None:
+                keys = [None] * len(level)
+            levels = level
+        else:
+            levels = [level] * len(keys)
+    
+        groupings: list[Grouping] = []
+        exclusions: set[Hashable] = set()
+    
+        # if the actual grouper should be obj[key]
+        def is_in_axis(key) -&gt; bool:
+            if not _is_label_like(key):
+                if obj.ndim == 1:
+                    return False
+    
+                # items -&gt; .columns for DataFrame, .index for Series
+                items = obj.axes[-1]
+                try:
+                    items.get_loc(key)
+                except (KeyError, TypeError, InvalidIndexError):
+                    # TypeError shows up here if we pass e.g. an Index
+                    return False
+    
+            return True
+    
+        # if the grouper is obj[name]
+        def is_in_obj(gpr) -&gt; bool:
+            if not hasattr(gpr, "name"):
+                return False
+            # We check the references to determine if the
+            # series is part of the object
+            try:
+                obj_gpr_column = obj[gpr.name]
+            except (KeyError, IndexError, InvalidIndexError, OutOfBoundsDatetime):
+                return False
+            if isinstance(gpr, Series) and isinstance(obj_gpr_column, Series):
+                return gpr._mgr.references_same_values(obj_gpr_column._mgr, 0)
+            return False
+    
+        for gpr, level in zip(keys, levels, strict=True):
+            if is_in_obj(gpr):  # df.groupby(df['name'])
+                in_axis = True
+                exclusions.add(gpr.name)
+    
+            elif is_in_axis(gpr):  # df.groupby('name')
+                if obj.ndim != 1 and gpr in obj:
+                    if validate:
+                        obj._check_label_or_level_ambiguity(gpr, axis=0)
+                    in_axis, name, gpr = True, gpr, obj[gpr]
+                    if gpr.ndim != 1:
+                        # non-unique columns; raise here to get the name in the
+                        # exception message
+                        raise ValueError(f"Grouper for '{name}' not 1-dimensional")
+                    exclusions.add(name)
+                elif obj._is_level_reference(gpr, axis=0):
+                    in_axis, level, gpr = False, gpr, None
+                else:
+&gt;                   raise KeyError(gpr)
+E                   KeyError: 'respondent_id'
+
+.venv\Lib\site-packages\pandas\core\groupby\grouper.py:901: KeyError</failure></testcase><testcase classname="backend.tests.test_p0_p1_audit" name="test_artifacts_survive_lf_and_crlf_checkout" time="0.043" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_cross_reading_components_are_pending_review" time="0.363" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_contradictory_bp_is_retained_but_not_aggregated" time="0.218" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_conflicting_duplicate_does_not_choose_first_answer" time="0.475" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_active_respondents_are_daily_ids_even_without_bp" time="0.540" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_private_paths_cannot_be_accidentally_added_to_git" time="0.207" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_public_metadata_does_not_disclose_actual_source_name" time="0.380" /><testcase classname="backend.tests.test_p0_p1_audit" name="test_csv_formula_text_is_escaped" time="0.633" /></testsuite></testsuites>

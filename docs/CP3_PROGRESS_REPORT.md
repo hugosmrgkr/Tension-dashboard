@@ -1,5 +1,7 @@
 # CP3 Progress Report - Minggu 8
 
+> **Penerapan terbaru:** satu stack utama **8080**, data sintetis tersinkronisasi tanpa penggantian baris/volume. Gunakan [CP3_MAIN_STACK.md](CP3_MAIN_STACK.md) dan [laporan konsolidasi](CP3_MAIN_CONSOLIDATION_REPORT.md); penjelasan demo RAM 8081 dan warehouse aktif belum diperbarui di bawah adalah riwayat sebelum konsolidasi.
+
 > **CATATAN SINKRONISASI (10 Nov 2026, CP3-K01):** Dokumen ini historis. Aturan sesi valid terbaru memakai gate pasangan pembacaan bersama (SBP/DBP bernomor sama) pada ETL, API, dan baseline sekaligus — lihat [`P0_P1_FINAL_AUDIT.md`](P0_P1_FINAL_AUDIT.md) untuk definisi final dan [`reports/p0_p1_final_verification.md`](../reports/p0_p1_final_verification.md) untuk bukti tes terbaru (10 Nov 2026).
 
 **DATA SINTETIS / SIMULASI.** CP3 selesai secara teknis pada fixture; bukan persetujuan dosen, kecukupan data primer, validitas klinis atau deployment akhir. Hasil terbaru dirangkum pada [CP3_FINAL_REPORT.md](CP3_FINAL_REPORT.md).

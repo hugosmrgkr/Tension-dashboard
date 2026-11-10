@@ -7,7 +7,9 @@ from .models import Participant, CalendarDate, SessionType, BPSession, DailyBeha
 
 def audit_warehouse(db):
     tables=[Participant,CalendarDate,SessionType,BPSession,DailyBehavior,SourceState]
-    inspector=inspect(db.bind)
+    # Inspect within this transaction; a separate Engine inspection can roll
+    # back an uncommitted SQLite connection shared by an in-memory test pool.
+    inspector=inspect(db.connection())
     counts={m.__tablename__:db.scalar(select(func.count()).select_from(m)) for m in tables}
     keys={m.__tablename__:dict(pk=inspector.get_pk_constraint(m.__tablename__)['constrained_columns'],
                               foreign_keys=[dict(columns=f['constrained_columns'],table=f['referred_table'],referred=f['referred_columns']) for f in inspector.get_foreign_keys(m.__tablename__)],
