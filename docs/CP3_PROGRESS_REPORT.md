@@ -1,5 +1,7 @@
 # CP3 Progress Report - Minggu 8
 
+> **CATATAN SINKRONISASI (10 Nov 2026, CP3-K01):** Dokumen ini historis. Aturan sesi valid terbaru memakai gate pasangan pembacaan bersama (SBP/DBP bernomor sama) pada ETL, API, dan baseline sekaligus — lihat [`P0_P1_FINAL_AUDIT.md`](P0_P1_FINAL_AUDIT.md) untuk definisi final dan [`reports/p0_p1_final_verification.md`](../reports/p0_p1_final_verification.md) untuk bukti tes terbaru (10 Nov 2026).
+
 **DATA SINTETIS / SIMULASI.** CP3 selesai secara teknis pada fixture; bukan persetujuan dosen, kecukupan data primer, validitas klinis atau deployment akhir. Hasil terbaru dirangkum pada [CP3_FINAL_REPORT.md](CP3_FINAL_REPORT.md).
 
 ## Acuan dan progres CP1-CP3

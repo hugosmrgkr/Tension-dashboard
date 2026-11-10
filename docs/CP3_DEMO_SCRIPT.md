@@ -1,5 +1,7 @@
 # CP3 Demo Script - 8 menit (fleksibel 5-10 menit)
 
+> **CATATAN SINKRONISASI (10 Nov 2026, CP3-K01/K02):** Gladi bersih penuh via Docker Compose (8081/8082) **belum dapat dijalankan ulang** pada sesi perbaikan 10 Nov 2026 karena Docker daemon tidak tersedia di environment kerja. Sebagai gantinya, backend (`uvicorn`) dan frontend (`vite preview`) dijalankan langsung di luar Docker terhadap database PostgreSQL disposable terisolasi, dimuat dengan fixture sintetis yang sama (19 profil/570 harian/1.140 sesi) melalui `etl.import_data --commit`, lalu seluruh endpoint API (meta, analytics, quality, model/baseline, predict-baseline, data/export) diuji manual dan lulus. Playwright/browser E2E tidak dapat dijalankan (unduhan Chromium diblokir jaringan sandbox). Detail lengkap ada di [`reports/p0_p1_final_verification.md`](../reports/p0_p1_final_verification.md). Ini BUKAN pengganti gladi bersih Docker penuh — tim tetap perlu menjalankan `scripts/start_cp3_demo.ps1` dan `npm run test:browser` sungguhan sebelum presentasi dosen.
+
 Demo **DATA SINTETIS / SIMULASI** untuk dosen. Target `future_7d_mean_sbp` masih usulan. Jangan menyatakan akurasi klinis, diagnosis, 570 responden unik atau persetujuan target yang belum ada.
 
 ## Persiapan sebelum presentasi

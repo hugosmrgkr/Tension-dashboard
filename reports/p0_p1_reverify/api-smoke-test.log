@@ -1,0 +1,24 @@
+=== API smoke test evidence, 10 Nov 2026 (re-run after sandbox process restart) ===
+Backend: uvicorn app.main:app (no docker) against isolated disposable PostgreSQL db toba_browser_demo
+Frontend: vite preview with default /api proxy to localhost:8000
+
+GET /health
+{"status":"ok","version":"2.1.0","database":"postgresql"}
+GET /api/meta
+{"participants":19,"daily_records":570,"session_records":1140,"source_kind":"synthetic","warehouse_empty":false,"access_restricted":false,"message":"DATA SINTETIS / SIMULASI. Data responden asli masih dalam proses pengumpulan.","source":"Dua formulir sintetis CP2","min_date":"2026-09-01","max_date":"2026-09-30","gender":["Laki-laki","Perempuan"],"province":["Aceh","Bali","DKI Jakarta","Jawa Barat","Jawa Timur","Kalimantan Timur","Riau","Sumatera Barat","Sumatera Utara"],"city":["Aceh Tengah","Bandung","Dairi","Denpasar","Humbang Hasundutan","Jakarta","Magetan","Medan","Padang","Pekanbaru","Pematangsiantar","Samarinda","Samosir","Tapanuli Utara","Tebing Tinggi","Toba"],"occupation":["Pegawai swasta","Pekerja lapangan atau pekerjaan fisik","Pelajar atau mahasiswa","Pensiunan","Petani atau bekerja di bidang pertanian","Tidak bekerja saat ini","Wiraswasta atau berdagang"],"respondent_ids":["SIM001","SIM002","SIM003","SIM004","SIM005","SIM006","SIM007","SIM008","SIM009","SIM010","SIM011","SIM012","SIM013","SIM014","SIM015","SIM016","SIM017","SIM018","SIM019"],"sessions":["Malam","Pagi"],"age_groups":["15–29","30–44","45–59"],"etl_audit_version":"cp2-1","data_version":"51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427","cities_by_province":{"Aceh":["Aceh Tengah"],"Bali":["Denpasar"],"DKI Jakarta":["Jakarta"],"Jawa Barat":["Bandung"],"Jawa Timur":["Magetan"],"Kalimantan Timur":["Samarinda"],"Riau":["Pekanbaru"],"Sumatera Barat":["Padang"],"Sumatera Utara":["Dairi","Humbang Hasundutan","Medan","Pematangsiantar","Samosir","Tapanuli Utara","Tebing Tinggi","Toba"]},"education":["Diploma","Pascasarjana","SMA atau SMK atau sederajat","SMP atau sederajat","Sarjana"]}
+GET /api/analytics -> status + size
+status=200 size=1059086
+GET /api/quality -> status + size
+status=200 size=32246
+GET /api/model/baseline -> status + size
+status=200 size=5305
+GET /api/model/predict-baseline?respondent_id=SIM001
+{"respondent_id":"SIM001","last_date":"2026-09-30","history_start":"2026-09-24","forecast_start":"2026-10-01","forecast_end":"2026-10-07","prediction_mmHg":119.75,"baseline":"Rata-rata SBP 7 hari terakhir","target":"future_7d_mean_sbp","is_synthetic":true,"is_diagnosis":false,"status":"DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS","artifact_run_id":"5d3bed0d6591cd2bc09d","target_approved":false}
+GET /api/data/export/sessions -> status + size
+status=200 size=95356
+GET /api/data/export/daily -> status + size
+status=200 size=128797
+GET /api/data/export/participants -> status + size
+status=200 size=2027
+GET / (static index) -> status
+status=200

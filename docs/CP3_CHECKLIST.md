@@ -1,5 +1,7 @@
 # CP3 Checklist - bukti kesiapan teknis
 
+> **CATATAN SINKRONISASI (10 Nov 2026, CP3-K01):** Sebagian bukti di bawah menunjuk hasil CP3 lama. Bukti regresi P0/P1 terbaru ada di [`P0_P1_FINAL_AUDIT.md`](P0_P1_FINAL_AUDIT.md) dan [`reports/p0_p1_final_verification.md`](../reports/p0_p1_final_verification.md) (dijalankan ulang 10 Nov 2026: backend 73 passed/1 skipped pada SQLite dan PostgreSQL asli, frontend 10/10 passed, build sukses).
+
 SELESAI berarti tersedia dan diuji pada **DATA SINTETIS / SIMULASI**; bukan tanda persetujuan dosen atau pemenuhan seluruh luaran final.
 
 | Butir | Status | Bukti / catatan |

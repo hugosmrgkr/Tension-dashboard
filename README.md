@@ -8,6 +8,8 @@ Prototipe interaktif untuk eksplorasi pola pengukuran tekanan darah **pagi dan m
 
 ## Audit final P0/P1 setelah commit CP3
 
+**Ringkasan + panduan instalasi (10 Nov 2026):** [docs/RINGKASAN_PERBAIKAN_P0_P1_DAN_INSTALASI.md](docs/RINGKASAN_PERBAIKAN_P0_P1_DAN_INSTALASI.md) — penjelasan status tiap item P0/P1, apa yang masih butuh keputusan dosen, dan cara instalasi Python/Node/PostgreSQL untuk jalur Docker maupun non-Docker.
+
 Laporan paling baru: [docs/P0_P1_FINAL_AUDIT.md](docs/P0_P1_FINAL_AUDIT.md). Gate BP/API/model kini satu definisi; responden aktif dihitung dari ID-harian, dibedakan dari ID dengan BP valid. Pasangan silang, parsial atau tidak konsisten memakai `pending_review`, bukan klaim klinis. Duplikat konflik tidak memilih baris pertama.
 
 Artefak memakai manifest v3 dengan hash teks UTF-8/LF dan hash binary joblib ketat; `.gitattributes` menjaga checkout. Jangan menyunting metrik/hash manual atau melewati validasi. Sintetis dan aktual tetap terpisah; actual/private/raw serta dotenv/kredensial dilindungi Git. Quality gate aktual yang belum lolos review akan menolak commit.

@@ -1,0 +1,18 @@
+
+> toba-health-insight-frontend@1.0.0 build
+> vite build
+
+vite v6.4.5 building for production...
+transforming...
+✓ 1592 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     0.41 kB │ gzip:     0.29 kB
+dist/assets/index-Byy9ZQ-x.css     28.16 kB │ gzip:     6.66 kB
+dist/assets/index-aka-j8hL.js   4,910.84 kB │ gzip: 1,489.54 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 24.00s

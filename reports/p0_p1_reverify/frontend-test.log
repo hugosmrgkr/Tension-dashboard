@@ -1,0 +1,74 @@
+
+> toba-health-insight-frontend@1.0.0 test
+> node --test tests/dashboard.test.mjs
+
+TAP version 13
+# Subtest: empty warehouse shows a useful message without KPI or plot fixtures
+ok 1 - empty warehouse shows a useful message without KPI or plot fixtures
+  ---
+  duration_ms: 60.213171
+  type: 'test'
+  ...
+# Subtest: dashboard reads arbitrary API values; filters and exports preserve exact ID and session
+ok 2 - dashboard reads arbitrary API values; filters and exports preserve exact ID and session
+  ---
+  duration_ms: 126.5038
+  type: 'test'
+  ...
+# Subtest: all eight pages render with API data and baseline remains an explicit artifact experiment
+ok 3 - all eight pages render with API data and baseline remains an explicit artifact experiment
+  ---
+  duration_ms: 97.607254
+  type: 'test'
+  ...
+# Subtest: analytics failure remains visible while evaluation and management can still open
+ok 4 - analytics failure remains visible while evaluation and management can still open
+  ---
+  duration_ms: 49.179207
+  type: 'test'
+  ...
+# Subtest: pagination exposes rows past the old 200-row cut-off and preserves nulls
+ok 5 - pagination exposes rows past the old 200-row cut-off and preserves nulls
+  ---
+  duration_ms: 24.909962
+  type: 'test'
+  ...
+# Subtest: incomplete sessions remain in the raw table without fabricated charts
+ok 6 - incomplete sessions remain in the raw table without fabricated charts
+  ---
+  duration_ms: 3.548567
+  type: 'test'
+  ...
+# Subtest: clicking a trend point applies date/session globally and reset clears it
+ok 7 - clicking a trend point applies date/session globally and reset clears it
+  ---
+  duration_ms: 32.081906
+  type: 'test'
+  ...
+# Subtest: date errors prevent incompatible analytics requests and never retain old KPI
+ok 8 - date errors prevent incompatible analytics requests and never retain old KPI
+  ---
+  duration_ms: 39.094954
+  type: 'test'
+  ...
+# Subtest: risk page explains smoking, medication, nulls and observed sample sizes
+ok 9 - risk page explains smoking, medication, nulls and observed sample sizes
+  ---
+  duration_ms: 20.804709
+  type: 'test'
+  ...
+# Subtest: daily-active respondents remain visible without valid BP and no fake chart appears
+ok 10 - daily-active respondents remain visible without valid BP and no fake chart appears
+  ---
+  duration_ms: 16.181227
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4263.417048

@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "raw": 19,
+    "accepted": 19,
+    "quarantined": 0,
+    "rejected_schema": 0
+  },
+  "daily": {
+    "raw": 570,
+    "accepted": 570,
+    "quarantined": 0,
+    "rejected_schema": 0
+  },
+  "sessions": {
+    "derived": 1140,
+    "valid": 1140,
+    "incomplete": 0
+  }
+}
+DRY RUN: no database changes. Use --commit to load.
