@@ -8,7 +8,7 @@ import TestRenderer, {act} from 'react-test-renderer';
 // Exercise the real React tree and API helper. Only the browser-only Plotly
 // renderer is substituted; the production build separately bundles real Plotly.
 const bundled=await build({
-  stdin:{contents:"export {default as App} from './src/App.jsx'; export {MiniTable} from './src/components/Common.jsx'; export {Tren} from './src/pages/Pages.jsx';",resolveDir:process.cwd(),loader:'jsx'},
+  stdin:{contents:"export {default as App} from './src/App.jsx'; export {MiniTable} from './src/components/Common.jsx'; export {Tren} from './src/pages/Pages.jsx'; export {SessionPressureLines} from './src/components/Visuals.jsx';",resolveDir:process.cwd(),loader:'jsx'},
   bundle:true,write:false,platform:'node',format:'cjs',external:['react','react-dom','lucide-react'],
   plugins:[{name:'plotly-renderer-probe',setup(builder){
     builder.onResolve({filter:/^(react-plotly\.js\/factory|plotly\.js-dist-min)$/},args=>({path:args.path,namespace:'probe'}));
@@ -18,7 +18,7 @@ const bundled=await build({
 });
 const entry={exports:{}};
 new Function('require','module','exports',bundled.outputFiles[0].text)(createRequire(import.meta.url),entry,entry.exports);
-const {App,MiniTable,Tren}=entry.exports;
+const {App,MiniTable,Tren,SessionPressureLines}=entry.exports;
 const meta={source_kind:'synthetic',source:'Fixture API',message:'DATA SINTETIS / SIMULASI',warehouse_empty:false,access_restricted:false,
   participants:23,daily_records:77,session_records:151,respondent_ids:['SIM009'],sessions:['Pagi','Malam'],age_groups:[],province:[],city:[],gender:[],occupation:[],min_date:'2026-01-01',max_date:'2026-01-30',etl_audit_version:'cp2-1'};
 const payload={empty:false,kpis:{respondents:23,daily_records:77,sessions:151,mean_sbp:123.4,mean_dbp:78.9},comparison:null,
@@ -63,7 +63,11 @@ test('dashboard reads arbitrary API values; filters and exports preserve exact I
   try{
     await mount();
     assert.deepEqual(renderer.root.findAll(node=>node.props.className==='kpi-value').map(visible),['23','77','151','123,4 mmHg']);
-    assert.equal(renderer.root.findAllByType('plot-probe').length,4);
+    // This fixture contains only morning data: the night panel must remain empty.
+    assert.equal(renderer.root.findAllByType('plot-probe').length,3);
+    assert.match(text(),/Tren Tekanan Darah Pagi/);
+    assert.match(text(),/Tren Tekanan Darah Malam/);
+    assert.match(text(),/Belum ada nilai valid untuk grafik ini/);
     await act(async()=>renderer.root.findByProps({'aria-label':'ID responden'}).props.onChange({target:{value:'SIM009'}}));await settle();
     await act(async()=>renderer.root.findByProps({'aria-label':'Sesi pengukuran'}).props.onChange({target:{value:'Malam'}}));await settle();
     assert.ok(requests.some(r=>r.url==='/api/analytics?respondent_id=SIM009&session=Malam'));
@@ -201,4 +205,32 @@ test('P2-06 without a token the app asks to sign in; the token is sent as Bearer
     assert.doesNotMatch(text(),/Masuk diperlukan/);
     assert.ok(requests.every(r=>!r.url.includes('tok-viewer')));
   }finally{await dispose();}
+});
+
+
+test('session trend compares SBP and DBP together, isolates morning/night and preserves click filters and missing values',()=>{
+ const rows=[
+  {date:'2026-09-02',session:'Pagi',sbp:125,dbp:null,n:2},
+  {date:'2026-09-01',session:'Malam',sbp:130,dbp:84,n:3},
+  {date:'2026-09-01',session:'Pagi',sbp:120,dbp:80,n:4}
+ ];
+ for(const session of ['Pagi','Malam']){
+  let selected;
+  const chart=TestRenderer.create(React.createElement(SessionPressureLines,{rows,session,onSelect:value=>selected=value}));
+  const plot=chart.root.findByType('plot-probe').props;
+  assert.deepEqual(plot.data.map(trace=>trace.name),['SBP','DBP']);
+  assert.deepEqual(plot.data[0].y,session==='Pagi'?[120,125]:[130]);
+  assert.deepEqual(plot.data[1].y,session==='Pagi'?[80,null]:[84]);
+  assert.equal(plot.data[1].connectgaps,false);
+  assert.equal(plot.layout.yaxis.title,'Rata-rata tekanan darah (mmHg)');
+  for(const trace of plot.data){
+   plot.onClick({points:[{customdata:trace.customdata[0]}]});
+   assert.deepEqual(selected,{start_date:'2026-09-01',end_date:'2026-09-01',session});
+  }
+  chart.unmount();
+ }
+ const empty=TestRenderer.create(React.createElement(SessionPressureLines,{rows:rows.filter(row=>row.session==='Pagi'),session:'Malam'}));
+ assert.equal(empty.root.findAllByType('plot-probe').length,0);
+ assert.match(JSON.stringify(empty.toJSON()),/Belum ada nilai valid/);
+ empty.unmount();
 });

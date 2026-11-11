@@ -1,11 +1,25 @@
 import React from 'react';
 import {PlotlyChart,Empty} from './Common';
 import {fmt} from '../lib/api';
-const BLUE='#2f6fe0',ORANGE='#e59732',TEAL='#168e86';
+const BLUE='#2789ed',ORANGE='#c58b36',TEAL='#397e8b';
 const palette=[BLUE,TEAL,ORANGE,'#8664b1','#ca657f','#58a3bc'];
 const sessions=['Pagi','Malam'];
-const color={Pagi:BLUE,Malam:ORANGE};
+const color={Pagi:BLUE,Malam:'#173b65'};
 const point=event=>event?.points?.[0];
+
+export function SessionPressureLines({rows=[],session,height=315,onSelect}){
+ const selected=rows.filter(row=>row.session===session).sort((a,b)=>a.date.localeCompare(b.date));
+ const traces=[['sbp','SBP',BLUE],['dbp','DBP','#173b65']].map(([field,label,lineColor])=>({
+  type:'scatter',mode:'lines+markers',name:label,x:selected.map(row=>row.date),
+  y:selected.map(row=>Number.isFinite(row[field])?row[field]:null),
+  marker:{color:lineColor,size:6},line:{width:2.5,color:lineColor,dash:field==='dbp'?'dash':'solid'},connectgaps:false,
+  customdata:selected.map(row=>[row.n,row.date,session]),
+  hovertemplate:'%{x}<br>'+session+' · '+label+': %{y:.1f} mmHg<br>n=%{customdata[0]} sesi<extra></extra>'
+ }));
+ return <PlotlyChart height={height} data={traces}
+  onClick={onSelect?event=>{const p=point(event);if(p?.customdata)onSelect({start_date:p.customdata[1],end_date:p.customdata[1],session:p.customdata[2]})}:undefined}
+  layout={{xaxis:{title:'Tanggal pengamatan',type:'date'},yaxis:{title:'Rata-rata tekanan darah (mmHg)'},hovermode:'x unified'}}/>;
+}
 
 export function SessionLines({rows=[],field='sbp',height=315,onSelect}){
  const traces=sessions.map(session=>{
@@ -22,7 +36,7 @@ export function SessionBox({rows=[],field='sbp_mean',violin=false,group='session
  return <PlotlyChart height={height} data={groups.map((name,i)=>{
   const a=rows.filter(r=>r[group]===name&&Number.isFinite(r[field]));
   return {type:violin?'violin':'box',name,y:a.map(r=>r[field]),box:violin?{visible:true}:undefined,
-   boxpoints:violin?undefined:'outliers',meanline:{visible:violin},line:{color:palette[i%palette.length]},
+   boxpoints:violin?undefined:'outliers',meanline:{visible:violin},line:{color:group==='session'?(color[name]||BLUE):palette[i%palette.length]},
    customdata:a.map(()=>a.length),hovertemplate:name+'<br>%{y:.1f} mmHg<br>n=%{customdata} sesi<extra></extra>'};
  })} layout={{yaxis:{title:`${field.startsWith('dbp')?'DBP':'SBP'} (mmHg)`},xaxis:{title:group==='session'?'Sesi pengukuran':'Kelompok usia (tahun)'},showlegend:false}}/>;
 }

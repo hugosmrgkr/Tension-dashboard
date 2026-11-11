@@ -1,4 +1,5 @@
 """Execute CP3 notebook using the invoking Python, without installing a global kernel."""
+"""Execute CP3 notebook using the invoking Python, without installing a global kernel."""
 import json
 import os
 import sys

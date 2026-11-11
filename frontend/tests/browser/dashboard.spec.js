@@ -26,8 +26,8 @@ test('8 desktop pages render real read-only PostgreSQL data and the baseline API
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   await mkdir(screenshotDir,{recursive:true});
   await page.goto('/');await ready(page);
-  await expect(page.locator('.brand-logo')).toBeVisible();
-  expect(await page.locator('.brand-logo').evaluate(image=>image.complete&&image.naturalWidth>0)).toBeTruthy();
+  await expect(page.locator('.brand-name')).toHaveText('Toba Health Insight');
+  await expect(page.locator('.brand img, .side-bottom img')).toHaveCount(0);
   const response=await page.request.get('/api/analytics');expect(response.ok()).toBeTruthy();const data=await response.json();
   expect(data.empty).toBe(false);
   await expect(page.locator('.kpi-value').first()).toHaveText(Number(data.kpis.respondents).toLocaleString('id-ID'));

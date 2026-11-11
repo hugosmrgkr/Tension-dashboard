@@ -99,8 +99,7 @@ export default function App(){
     <Sidebar page={page} changePage={go} isOpen={menu} setOpen={setMenu}/>
     <main className="main-area" id="main-content">
       <Header page={page} meta={meta} setOpen={setMenu}/>
-      <div className="source-banner"><b>{!meta?'MEMUAT SUMBER':meta.warehouse_empty?'BELUM ADA DATA':meta.source_kind==='synthetic'?'DATA SINTETIS / SIMULASI':'DATA TERBATAS'}</b><span>{meta?.message||'Menghubungkan dashboard ke warehouse.'}</span></div>
-      <div className="data-actions"><button className="button light" type="button" onClick={reload} disabled={loading}>Muat ulang data</button><span>Membaca ulang PostgreSQL; pemuatan data dilakukan lewat ETL manual.</span></div>
+      <div className="source-banner"><b>{!meta?'MEMUAT SUMBER':meta.warehouse_empty?'BELUM ADA DATA':meta.source_kind==='synthetic'?'DATA SINTETIS / SIMULASI':'DATA TERBATAS'}</b><span>{meta?.message||'Menghubungkan dashboard ke warehouse.'}</span><button className="button light" type="button" onClick={reload} disabled={loading} title="Membaca ulang PostgreSQL; pemuatan data dilakukan lewat ETL manual.">Muat ulang data</button></div>
       {meta&&!meta.warehouse_empty&&!meta.access_restricted&&!baselinePage&&<FilterBar meta={meta} filters={filters} setFilters={setFilters} loading={loading}/>}
       {baselinePage&&<Notice>Halaman baseline mempertahankan eksperimen ML yang tersedia. Metrik berasal dari artefak eksperimen; filter analitik tidak menghitung ulang model.</Notice>}
       {error&&<Notice tone="error">Gagal membaca data: {error} <button className="link-button" type="button" onClick={reload}>Coba baca ulang</button></Notice>}
