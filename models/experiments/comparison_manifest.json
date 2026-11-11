@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "metrics_hash_mode": "utf8-lf-v1",
+  "run_id": "d43ac5c17c70cead67c7",
+  "metrics_sha256": "13b4ce741f1aeb4d98d931f98bde8d38570ecc040e714c9495b558c474c23d3f",
+  "model_file": "linear_regression_synthetic.joblib",
+  "model_sha256": "327eb82ea728ad312e6534a24fe4888c3d4d41c4f5a9bf9b98e1dc47f545ac71",
+  "target_approved": false
+}

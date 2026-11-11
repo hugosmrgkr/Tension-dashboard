@@ -1,0 +1,529 @@
+{
+  "schema_version": 1,
+  "run_id": "d43ac5c17c70cead67c7",
+  "status": "DATA SINTETIS / SIMULASI - EKSPERIMEN",
+  "target": "future_7d_mean_sbp",
+  "target_approved": false,
+  "horizon_days": 7,
+  "is_synthetic": true,
+  "is_diagnosis": false,
+  "real_model_validated": false,
+  "description": "Rerata SBP harian t+1..t+7; origin akhir hari t. Usulan target, belum disetujui dosen.",
+  "dataset": "19 ID sintetis, 570 ID-tanggal, 1140 sesi; 323 complete windows.",
+  "features": [
+    "past_7d_sbp",
+    "past_7d_dbp",
+    "past_7d_sbp_std",
+    "age",
+    "bmi",
+    "past_7d_activity",
+    "past_7d_sleep",
+    "past_7d_stress"
+  ],
+  "feature_ranges": {
+    "past_7d_sbp": {
+      "min": 110.60714285714286,
+      "max": 136.67857142857142
+    },
+    "past_7d_dbp": {
+      "min": 68.60714285714286,
+      "max": 81.64285714285714
+    },
+    "past_7d_sbp_std": {
+      "min": 1.179112429944227,
+      "max": 5.4358503831282095
+    },
+    "age": {
+      "min": 20.0,
+      "max": 59.0
+    },
+    "bmi": {
+      "min": 19.408,
+      "max": 32.49
+    },
+    "past_7d_activity": {
+      "min": 24.285714285714285,
+      "max": 81.42857142857143
+    },
+    "past_7d_sleep": {
+      "min": 6.052428571428571,
+      "max": 7.721428571428572
+    },
+    "past_7d_stress": {
+      "min": 2.0,
+      "max": 3.4285714285714284
+    }
+  },
+  "config": {
+    "seed": 42,
+    "heldout_id_fraction": 0.32,
+    "calendar_train_fraction": 0.6,
+    "test_target_stride_days": 7
+  },
+  "cutoff": "2026-09-18",
+  "seed": 42,
+  "validation_folds": 4,
+  "split": "Held-out ID + purge label kronologis + target uji tidak overlap (identik baseline CP3); validasi model = leave-ID-out di dalam train",
+  "rows_training": 60,
+  "rows_test": 7,
+  "respondents_train": [
+    "SIM003",
+    "SIM005",
+    "SIM007",
+    "SIM008",
+    "SIM010",
+    "SIM011",
+    "SIM013",
+    "SIM014",
+    "SIM015",
+    "SIM016",
+    "SIM018",
+    "SIM019"
+  ],
+  "respondents_test": [
+    "SIM001",
+    "SIM002",
+    "SIM004",
+    "SIM006",
+    "SIM009",
+    "SIM012",
+    "SIM017"
+  ],
+  "folds": [
+    {
+      "fold": 0,
+      "fit_rows": 45,
+      "validation_rows": 15,
+      "validation_ids": [
+        "SIM008",
+        "SIM014",
+        "SIM019"
+      ]
+    },
+    {
+      "fold": 1,
+      "fit_rows": 45,
+      "validation_rows": 15,
+      "validation_ids": [
+        "SIM007",
+        "SIM013",
+        "SIM018"
+      ]
+    },
+    {
+      "fold": 2,
+      "fit_rows": 45,
+      "validation_rows": 15,
+      "validation_ids": [
+        "SIM005",
+        "SIM011",
+        "SIM016"
+      ]
+    },
+    {
+      "fold": 3,
+      "fit_rows": 45,
+      "validation_rows": 15,
+      "validation_ids": [
+        "SIM003",
+        "SIM010",
+        "SIM015"
+      ]
+    }
+  ],
+  "comparison": [
+    {
+      "model": "Naive 7-day mean",
+      "kind": "baseline naif",
+      "validation": {
+        "mae": 1.9077380952380962,
+        "rmse": 2.376512228908083,
+        "r2": 0.8646372199233365,
+        "n": 60
+      },
+      "test": {
+        "mae": 1.933673469387758,
+        "rmse": 2.2347229985988153,
+        "r2": 0.8503092921859248,
+        "n": 7
+      },
+      "hyperparameters": {}
+    },
+    {
+      "model": "Linear Regression",
+      "kind": "terlatih",
+      "validation": {
+        "mae": 2.1804559044735092,
+        "rmse": 2.7588255751932826,
+        "r2": 0.8175820187369995,
+        "n": 60
+      },
+      "test": {
+        "mae": 2.575491601598048,
+        "rmse": 3.1139849025417354,
+        "r2": 0.7093432252178671,
+        "n": 7
+      },
+      "hyperparameters": {}
+    },
+    {
+      "model": "Random Forest",
+      "kind": "terlatih",
+      "validation": {
+        "mae": 3.177824920361443,
+        "rmse": 4.750046472580027,
+        "r2": 0.45922715447411144,
+        "n": 60
+      },
+      "test": {
+        "mae": 2.959332062992323,
+        "rmse": 3.440746932239855,
+        "r2": 0.6451433833185107,
+        "n": 7
+      },
+      "hyperparameters": {
+        "n_estimators": 300,
+        "max_depth": 5,
+        "min_samples_leaf": 5,
+        "max_features": 0.6,
+        "random_state": 42,
+        "n_jobs": 1
+      }
+    },
+    {
+      "model": "Hist Gradient Boosting",
+      "kind": "terlatih",
+      "validation": {
+        "mae": 3.3529502367008592,
+        "rmse": 4.5999213540192505,
+        "r2": 0.49286921891466806,
+        "n": 60
+      },
+      "test": {
+        "mae": 3.6934015596669445,
+        "rmse": 4.83155121004614,
+        "r2": 0.30028591062284515,
+        "n": 7
+      },
+      "hyperparameters": {
+        "max_iter": 120,
+        "learning_rate": 0.05,
+        "max_depth": 3,
+        "min_samples_leaf": 5,
+        "l2_regularization": 1.0,
+        "random_state": 42
+      }
+    }
+  ],
+  "validation_per_fold": {
+    "Naive 7-day mean": [
+      {
+        "fold": 0,
+        "mae": 2.285714285714287,
+        "rmse": 2.4993196353119354,
+        "r2": 0.13588398777894117,
+        "n": 15
+      },
+      {
+        "fold": 1,
+        "mae": 1.2928571428571416,
+        "rmse": 1.6908366483574255,
+        "r2": 0.8996710709550919,
+        "n": 15
+      },
+      {
+        "fold": 2,
+        "mae": 2.038095238095239,
+        "rmse": 2.582845027363072,
+        "r2": -8.737848170398674,
+        "n": 15
+      },
+      {
+        "fold": 3,
+        "mae": 2.014285714285718,
+        "rmse": 2.6104838345295596,
+        "r2": 0.9233074331372368,
+        "n": 15
+      }
+    ],
+    "Linear Regression": [
+      {
+        "fold": 0,
+        "mae": 2.263236599398766,
+        "rmse": 2.6359739569549916,
+        "r2": 0.038806819617205335,
+        "n": 15
+      },
+      {
+        "fold": 1,
+        "mae": 3.0010643564954345,
+        "rmse": 3.595299171245957,
+        "r2": 0.5463792202415318,
+        "n": 15
+      },
+      {
+        "fold": 2,
+        "mae": 1.6463235075344007,
+        "rmse": 2.1727695374427007,
+        "r2": -5.8911805475133034,
+        "n": 15
+      },
+      {
+        "fold": 3,
+        "mae": 1.8111991544654378,
+        "rmse": 2.4184730558797627,
+        "r2": 0.9341745610453506,
+        "n": 15
+      }
+    ],
+    "Random Forest": [
+      {
+        "fold": 0,
+        "mae": 2.9269301927504228,
+        "rmse": 3.8565515632266334,
+        "r2": -1.0574378979162646,
+        "n": 15
+      },
+      {
+        "fold": 1,
+        "mae": 2.5864305277738726,
+        "rmse": 2.943203664965525,
+        "r2": 0.6960070563783887,
+        "n": 15
+      },
+      {
+        "fold": 2,
+        "mae": 1.414573781097829,
+        "rmse": 1.7731234082245295,
+        "r2": -3.589276533009124,
+        "n": 15
+      },
+      {
+        "fold": 3,
+        "mae": 5.783365179823645,
+        "rmse": 7.9732278013734055,
+        "r2": 0.2845494825975601,
+        "n": 15
+      }
+    ],
+    "Hist Gradient Boosting": [
+      {
+        "fold": 0,
+        "mae": 2.5879147228564117,
+        "rmse": 3.041427823592554,
+        "r2": -0.27962724954052387,
+        "n": 15
+      },
+      {
+        "fold": 1,
+        "mae": 3.187184512542681,
+        "rmse": 3.795831118443639,
+        "r2": 0.4943655738996112,
+        "n": 15
+      },
+      {
+        "fold": 2,
+        "mae": 2.4565744823669293,
+        "rmse": 3.145345676283953,
+        "r2": -13.441192743436446,
+        "n": 15
+      },
+      {
+        "fold": 3,
+        "mae": 5.180127229037415,
+        "rmse": 7.147397382506655,
+        "r2": 0.4250803999046292,
+        "n": 15
+      }
+    ]
+  },
+  "selection": {
+    "selected": "Linear Regression",
+    "ranking": [
+      "Linear Regression",
+      "Hist Gradient Boosting",
+      "Random Forest"
+    ],
+    "rule": "RMSE validasi leave-ID-out terkecil; tie dipecah dengan MAE lalu nama",
+    "beats_naive_on_validation": false
+  },
+  "selected_model": "Linear Regression",
+  "leakage_audit": {
+    "subject_overlap": [],
+    "shared_measurement_id_dates": 0,
+    "train_target_end_max": "2026-09-18",
+    "test_origin_min": "2026-09-18",
+    "labels_available_before_test": true,
+    "test_overlapping_target_id_days": 0,
+    "imputer_matches_training_only": true,
+    "scaler_matches_training_only": true,
+    "training_overlapping_target_id_days": 288
+  },
+  "leakage_audit_all": {
+    "Linear Regression": {
+      "subject_overlap": [],
+      "shared_measurement_id_dates": 0,
+      "train_target_end_max": "2026-09-18",
+      "test_origin_min": "2026-09-18",
+      "labels_available_before_test": true,
+      "test_overlapping_target_id_days": 0,
+      "imputer_matches_training_only": true,
+      "scaler_matches_training_only": true,
+      "training_overlapping_target_id_days": 288
+    },
+    "Random Forest": {
+      "subject_overlap": [],
+      "shared_measurement_id_dates": 0,
+      "train_target_end_max": "2026-09-18",
+      "test_origin_min": "2026-09-18",
+      "labels_available_before_test": true,
+      "test_overlapping_target_id_days": 0,
+      "imputer_matches_training_only": true,
+      "scaler_matches_training_only": true,
+      "training_overlapping_target_id_days": 288
+    },
+    "Hist Gradient Boosting": {
+      "subject_overlap": [],
+      "shared_measurement_id_dates": 0,
+      "train_target_end_max": "2026-09-18",
+      "test_origin_min": "2026-09-18",
+      "labels_available_before_test": true,
+      "test_overlapping_target_id_days": 0,
+      "imputer_matches_training_only": true,
+      "scaler_matches_training_only": true,
+      "training_overlapping_target_id_days": 288
+    }
+  },
+  "actual_vs_predicted": [
+    {
+      "respondent_id": "SIM001",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 122.53571428571429,
+      "naive_7_day_mean": 121.17857142857143,
+      "naive_7_day_mean_residual": 1.357142857142861,
+      "linear_regression": 123.38319812652209,
+      "linear_regression_residual": -0.847483840807797,
+      "random_forest": 122.5780449284298,
+      "random_forest_residual": -0.042330642715513,
+      "hist_gradient_boosting": 120.94602126076572,
+      "hist_gradient_boosting_residual": 1.589693024948574
+    },
+    {
+      "respondent_id": "SIM002",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 122.07142857142857,
+      "naive_7_day_mean": 120.17857142857143,
+      "naive_7_day_mean_residual": 1.892857142857139,
+      "linear_regression": 117.66939610537716,
+      "linear_regression_residual": 4.402032466051409,
+      "random_forest": 118.75611869345647,
+      "random_forest_residual": 3.315309877972098,
+      "hist_gradient_boosting": 119.26302903575622,
+      "hist_gradient_boosting_residual": 2.808399535672351
+    },
+    {
+      "respondent_id": "SIM004",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 130.32142857142858,
+      "naive_7_day_mean": 128.67857142857142,
+      "naive_7_day_mean_residual": 1.642857142857167,
+      "linear_regression": 126.16438830314577,
+      "linear_regression_residual": 4.157040268282813,
+      "random_forest": 124.3043373901912,
+      "random_forest_residual": 6.01709118123739,
+      "hist_gradient_boosting": 119.30262791501373,
+      "hist_gradient_boosting_residual": 11.018800656414854
+    },
+    {
+      "respondent_id": "SIM006",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 116.03571428571429,
+      "naive_7_day_mean": 116.92857142857143,
+      "naive_7_day_mean_residual": -0.892857142857139,
+      "linear_regression": 114.77623871090438,
+      "linear_regression_residual": 1.259475574809912,
+      "random_forest": 114.62238987637548,
+      "random_forest_residual": 1.413324409338813,
+      "hist_gradient_boosting": 114.56548910361101,
+      "hist_gradient_boosting_residual": 1.470225182103277
+    },
+    {
+      "respondent_id": "SIM009",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 121.85714285714286,
+      "naive_7_day_mean": 121.17857142857143,
+      "naive_7_day_mean_residual": 0.678571428571431,
+      "linear_regression": 116.72081015045681,
+      "linear_regression_residual": 5.136332706686048,
+      "random_forest": 118.04377279545268,
+      "random_forest_residual": 3.813370061690179,
+      "hist_gradient_boosting": 119.40491045282123,
+      "hist_gradient_boosting_residual": 2.452232404321634
+    },
+    {
+      "respondent_id": "SIM012",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 110.64285714285714,
+      "naive_7_day_mean": 106.57142857142857,
+      "naive_7_day_mean_residual": 4.071428571428569,
+      "linear_regression": 111.5895959475769,
+      "linear_regression_residual": -0.946738804719757,
+      "random_forest": 113.22886823458992,
+      "random_forest_residual": -2.586011091732786,
+      "hist_gradient_boosting": 112.85488177636094,
+      "hist_gradient_boosting_residual": -2.212024633503802
+    },
+    {
+      "respondent_id": "SIM017",
+      "date": "2026-09-18",
+      "target_start": "2026-09-19",
+      "target_end": "2026-09-25",
+      "actual": 124.25,
+      "naive_7_day_mean": 121.25,
+      "naive_7_day_mean_residual": 3.0,
+      "linear_regression": 125.5293375498286,
+      "linear_regression_residual": -1.279337549828597,
+      "random_forest": 120.72211282374052,
+      "random_forest_residual": 3.527887176259483,
+      "hist_gradient_boosting": 119.94756451929588,
+      "hist_gradient_boosting_residual": 4.302435480704119
+    }
+  ],
+  "provenance": {
+    "text_hash_mode": "utf8-lf-v1",
+    "profile_sha256": "041778498fca147f2690b1612518eabec71f8db5ac449ef074695293b066e3c3",
+    "daily_sha256": "140734ffbbe95d31ba6c70d34e15f78b2174bd2bf71d5edc1061d6f8cbb7c70f",
+    "prepared_content_sha256": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+    "code_sha256": "89436a4dfe9816ecf5e6c54c093c8a31f2b88f748667d9821392a40d641abeb7",
+    "baseline_code_sha256": "c9ffb174cb656d79a8572b9a055bf41a7a4840f46ce4215a1470bc1c4bfe73e1",
+    "versions": {
+      "python": "3.13.18",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "sklearn": "1.9.1",
+      "joblib": "1.6.0"
+    }
+  },
+  "as_of": "2026-11-10",
+  "tuned": false,
+  "limitation": "DATA SINTETIS. Train hanya 60 window dari 12 ID dan test utama hanya 7 origin dari 7 ID, sehingga selisih antar-model tidak stabil dan tidak membuktikan generalisasi. Window train saling berkorelasi. Target belum disetujui dosen. Bukan validasi klinis atau diagnosis.",
+  "warnings": [
+    "Test hanya 7 origin: metrik test sangat tidak stabil.",
+    "Train hanya 60 window: model non-linear mudah overfit.",
+    "Tidak ada model terlatih yang mengalahkan baseline naif pada validasi."
+  ],
+  "model_file": "linear_regression_synthetic.joblib",
+  "model_sha256": "327eb82ea728ad312e6534a24fe4888c3d4d41c4f5a9bf9b98e1dc47f545ac71"
+}

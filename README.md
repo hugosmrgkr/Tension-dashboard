@@ -106,8 +106,8 @@ Panduan layar demi layar: [`docs/PANDUAN_PENGGUNA.md`](docs/PANDUAN_PENGGUNA.md)
 | Data Partisipan | Profil anonim | ID pseudonim, demografi, BMI turunan dan jumlah hari pencatatan. |
 | Analisis Faktor Risiko | Grafik gaya hidup | Tidur, stres 1–5, aktivitas menit, makanan asin, buah, sayur, kafein, dan treemap aktivitas. Hanya asosiasi. |
 | Tren Tekanan Darah | Tren sesi dan bacaan mentah | Dua pembacaan tetap tersedia. Pilih satu ID untuk menelusuri sesi internal. |
-| Prediksi Hipertensi | Baseline regresi | Tombol memilih ID dan menghitung **rata-rata SBP 7 hari sebelumnya** sebagai estimasi rata-rata 7 hari berikutnya. Bukan diagnosis hipertensi. |
-| Evaluasi Model | Metrik awal | MAE/RMSE/R² baseline naif vs Linear Regression, group split berdasarkan responden, aktual-vs-prediksi dan residual. **Hanya simulasi.** |
+| Prediksi Tekanan Darah | Model terlatih (P2-02) | Memilih ID; server menghitung fitur riwayat 7 hari dan menjalankan model terpilih P2-01 yang terverifikasi hash, ditampilkan bersama pembanding baseline naif. Bukan diagnosis. |
+| Evaluasi Model | Perbandingan 3 algoritma (P2-03) | MAE/RMSE/R² validasi vs test untuk baseline naif, Linear Regression, Random Forest, HistGradientBoosting; aktual-vs-prediksi, residual, distribusi error, error per ID. **Hanya simulasi.** |
 | Laporan & Ringkasan | 5 poin deskriptif | Semua pernyataan berasal dari agregat filter aktif, bukan temuan populasi. |
 | Kelola Data | Audit dan unduh | Sumber PostgreSQL, kualitas filter aktif, snapshot audit batch, ekspor CSV terfilter dan petunjuk ETL manual. Tidak ada upload website. |
 
@@ -230,3 +230,16 @@ Dashboard tanpa login hanya melayani data **sintetis**. Data aktual tetap memaka
 ## Keamanan dan kolaborasi
 
 Jangan commit `.env`, data kesehatan asli, nama/kontak responden, atau data mentah privat. Jangan hapus volume Docker tanpa backup. Gunakan pull request dan logbook kontribusi; deklarasikan penggunaan AI sesuai brief dosen. Aplikasi publik harus dibatasi pada agregasi yang tidak mengidentifikasi individu.
+
+## P2 — status pengerjaan
+
+Rincian lengkap, bukti uji, temuan, dan keputusan yang masih pending: **[docs/P2_HASIL_PENGERJAAN_2026-11-11.md](docs/P2_HASIL_PENGERJAAN_2026-11-11.md)**.
+
+```powershell
+# P2-01: ulangi perbandingan algoritma (data sintetis, tanpa database)
+python -m etl.run_model_comparison
+# P2-06: buat secret staging/production, lalu jalankan stack aman (lihat docs/P2_DEPLOYMENT_RUNBOOK.md)
+python scripts/make_secrets.py
+# P2-08: audit kebersihan repository (hanya membaca)
+python scripts/audit_repo.py
+```

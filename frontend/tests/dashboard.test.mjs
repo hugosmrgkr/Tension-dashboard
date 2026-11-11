@@ -26,22 +26,29 @@ const payload={empty:false,kpis:{respondents:23,daily_records:77,sessions:151,me
   categories:{salty_food:[],fruit:[],vegetable:[],caffeine:[],activity_type:[]},participants:[],daily_rows:[],session_rows:[],session_stats:[],
   quality:{accepted_profiles:23,accepted_daily:77,rejected_daily:0},filtered_quality:{daily_records:77,session_records:151,incomplete_sessions:0,missing_sleep_hours:2,missing_sitting:1,missing_smoke_count:70}};
 const model={available:true,rows_training:12,rows_test:3,scores:[{model:'Baseline',mae:1,rmse:2,r2:.5}],actual_vs_predicted:[],features:['sbp'],split:'ID',limitation:'SIMULASI'};
-let renderer,requests;
+const rowsCmp=['Naive 7-day mean','Linear Regression','Random Forest','Hist Gradient Boosting'].map((name,i)=>({model:name,kind:i?'terlatih':'baseline naif',validation:{mae:2+i,rmse:2.5+i,r2:.1,n:60},test:{mae:1.5+i,rmse:2+i,r2:null,n:2}}));
+const comparison={available:true,artifact_integrity_verified:true,run_id:'RUNCMP1',status:'DATA SINTETIS / SIMULASI - EKSPERIMEN',target_approved:false,horizon_days:7,selected_model:'Linear Regression',
+  selection:{rule:'RMSE validasi terkecil',beats_naive_on_validation:false},comparison:rowsCmp,respondents_train:['A','B','C'],respondents_test:['D'],rows_training:60,rows_test:2,cutoff:'2026-09-18',
+  dataset:'fixture',split:'ID + waktu',seed:42,validation_folds:4,features:['f1'],limitation:'SINTETIS kecil',warnings:['Test hanya 2 origin: metrik sangat tidak stabil.'],
+  actual_vs_predicted:[{respondent_id:'D',actual:120,naive_7_day_mean:119,linear_regression:121,random_forest:122,hist_gradient_boosting:118},{respondent_id:'D',actual:125,naive_7_day_mean:124,linear_regression:123,random_forest:126,hist_gradient_boosting:127}]};
+const prediction={respondent_id:'SIM009',last_date:'2026-09-20',forecast_start:'2026-09-21',forecast_end:'2026-09-27',prediction_mmHg:121.5,reference_naive_mmHg:120.1,notes:['Pada validasi, model ini tidak lebih baik dari baseline naif; gunakan angka naif sebagai pembanding.'],model:{algorithm:'Linear Regression',version:'RUNCMP1',trained_on:'2026-11-10',target:'future_7d_mean_sbp',horizon_days:7,data_source:'fixture',target_approved:false}};
+let renderer,requests,comparisonOverride;
 const visible=node=>typeof node==='string'?node:(node.children||[]).map(visible).join('');
 const button=label=>renderer.root.findAllByType('button').find(node=>visible(node)===label);
 const text=()=>JSON.stringify(renderer.toJSON());
 async function settle(){for(let n=0;n<3;n++)await act(async()=>{await new Promise(resolve=>setImmediate(resolve))});}
-async function mount({empty=false,failAnalytics=false,page='Dashboard',dataOverride=null}={}){
-  requests=[];
-  global.window={location:{hash:'#'+encodeURIComponent(page)},addEventListener(){},removeEventListener(){},scrollTo(){}};
+async function mount({empty=false,failAnalytics=false,page='Dashboard',dataOverride=null,comparisonData=comparison,requireToken=false}={}){
+  requests=[];const store=new Map();comparisonOverride=comparisonData;
+  global.window={sessionStorage:{getItem:key=>store.has(key)?store.get(key):null,setItem:(key,value)=>store.set(key,value),removeItem:key=>store.delete(key)},location:{hash:'#'+encodeURIComponent(page)},addEventListener(){},removeEventListener(){},scrollTo(){}};
   global.document={createElement:()=>({click(){},remove(){}}),body:{appendChild(){}}};
   global.URL.createObjectURL=()=> 'blob:test';global.URL.revokeObjectURL=()=>{};
   global.fetch=async(url,options={})=>{
-    requests.push({url,method:options.method||'GET'});
+    requests.push({url,method:options.method||'GET',authorization:options.headers?.Authorization});
+    if(requireToken&&options.headers?.Authorization!=='Bearer tok-viewer')return {ok:false,status:401,json:async()=>({detail:'Autentikasi diperlukan.'})};
     const failure=failAnalytics&&url.startsWith('/api/analytics');
     return {ok:!failure,status:failure?503:200,blob:async()=>new Blob(['csv']),json:async()=>failure?{detail:'Warehouse tidak dapat dibaca'}:
       url==='/api/meta'?{...meta,warehouse_empty:empty,participants:empty?0:23,message:empty?'Warehouse belum berisi data. Jalankan ETL manual.':meta.message}:
-      url==='/api/model/baseline'?model:empty?{...payload,empty:true,kpis:{},trend:[]}:dataOverride||payload};
+      url==='/api/model/baseline'?model:url==='/api/model/comparison'?comparisonOverride:url.startsWith('/api/model/predict')?prediction:empty?{...payload,empty:true,kpis:{},trend:[]}:dataOverride||payload};
   };
   await act(async()=>{renderer=TestRenderer.create(React.createElement(App))});
   await settle();
@@ -70,14 +77,14 @@ test('dashboard reads arbitrary API values; filters and exports preserve exact I
 });
 
 test('all eight pages render with API data and baseline remains an explicit artifact experiment',async()=>{
-  try{await mount();for(const page of ['Data Partisipan','Analisis Faktor Risiko','Tren Tekanan Darah','Prediksi Hipertensi','Evaluasi Model','Laporan & Ringkasan','Kelola Data','Dashboard']){
+  try{await mount();for(const page of ['Data Partisipan','Analisis Faktor Risiko','Tren Tekanan Darah','Prediksi Tekanan Darah','Evaluasi Model','Laporan & Ringkasan','Kelola Data','Dashboard']){
     await act(async()=>button(page).props.onClick());await settle();assert.equal(renderer.root.findByType('h1').children.join(''),page);
   }}finally{await dispose();}
 });
 
 test('analytics failure remains visible while evaluation and management can still open',async()=>{
   try{await mount({failAnalytics:true});assert.match(text(),/Gagal membaca data/);assert.equal(renderer.root.findAllByType('plot-probe').length,0);
-    await act(async()=>button('Evaluasi Model').props.onClick());await settle();assert.match(text(),/Tabel metrik eksperimen/);
+    await act(async()=>button('Evaluasi Model').props.onClick());await settle();assert.match(text(),/Tabel metrik perbandingan/);
     await act(async()=>button('Kelola Data').props.onClick());await settle();assert.match(text(),/Sumber aktif/);assert.match(text(),/Kualitas pilihan belum dapat dibaca/);
   }finally{await dispose();}
 });
@@ -139,5 +146,59 @@ test('daily-active respondents remain visible without valid BP and no fake chart
     assert.deepEqual(values.slice(0,3),['23','77','0']);
     assert.ok(!values[3].startsWith('0'));assert.equal(renderer.root.findAllByType('plot-probe').length,0);
     assert.match(text(),/catatan harian diterima ETL/);assert.match(text(),/Sesi pending review/);
+  }finally{await dispose();}
+});
+
+test('P2-03 evaluation reads the verified comparison artifact: metrics, warnings, no invented numbers',async()=>{
+  try{
+    await mount();await act(async()=>button('Evaluasi Model').props.onClick());await settle();
+    const page=text();
+    assert.match(page,/Tabel metrik perbandingan/);assert.match(page,/Random Forest/);assert.match(page,/Hist Gradient Boosting/);
+    assert.match(page,/Test hanya 2 origin/);assert.match(page,/RUNCMP1/);assert.match(page,/Belum disetujui|belum disetujui dosen/);
+    assert.ok(requests.some(r=>r.url==='/api/model/comparison'));
+    assert.ok(renderer.root.findAllByType('plot-probe').length>=5);
+  }finally{await dispose();}
+});
+
+test('P2-03 evaluation falls back to CP3 baseline when comparison artifact is unavailable',async()=>{
+  try{
+    await mount({comparisonData:{available:false,message:'Artefak perbandingan belum tersedia'}});
+    await act(async()=>button('Evaluasi Model').props.onClick());await settle();
+    assert.match(text(),/Tabel metrik eksperimen/);assert.doesNotMatch(text(),/Tabel metrik perbandingan/);
+  }finally{await dispose();}
+});
+
+test('P2-02 prediction page calls the trained-model endpoint and shows model metadata and naive reference',async()=>{
+  try{
+    await mount();await act(async()=>button('Prediksi Tekanan Darah').props.onClick());await settle();
+    await act(async()=>renderer.root.findByType('form').props.onSubmit({preventDefault(){}}));await settle();
+    assert.ok(requests.some(r=>r.url==='/api/model/predict?respondent_id=SIM009'&&r.method==='GET'));
+    const shown=visible(renderer.root.findAll(node=>node.props.className==='prediction-result')[0]);
+    assert.match(shown,/121,50 mmHg/);assert.match(shown,/120,10 mmHg/);assert.match(shown,/Linear Regression/);assert.match(shown,/tidak lebih baik dari baseline naif/);
+  }finally{await dispose();}
+});
+
+test('P2-04 KPI cards expose written definition, unit, grain and sample size from the API',async()=>{
+  const defs={respondents:{formula:'COUNT DISTINCT id',unit:'ID',grain:'ID responden',filters:'semua'},daily_records:{formula:'COUNT harian',unit:'catatan',grain:'ID x tanggal',filters:'semua'},sessions:{formula:'COUNT sesi valid',unit:'sesi',grain:'ID x tanggal x sesi',filters:'semua'},mean_sbp:{formula:'AVG sbp',unit:'mmHg',grain:'sesi',filters:'semua'}};
+  try{
+    await mount({dataOverride:{...payload,kpi_definitions:defs,comparison_definition:'Periode pembanding sebelumnya sama panjang.'}});
+    const panels=renderer.root.findAll(node=>node.props.className==='kpi-def').map(visible);
+    assert.equal(panels.length,4);
+    assert.match(panels[2],/COUNT sesi valid/);assert.match(panels[2],/ID x tanggal x sesi/);assert.match(panels[0],/151|23/);
+    assert.match(text(),/Periode pembanding sebelumnya sama panjang/);
+  }finally{await dispose();}
+});
+
+test('P2-06 without a token the app asks to sign in; the token is sent as Bearer and kept only in sessionStorage',async()=>{
+  try{
+    await mount({requireToken:true});
+    assert.match(visible(renderer.root.findAll(node=>node.props.className==='notice notice-warning')[0]),/Masuk diperlukan/);
+    assert.equal(renderer.root.findAllByType('plot-probe').length,0);
+    await act(async()=>renderer.root.findByProps({'aria-label':'Token akses'}).props.onChange({target:{value:'tok-viewer'}}));
+    await act(async()=>renderer.root.findByType('form').props.onSubmit({preventDefault(){}}));await settle();
+    assert.ok(requests.some(r=>r.url==='/api/meta'&&r.authorization==='Bearer tok-viewer'));
+    assert.ok(requests.some(r=>r.url.startsWith('/api/analytics')&&r.authorization==='Bearer tok-viewer'));
+    assert.doesNotMatch(text(),/Masuk diperlukan/);
+    assert.ok(requests.every(r=>!r.url.includes('tok-viewer')));
   }finally{await dispose();}
 });

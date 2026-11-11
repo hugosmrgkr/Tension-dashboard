@@ -31,3 +31,11 @@ node_modules/
 __pycache__/
 dist/
 .env
+
+# P2-06: secret dan backup deploy
+deploy/production.env
+deploy/*.env
+!deploy/production.env.example
+backups/
+*.sql.gz
+*.sql.gz.gpg

@@ -1,61 +1,61 @@
-services:
-  db:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: toba_health
-      POSTGRES_USER: toba
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me-local-only}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U toba -d toba_health"]
-      interval: 5s
-      timeout: 5s
-      retries: 15
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+  services:
+    db:
+      image: postgres:16-alpine
+      restart: unless-stopped
+      environment:
+        POSTGRES_DB: toba_health
+        POSTGRES_USER: toba
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me-local-only}
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U toba -d toba_health"]
+        interval: 5s
+        timeout: 5s
+        retries: 15
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
 
-  backend:
-    build: ./backend
-    volumes:
-      - ./data/sample:/app/data/sample:ro
-      - ./models:/app/models:ro
-    restart: unless-stopped
-    environment:
-      ENABLE_IMPORT: ${ENABLE_IMPORT:-false}
-      IMPORT_TOKEN: ${IMPORT_TOKEN:-}
-      DATABASE_URL: postgresql+psycopg://toba:${POSTGRES_PASSWORD:-change-me-local-only}@db:5432/toba_health
-    depends_on:
-      db:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health',timeout=3)"]
-      interval: 3s
-      timeout: 5s
-      retries: 30
+    backend:
+      build: ./backend
+      volumes:
+        - ./data/sample:/app/data/sample:ro
+        - ./models:/app/models:ro
+      restart: unless-stopped
+      environment:
+        ENABLE_IMPORT: ${ENABLE_IMPORT:-false}
+        IMPORT_TOKEN: ${IMPORT_TOKEN:-}
+        DATABASE_URL: postgresql+psycopg://toba:${POSTGRES_PASSWORD:-change-me-local-only}@db:5432/toba_health
+      depends_on:
+        db:
+          condition: service_healthy
+      healthcheck:
+        test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health',timeout=3)"]
+        interval: 3s
+        timeout: 5s
+        retries: 30
 
-  frontend:
-    build: ./frontend
-    restart: unless-stopped
-    ports:
-      - "8080:80"
-    depends_on:
-      backend:
-        condition: service_healthy
+    frontend:
+      build: ./frontend
+      restart: unless-stopped
+      ports:
+        - "8080:80"
+      depends_on:
+        backend:
+          condition: service_healthy
 
-  maintenance:
-    # Explicit CLI only; never starts or imports automatically with the app.
-    profiles: [tools]
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.cp2
-    environment:
-      DATABASE_URL: postgresql+psycopg://toba:${POSTGRES_PASSWORD:-change-me-local-only}@db:5432/toba_health
-    volumes:
-      - .:/workspace:ro
-    depends_on:
-      db:
-        condition: service_healthy
-    command: ["python", "-m", "etl.sync_main_warehouse", "--dry-run"]
+    maintenance:
+      # Explicit CLI only; never starts or imports automatically with the app.
+      profiles: [tools]
+      build:
+        context: ./backend
+        dockerfile: Dockerfile.cp2
+      environment:
+        DATABASE_URL: postgresql+psycopg://toba:${POSTGRES_PASSWORD:-change-me-local-only}@db:5432/toba_health
+      volumes:
+        - .:/workspace:ro
+      depends_on:
+        db:
+          condition: service_healthy
+      command: ["python", "-m", "etl.sync_main_warehouse", "--dry-run"]
 
-volumes:
-  postgres_data:
+  volumes:
+    postgres_data:

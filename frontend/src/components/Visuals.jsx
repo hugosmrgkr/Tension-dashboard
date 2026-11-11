@@ -87,17 +87,30 @@ export function ModelComparison({model}){
  return <PlotlyChart height={300} data={[{type:'bar',x:scores.map(r=>r.model),y:scores.map(r=>r.mae),marker:{color:[ORANGE,BLUE]},text:scores.map(r=>fmt(r.mae,2)),textposition:'outside',hovertemplate:'%{x}<br>MAE %{y:.3f} mmHg<extra></extra>'}]}
   layout={{xaxis:{title:'Metode eksperimen'},yaxis:{title:'MAE (mmHg)',range:scores.length?[0,Math.max(...scores.map(row=>row.mae))*1.2||1]:undefined},showlegend:false}}/>;
 }
-const validPredictions=model=>(model?.actual_vs_predicted||[]).filter(r=>Number.isFinite(r.actual)&&Number.isFinite(r.linear));
-export function ActualVsPredicted({model}){
- const a=validPredictions(model);if(!a.length)return <Empty message="Pasangan aktual-prediksi belum tersedia pada artefak eksperimen."/>;
- const values=a.flatMap(r=>[r.actual,r.linear]),bounds=[Math.min(...values),Math.max(...values)];
- return <PlotlyChart height={320} data={[{type:'scatter',mode:'markers',name:'Linear Regression',x:a.map(r=>r.actual),y:a.map(r=>r.linear),marker:{color:BLUE,opacity:.6},hovertemplate:'Aktual %{x:.1f} mmHg<br>Prediksi %{y:.1f} mmHg<extra></extra>'},
+const validPredictions=(model,field='linear')=>(model?.actual_vs_predicted||[]).filter(r=>Number.isFinite(r.actual)&&Number.isFinite(r[field]));
+export function ActualVsPredicted({model,field='linear',label='Linear Regression'}){
+ const a=validPredictions(model,field);if(!a.length)return <Empty message="Pasangan aktual-prediksi belum tersedia pada artefak eksperimen."/>;
+ const values=a.flatMap(r=>[r.actual,r[field]]),bounds=[Math.min(...values),Math.max(...values)];
+ return <PlotlyChart height={320} data={[{type:'scatter',mode:'markers',name:label,x:a.map(r=>r.actual),y:a.map(r=>r[field]),marker:{color:BLUE,opacity:.6},hovertemplate:'Aktual %{x:.1f} mmHg<br>Prediksi %{y:.1f} mmHg<extra></extra>'},
   {type:'scatter',mode:'lines',name:'Prediksi = aktual',x:bounds,y:bounds,line:{color:'#8194af',dash:'dash'}}]} layout={{xaxis:{title:'Aktual (mmHg)'},yaxis:{title:'Prediksi (mmHg)'}}}/>;
 }
-export function ResidualPlot({model}){
- const a=validPredictions(model);if(!a.length)return <Empty message="Residual belum tersedia pada artefak eksperimen."/>;
- const values=a.map(r=>r.linear);
- return <PlotlyChart height={320} data={[{type:'scatter',mode:'markers',name:'Residual',x:values,y:a.map(r=>r.actual-r.linear),marker:{color:TEAL,opacity:.65},hovertemplate:'Prediksi %{x:.1f} mmHg<br>Residual %{y:.1f} mmHg<extra></extra>'},
+export function ResidualPlot({model,field='linear'}){
+ const a=validPredictions(model,field);if(!a.length)return <Empty message="Residual belum tersedia pada artefak eksperimen."/>;
+ const values=a.map(r=>r[field]);
+ return <PlotlyChart height={320} data={[{type:'scatter',mode:'markers',name:'Residual',x:values,y:a.map(r=>r.actual-r[field]),marker:{color:TEAL,opacity:.65},hovertemplate:'Prediksi %{x:.1f} mmHg<br>Residual %{y:.1f} mmHg<extra></extra>'},
   {type:'scatter',mode:'lines',name:'Residual nol',x:[Math.min(...values),Math.max(...values)],y:[0,0],line:{dash:'dash',color:'#8194af'}}]}
   layout={{xaxis:{title:'Prediksi (mmHg)'},yaxis:{title:'Residual aktual - prediksi (mmHg)'},showlegend:false}}/>;
+}
+
+export function ValidationVsTest({comparison,metric='rmse'}){
+ const rows=comparison?.comparison||[];if(!rows.length)return <Empty message="Hasil perbandingan belum tersedia."/>;
+ const label=metric.toUpperCase();
+ return <PlotlyChart height={320} data={[{type:'bar',name:'Validasi (leave-ID-out)',x:rows.map(r=>r.model),y:rows.map(r=>r.validation[metric]),marker:{color:BLUE},hovertemplate:'%{x}<br>Validasi '+label+' %{y:.3f} mmHg<extra></extra>'},
+  {type:'bar',name:'Test utama',x:rows.map(r=>r.model),y:rows.map(r=>r.test[metric]),marker:{color:ORANGE},hovertemplate:'%{x}<br>Test '+label+' %{y:.3f} mmHg<extra></extra>'}]}
+  layout={{barmode:'group',xaxis:{title:'Metode'},yaxis:{title:label+' (mmHg)',rangemode:'tozero'},legend:{orientation:'h'}}}/>;
+}
+export function ResidualHistogram({model,field}){
+ const a=validPredictions(model,field);if(!a.length)return <Empty message="Distribusi error belum tersedia."/>;
+ return <PlotlyChart height={300} data={[{type:'histogram',x:a.map(r=>r.actual-r[field]),nbinsx:10,marker:{color:TEAL},hovertemplate:'Residual %{x} mmHg<br>%{y} origin<extra></extra>'}]}
+  layout={{xaxis:{title:'Residual aktual - prediksi (mmHg)'},yaxis:{title:'Jumlah origin uji'},showlegend:false}}/>;
 }

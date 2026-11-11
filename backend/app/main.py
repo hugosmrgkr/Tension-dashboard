@@ -15,19 +15,23 @@ from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from .db import Base, engine, SessionLocal, get_db
 from .models import SourceState
+from . import security
 from .analytics_v2 import analytics, frames, metadata_payload, source_summary, EXPORT_FIELDS, AGE_GROUPS
 
 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
+    security.validate_runtime_config()  # P2-06: gagal tertutup bila konfigurasi staging/production tidak aman
     # Create missing empty tables only. ETL/seed is never run by the web server.
     Base.metadata.create_all(bind=engine)
     yield
 
 
+_secure=security.app_env() in security.SECURE_ENVS  # dokumentasi API dimatikan di staging/production
 app=FastAPI(title='Toba Health Insight API',version='2.1.0',lifespan=lifespan,
-            docs_url='/api/docs',redoc_url='/api/redoc',openapi_url='/api/openapi.json')
-app.add_middleware(CORSMiddleware,allow_origins=['http://localhost:5173','http://127.0.0.1:5173','http://localhost:8080'],allow_methods=['GET'],allow_headers=['*'])
+            docs_url=None if _secure else '/api/docs',redoc_url=None if _secure else '/api/redoc',openapi_url=None if _secure else '/api/openapi.json')
+app.add_middleware(CORSMiddleware,allow_origins=security.cors_origins(),allow_methods=['GET'],allow_headers=['Authorization','Content-Type'])
+app.middleware('http')(security.security_middleware)
 
 
 @app.exception_handler(SQLAlchemyError)
@@ -102,6 +106,31 @@ def predict_baseline(respondent_id:str=Query(...,min_length=1,max_length=40),aso
     except LookupError as exc:raise HTTPException(404,str(exc))
     except ValueError as exc:raise HTTPException(422,str(exc))
     return {**result,'artifact_run_id':experiment['run_id'],'target_approved':False}
+
+@app.get('/api/model/comparison')
+def model_comparison(db:Session=Depends(get_db)):
+    """P2-03: hasil perbandingan algoritma dari artefak terverifikasi (hanya DATA SINTETIS)."""
+    from .model_comparison import load_comparison
+    state=db.get(SourceState,1)
+    if not state or state.source_kind!='synthetic':
+        return dict(available=False,message='Perbandingan model hanya tersedia pada DATA SINTETIS / SIMULASI.')
+    return load_comparison(Path(os.getenv('MODEL_DIR','/app/models'))/'experiments')
+
+
+@app.get('/api/model/predict')
+def predict_model(respondent_id:str=Query(...,min_length=1,max_length=40),asof_date:date|None=None,db:Session=Depends(get_db)):
+    """P2-02: prediksi rerata SBP 7 hari ke depan memakai model terlatih terverifikasi. Bukan diagnosis."""
+    from . import model_service as ms
+    state=db.get(SourceState,1)
+    if not state or state.source_kind!='synthetic':raise HTTPException(409,'Prediksi model hanya tersedia pada dataset sintetis.')
+    try:model,info=ms.load_serving_model(Path(os.getenv('MODEL_DIR','/app/models'))/'experiments')
+    except ms.ModelUnavailable as exc:raise HTTPException(409,str(exc))
+    profiles,sessions,days=frames(db)
+    try:return ms.predict(model,info,profiles,days,sessions,respondent_id,asof_date)
+    except ms.UnknownRespondent as exc:raise HTTPException(404,str(exc))
+    except ms.InsufficientHistory as exc:raise HTTPException(422,str(exc))
+    except ms.ModelFailure as exc:raise HTTPException(503,str(exc))
+
 
 @app.get('/api/data/export/{kind}')
 def export(kind:Literal['sessions','daily','participants'],q:dict=Depends(query_args),db:Session=Depends(get_db)):

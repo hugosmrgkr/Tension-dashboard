@@ -13,6 +13,20 @@ EXPORT_FIELDS = {
 }
 
 
+# P2-04: definisi tertulis tiap KPI (rumus, satuan, grain, filter, sumber). Dipakai tooltip UI dan tes.
+KPI_DEFINITIONS={
+    'respondents':dict(label='Responden aktif',formula='COUNT(DISTINCT respondent_id) pada catatan harian yang diterima ETL dan lolos filter',unit='ID',grain='ID responden',
+        filters='Semua filter global (tanggal, wilayah, profil, ID); filter sesi tidak berpengaruh karena catatan harian bukan per sesi',source='/api/analytics -> kpis.respondents (fact_daily_behavior_v2)',comparison_field='active'),
+    'daily_records':dict(label='Catatan harian valid',formula='COUNT(ID-tanggal) pada fact_daily_behavior_v2 yang lolos filter',unit='catatan',grain='ID x tanggal',
+        filters='Semua filter global kecuali sesi; dua sesi pada hari yang sama tidak menggandakan catatan',source='/api/analytics -> kpis.daily_records',comparison_field='daily'),
+    'sessions':dict(label='Sesi valid',formula='COUNT(ID-tanggal-sesi) yang lolos gate pasangan pembacaan bp_policy (pending review dikecualikan)',unit='sesi',grain='ID x tanggal x sesi',
+        filters='Semua filter global termasuk sesi Pagi/Malam',source='/api/analytics -> kpis.sessions (fact_bp_session_v2 + bp_policy)',comparison_field='sessions'),
+    'mean_sbp':dict(label='Rata-rata SBP',formula='AVG(sbp_mean) atas sesi valid; bukan rerata per orang sehingga ID dengan lebih banyak sesi berbobot lebih besar',unit='mmHg',grain='ID x tanggal x sesi',
+        filters='Semua filter global termasuk sesi',source='/api/analytics -> kpis.mean_sbp',comparison_field='sbp'),
+}
+COMPARISON_DEFINITION='Periode pembanding = rentang sebelumnya dengan jumlah hari sama persis dengan filter tanggal; seluruh filter non-tanggal sama. Hanya dihitung bila tanggal mulai dan sampai dipilih; bila periode sebelumnya kosong, tidak ada angka pembanding.'
+
+
 def age_band(value):
     if pd.isna(value): return 'Tidak diketahui'
     if value < 15: return '<15'
@@ -168,6 +182,7 @@ def analytics(db:Session,query=None):
     return dict(source_kind=state.source_kind if state else 'empty' if warehouse_empty else 'unknown',
                 bp_policy_version=POLICY_VERSION,data_version=quality.get('prepared_content_sha256'),empty=not len(d) and not len(s),empty_reason=reason,message=messages.get(reason),
                 filters={k:v for k,v in query.items() if v is not None},
+                kpi_definitions=KPI_DEFINITIONS,comparison_definition=COMPARISON_DEFINITION,
                 kpis=dict(respondents=int(d.respondent_id.nunique()),respondents_with_valid_bp=int(valid.respondent_id.nunique()),daily_records=len(d),sessions=n,
                           mean_sbp=round(float(valid.sbp_mean.mean()),1) if n else None,
                           mean_dbp=round(float(valid.dbp_mean.mean()),1) if n else None,dates=int(d.date.nunique())),

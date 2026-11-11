@@ -4,13 +4,13 @@ import Plotly from 'plotly.js-dist-min';
 import {Activity, CalendarDays, ChartColumn, ChartNoAxesCombined, ClipboardList, Database, HeartPulse, House, Menu, ShieldAlert, SlidersHorizontal, Target, UsersRound, X, AlertTriangle, RefreshCcw} from 'lucide-react';
 import {dateID} from '../lib/api';
 const Plot=createPlotlyComponent(Plotly);
-export const NAV=[['Dashboard',House],['Data Partisipan',UsersRound],['Analisis Faktor Risiko',ChartColumn],['Tren Tekanan Darah',ChartNoAxesCombined],['Prediksi Hipertensi',Target],['Evaluasi Model',Activity],['Laporan & Ringkasan',ClipboardList],['Kelola Data',Database]];
+export const NAV=[['Dashboard',House],['Data Partisipan',UsersRound],['Analisis Faktor Risiko',ChartColumn],['Tren Tekanan Darah',ChartNoAxesCombined],['Prediksi Tekanan Darah',Target],['Evaluasi Model',Activity],['Laporan & Ringkasan',ClipboardList],['Kelola Data',Database]];
 export const INFO={
  'Dashboard':'Gambaran umum pengukuran pagi dan malam dari dataset yang sedang dipilih.',
  'Data Partisipan':'Profil responden dengan ID pseudonim dan jumlah catatan harian.',
  'Analisis Faktor Risiko':'Eksplorasi hubungan faktor gaya hidup dengan tekanan darah — bukan sebab-akibat.',
  'Tren Tekanan Darah':'Bandingkan pola sistolik dan diastolik sesi pagi serta malam.',
- 'Prediksi Hipertensi':'Eksperimen baseline: perkiraan rata-rata sistolik 7 hari berikutnya (bukan diagnosis).',
+ 'Prediksi Tekanan Darah':'Eksperimen baseline: perkiraan rata-rata sistolik 7 hari berikutnya (bukan diagnosis).',
  'Evaluasi Model':'Metrik baseline dan pembanding pada data sintetis, tanpa klaim klinis.',
  'Laporan & Ringkasan':'Lima temuan deskriptif, ukuran sampel, dan batas interpretasi.',
  'Kelola Data':'Sumber PostgreSQL, kualitas data, unduh CSV terfilter, dan status ETL manual.'

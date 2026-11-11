@@ -1,23 +1,24 @@
 import {test,expect} from '@playwright/test';
 import {mkdir,readFile} from 'node:fs/promises';
 
-const pages=['Dashboard','Data Partisipan','Analisis Faktor Risiko','Tren Tekanan Darah','Prediksi Hipertensi','Evaluasi Model','Laporan & Ringkasan','Kelola Data'];
+const pages=['Dashboard','Data Partisipan','Analisis Faktor Risiko','Tren Tekanan Darah','Prediksi Tekanan Darah','Evaluasi Model','Laporan & Ringkasan','Kelola Data'];
 const screenshotDir=(process.env.CP3_REPORT_DIR||'../reports/cp3_stage2')+'/screenshots';
 async function ready(page){await expect(page.getByRole('button',{name:'Muat ulang data',exact:true})).toBeEnabled();}
 async function navigate(page,label){await page.getByRole('navigation').getByRole('button',{name:label,exact:true}).click();await expect(page.getByRole('heading',{level:1})).toHaveText(label);}
 async function noOverflow(page){expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBeTruthy();}
 
-test('verified baseline scores match raw predictions and evaluation UI',async({page})=>{
+test('verified comparison scores match raw predictions and evaluation UI (P2-03)',async({page})=>{
   await page.goto('/#'+encodeURIComponent('Evaluasi Model'));await ready(page);
-  const model=await (await page.request.get('/api/model/baseline')).json();
+  const model=await (await page.request.get('/api/model/comparison')).json();
   expect(model.available).toBe(true);expect(model.artifact_integrity_verified).toBe(true);
-  expect(model.target_approved).toBe(false);expect(model.audit.test_overlapping_target_id_days).toBe(0);
-  await expect(page.getByText(model.run_id,{exact:false})).toBeVisible();
-  for(const [i,key] of ['naive','linear'].entries()){
-    const mean=model.actual_vs_predicted.reduce((sum,row)=>sum+Math.abs(row.actual-row[key]),0)/model.actual_vs_predicted.length;
-    expect(mean).toBeCloseTo(model.scores[i].mae,10);
-    const formatted=Number(model.scores[i].mae).toLocaleString('id-ID',{minimumFractionDigits:3,maximumFractionDigits:3});
-    await expect(page.getByRole('cell',{name:formatted,exact:true})).toBeVisible();
+  expect(model.target_approved).toBe(false);expect(model.leakage_audit.test_overlapping_target_id_days).toBe(0);
+  await expect(page.getByText(model.run_id,{exact:false}).first()).toBeVisible();
+  const key=name=>name.toLowerCase().replace(/[ -]/g,'_');
+  for(const row of model.comparison){
+    const mean=model.actual_vs_predicted.reduce((sum,r)=>sum+Math.abs(r.actual-r[key(row.model)]),0)/model.actual_vs_predicted.length;
+    expect(mean).toBeCloseTo(row.test.mae,10);
+    const formatted=Number(row.test.mae).toLocaleString('id-ID',{minimumFractionDigits:3,maximumFractionDigits:3});
+    await expect(page.getByRole('cell',{name:formatted,exact:true}).first()).toBeVisible();
   }
 });
 
@@ -32,12 +33,12 @@ test('8 desktop pages render real read-only PostgreSQL data and the baseline API
   await expect(page.locator('.kpi-value').first()).toHaveText(Number(data.kpis.respondents).toLocaleString('id-ID'));
   for(const [i,label] of pages.entries()){
     if(i)await navigate(page,label);
-    if(label==='Prediksi Hipertensi'){
-      const submit=page.getByRole('button',{name:'Hitung perkiraan baseline'});await expect(submit).toBeEnabled();
-      const result=page.waitForResponse(r=>r.url().includes('/api/model/predict-baseline'));
+    if(label==='Prediksi Tekanan Darah'){
+      const submit=page.getByRole('button',{name:'Hitung perkiraan model'});await expect(submit).toBeEnabled();
+      const result=page.waitForResponse(r=>r.url().includes('/api/model/predict'));
       await submit.click();expect((await result).ok()).toBeTruthy();await expect(page.locator('.prediction-number')).toContainText('mmHg');
     }
-    if(label==='Evaluasi Model')await expect(page.getByRole('heading',{name:'Tabel metrik eksperimen'})).toBeVisible();
+    if(label==='Evaluasi Model')await expect(page.getByRole('heading',{name:'Tabel metrik perbandingan'})).toBeVisible();
     await expect(page.locator('.source-banner')).toContainText('DATA SINTETIS / SIMULASI');
     await noOverflow(page);
     await page.screenshot({path:`${screenshotDir}/desktop-${i+1}.png`,fullPage:true});
