@@ -1,0 +1,50 @@
+model,stage,respondent_id,mae,rmse,r2,n,bias,median_absolute_error,max_absolute_error,over_count,under_count,equal_count,limitation
+Hist Gradient Boosting,original,SIM001,1.58969302494799,1.58969302494799,,1,-1.58969302494799,1.58969302494799,1.58969302494799,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Hist Gradient Boosting,original,SIM002,2.80839953567299,2.80839953567299,,1,-2.80839953567299,2.80839953567299,2.80839953567299,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Hist Gradient Boosting,original,SIM004,11.018800656415,11.018800656415,,1,-11.018800656415,11.018800656415,11.018800656415,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Hist Gradient Boosting,original,SIM006,1.47022518210299,1.47022518210299,,1,-1.47022518210299,1.47022518210299,1.47022518210299,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Hist Gradient Boosting,original,SIM009,2.452232404322,2.452232404322,,1,-2.452232404322,2.452232404322,2.452232404322,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Hist Gradient Boosting,original,SIM012,2.212024633504,2.212024633504,,1,2.212024633504,2.212024633504,2.212024633504,1,0,0,Satu origin per ID; tidak menilai performa stabil individu.
+Hist Gradient Boosting,original,SIM017,4.30243548070401,4.30243548070401,,1,-4.30243548070401,4.30243548070401,4.30243548070401,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Hist Gradient Boosting,selected_configuration,SIM001,1.694599468099,1.694599468099,,1,-1.694599468099,1.694599468099,1.694599468099,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Hist Gradient Boosting,selected_configuration,SIM002,2.782703368727,2.782703368727,,1,-2.782703368727,2.782703368727,2.782703368727,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Hist Gradient Boosting,selected_configuration,SIM004,10.424076344501,10.424076344501,,1,-10.424076344501,10.424076344501,10.424076344501,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Hist Gradient Boosting,selected_configuration,SIM006,1.366244997938,1.366244997938,,1,-1.366244997938,1.366244997938,1.366244997938,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Hist Gradient Boosting,selected_configuration,SIM009,2.46639190003701,2.46639190003701,,1,-2.46639190003701,2.46639190003701,2.46639190003701,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Hist Gradient Boosting,selected_configuration,SIM012,2.364701560791,2.364701560791,,1,2.364701560791,2.364701560791,2.364701560791,1,0,0,Satu origin per ID; tidak menilai performa stabil individu.
+Hist Gradient Boosting,selected_configuration,SIM017,4.31505411597099,4.31505411597099,,1,-4.31505411597099,4.31505411597099,4.31505411597099,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,original,SIM001,0.84748384080801,0.84748384080801,,1,0.84748384080801,0.84748384080801,0.84748384080801,1,0,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,original,SIM002,4.40203246605199,4.40203246605199,,1,-4.40203246605199,4.40203246605199,4.40203246605199,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,original,SIM004,4.15704026828301,4.15704026828301,,1,-4.15704026828301,4.15704026828301,4.15704026828301,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,original,SIM006,1.25947557481,1.25947557481,,1,-1.25947557481,1.25947557481,1.25947557481,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,original,SIM009,5.13633270668601,5.13633270668601,,1,-5.13633270668601,5.13633270668601,5.13633270668601,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,original,SIM012,0.946738804719999,0.946738804719999,,1,0.946738804719999,0.946738804719999,0.946738804719999,1,0,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,original,SIM017,1.27933754982899,1.27933754982899,,1,1.27933754982899,1.27933754982899,1.27933754982899,1,0,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,selected_configuration,SIM001,0.84748384080801,0.84748384080801,,1,0.84748384080801,0.84748384080801,0.84748384080801,1,0,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,selected_configuration,SIM002,4.40203246605199,4.40203246605199,,1,-4.40203246605199,4.40203246605199,4.40203246605199,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,selected_configuration,SIM004,4.15704026828301,4.15704026828301,,1,-4.15704026828301,4.15704026828301,4.15704026828301,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,selected_configuration,SIM006,1.25947557481,1.25947557481,,1,-1.25947557481,1.25947557481,1.25947557481,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,selected_configuration,SIM009,5.13633270668601,5.13633270668601,,1,-5.13633270668601,5.13633270668601,5.13633270668601,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,selected_configuration,SIM012,0.946738804719999,0.946738804719999,,1,0.946738804719999,0.946738804719999,0.946738804719999,1,0,0,Satu origin per ID; tidak menilai performa stabil individu.
+Linear Regression,selected_configuration,SIM017,1.27933754982899,1.27933754982899,,1,1.27933754982899,1.27933754982899,1.27933754982899,1,0,0,Satu origin per ID; tidak menilai performa stabil individu.
+Naive 7-day mean,reference,SIM001,1.35714285714299,1.35714285714299,,1,-1.35714285714299,1.35714285714299,1.35714285714299,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Naive 7-day mean,reference,SIM002,1.89285714285799,1.89285714285799,,1,-1.89285714285799,1.89285714285799,1.89285714285799,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Naive 7-day mean,reference,SIM004,1.64285714285802,1.64285714285802,,1,-1.64285714285802,1.64285714285802,1.64285714285802,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Naive 7-day mean,reference,SIM006,0.892857142857011,0.892857142857011,,1,0.892857142857011,0.892857142857011,0.892857142857011,1,0,0,Satu origin per ID; tidak menilai performa stabil individu.
+Naive 7-day mean,reference,SIM009,0.678571428571999,0.678571428571999,,1,-0.678571428571999,0.678571428571999,0.678571428571999,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Naive 7-day mean,reference,SIM012,4.071428571428,4.071428571428,,1,-4.071428571428,4.071428571428,4.071428571428,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Naive 7-day mean,reference,SIM017,3,3,,1,-3,3,3,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,original,SIM001,0.0423306427160099,0.0423306427160099,,1,0.0423306427160099,0.0423306427160099,0.0423306427160099,1,0,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,original,SIM002,3.31530987797299,3.31530987797299,,1,-3.31530987797299,3.31530987797299,3.31530987797299,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,original,SIM004,6.01709118123802,6.01709118123802,,1,-6.01709118123802,6.01709118123802,6.01709118123802,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,original,SIM006,1.413324409339,1.413324409339,,1,-1.413324409339,1.413324409339,1.413324409339,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,original,SIM009,3.81337006169001,3.81337006169001,,1,-3.81337006169001,3.81337006169001,3.81337006169001,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,original,SIM012,2.586011091733,2.586011091733,,1,2.586011091733,2.586011091733,2.586011091733,1,0,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,original,SIM017,3.527887176259,3.527887176259,,1,-3.527887176259,3.527887176259,3.527887176259,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,selected_configuration,SIM001,0.420795563631998,0.420795563631998,,1,-0.420795563631998,0.420795563631998,0.420795563631998,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,selected_configuration,SIM002,2.45791284675499,2.45791284675499,,1,-2.45791284675499,2.45791284675499,2.45791284675499,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,selected_configuration,SIM004,6.40613537482501,6.40613537482501,,1,-6.40613537482501,6.40613537482501,6.40613537482501,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,selected_configuration,SIM006,1.43932504647499,1.43932504647499,,1,-1.43932504647499,1.43932504647499,1.43932504647499,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,selected_configuration,SIM009,3.665403775263,3.665403775263,,1,-3.665403775263,3.665403775263,3.665403775263,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,selected_configuration,SIM012,2.878432141887,2.878432141887,,1,2.878432141887,2.878432141887,2.878432141887,1,0,0,Satu origin per ID; tidak menilai performa stabil individu.
+Random Forest,selected_configuration,SIM017,1.506018953131,1.506018953131,,1,-1.506018953131,1.506018953131,1.506018953131,0,1,0,Satu origin per ID; tidak menilai performa stabil individu.

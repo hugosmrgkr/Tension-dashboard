@@ -1,0 +1,33 @@
+{
+  "run_id": "e34327cd28c78f592900",
+  "source_and_prediction_keys_verified": true,
+  "recomputed_metrics_match_artifact": true,
+  "active_models_unchanged": true,
+  "tuning_binary_metrics_manifest_unchanged": true,
+  "trained": false,
+  "database_accessed": false,
+  "targeted_tests": {
+    "tests": 31,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 31,
+    "junit_sha256": "e0ad9d695529e70799f4ca8b4775235f3478ac9bcbd6c1e6a87a8820f22d3afa"
+  },
+  "code_sha256": {
+    "backend/app/model_evaluation.py": "6e7bf8e8b2873766938534e9bfd75629bed0a007802142d676c4b1bb1b7d487d",
+    "etl/evaluate_week10_models.py": "48cc5165b5c587215207c86b8a561ea56d2126d1fb323c0608924e44c86ee8ba"
+  },
+  "generated_hashes": {
+    "all_errors.csv": "7934475e7398320e0a2f772cc2c77b36cff2e263170de91d98d00ac728756107",
+    "errors_per_respondent.csv": "b9f748a566ff6b408b425e369eba838d66b15108ae4ee2a272e91b598ff49c6e",
+    "evaluation.json": "802dbd8b4803b3c13bc03463d3714ee2887e3eee07d7ef8fe7b0c0ac81dc4fe0",
+    "largest_errors_each_method.csv": "f30835a41dabbb16bc2058871c0c302bc0f36c967bfd9dc1981b898b3276e121",
+    "largest_selected_model_errors.csv": "a13a18a221126e755684e5ef47578556d5ae47f7346fb4e5c2ce0785e018e777",
+    "metrics_and_bias.csv": "f5681a80509be601fc9477fcb6885a6df9314935598d862ffbee6f405b66d145",
+    "tests.xml": "e0ad9d695529e70799f4ca8b4775235f3478ac9bcbd6c1e6a87a8820f22d3afa",
+    "figures\\error_analysis.png": "aa9556c5780e5de9081ff0e21f179dee55b880dd9581481b54bd1f06ee143934"
+  },
+  "repeat_evaluation_identical": true,
+  "model_card_survives_tuning_summary": true
+}

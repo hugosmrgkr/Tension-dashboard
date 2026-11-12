@@ -1,0 +1,1250 @@
+{
+  "schema_version": 1,
+  "run_id": "e34327cd28c78f592900",
+  "status": "DATA SINTETIS / SIMULASI",
+  "target": "future_7d_mean_sbp",
+  "target_approval": "assumed_for_this_task_not_independently_verified",
+  "target_approved": false,
+  "is_synthetic": true,
+  "is_diagnosis": false,
+  "real_model_validated": false,
+  "promoted_to_serving": false,
+  "cutoff": "2026-09-18",
+  "rows_training": 60,
+  "rows_test": 7,
+  "train_ids": [
+    "SIM003",
+    "SIM005",
+    "SIM007",
+    "SIM008",
+    "SIM010",
+    "SIM011",
+    "SIM013",
+    "SIM014",
+    "SIM015",
+    "SIM016",
+    "SIM018",
+    "SIM019"
+  ],
+  "test_ids": [
+    "SIM001",
+    "SIM002",
+    "SIM004",
+    "SIM006",
+    "SIM009",
+    "SIM012",
+    "SIM017"
+  ],
+  "features": [
+    "past_7d_sbp",
+    "past_7d_dbp",
+    "past_7d_sbp_std",
+    "age",
+    "bmi",
+    "past_7d_activity",
+    "past_7d_sleep",
+    "past_7d_stress"
+  ],
+  "seed": 42,
+  "grids": {
+    "Random Forest": {
+      "max_depth": [
+        2,
+        5
+      ],
+      "min_samples_leaf": [
+        2,
+        5
+      ],
+      "max_features": [
+        0.6,
+        1.0
+      ]
+    },
+    "Hist Gradient Boosting": {
+      "max_iter": [
+        60,
+        120
+      ],
+      "learning_rate": [
+        0.03,
+        0.05
+      ],
+      "min_samples_leaf": [
+        5,
+        10
+      ]
+    }
+  },
+  "folds": [
+    {
+      "fold": 0,
+      "fit_rows": 45,
+      "validation_rows": 15,
+      "fit_ids": [
+        "SIM003",
+        "SIM005",
+        "SIM007",
+        "SIM010",
+        "SIM011",
+        "SIM013",
+        "SIM015",
+        "SIM016",
+        "SIM018"
+      ],
+      "validation_ids": [
+        "SIM008",
+        "SIM014",
+        "SIM019"
+      ],
+      "fit_target_end_max": "2026-09-18",
+      "validation_origin_min": "2026-09-07",
+      "chronological": false
+    },
+    {
+      "fold": 1,
+      "fit_rows": 45,
+      "validation_rows": 15,
+      "fit_ids": [
+        "SIM003",
+        "SIM005",
+        "SIM008",
+        "SIM010",
+        "SIM011",
+        "SIM014",
+        "SIM015",
+        "SIM016",
+        "SIM019"
+      ],
+      "validation_ids": [
+        "SIM007",
+        "SIM013",
+        "SIM018"
+      ],
+      "fit_target_end_max": "2026-09-18",
+      "validation_origin_min": "2026-09-07",
+      "chronological": false
+    },
+    {
+      "fold": 2,
+      "fit_rows": 45,
+      "validation_rows": 15,
+      "fit_ids": [
+        "SIM003",
+        "SIM007",
+        "SIM008",
+        "SIM010",
+        "SIM013",
+        "SIM014",
+        "SIM015",
+        "SIM018",
+        "SIM019"
+      ],
+      "validation_ids": [
+        "SIM005",
+        "SIM011",
+        "SIM016"
+      ],
+      "fit_target_end_max": "2026-09-18",
+      "validation_origin_min": "2026-09-07",
+      "chronological": false
+    },
+    {
+      "fold": 3,
+      "fit_rows": 45,
+      "validation_rows": 15,
+      "fit_ids": [
+        "SIM005",
+        "SIM007",
+        "SIM008",
+        "SIM011",
+        "SIM013",
+        "SIM014",
+        "SIM016",
+        "SIM018",
+        "SIM019"
+      ],
+      "validation_ids": [
+        "SIM003",
+        "SIM010",
+        "SIM015"
+      ],
+      "fit_target_end_max": "2026-09-18",
+      "validation_origin_min": "2026-09-07",
+      "chronological": false
+    }
+  ],
+  "selection": {
+    "model": "Linear Regression",
+    "params": {},
+    "rule": "minimum pooled out-of-fold RMSE, then MAE, then canonical candidate key; learned models only",
+    "beats_naive_validation": false
+  },
+  "trials": [
+    {
+      "key": "Linear Regression|{}",
+      "model": "Linear Regression",
+      "params": {},
+      "original": true,
+      "validation": {
+        "mae": 2.18045590447351,
+        "rmse": 2.7588255751932826,
+        "r2": 0.8175820187369996,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 2.2632365993987644,
+          "rmse": 2.6359739569549876,
+          "r2": 0.03880681961720833,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 3.0010643564954353,
+          "rmse": 3.5952991712459594,
+          "r2": 0.5463792202415314,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 1.6463235075344025,
+          "rmse": 2.1727695374427016,
+          "r2": -5.8911805475133106,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 1.8111991544654396,
+          "rmse": 2.418473055879763,
+          "r2": 0.9341745610453506,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Random Forest|{\"max_depth\": 2, \"max_features\": 0.6, \"min_samples_leaf\": 2, \"n_estimators\": 300, \"n_jobs\": 1, \"random_state\": 42}",
+      "model": "Random Forest",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 2,
+        "min_samples_leaf": 2,
+        "max_features": 0.6,
+        "random_state": 42,
+        "n_jobs": 1
+      },
+      "original": false,
+      "validation": {
+        "mae": 2.897935169580681,
+        "rmse": 4.411719054493177,
+        "r2": 0.5335180384307316,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 1.521778925864325,
+          "rmse": 2.3187824970220574,
+          "r2": 0.25621318142541283,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 3.238224859151208,
+          "rmse": 3.4521375878563916,
+          "r2": 0.5817855208242282,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 1.337133497095771,
+          "rmse": 1.6522359024324202,
+          "r2": -2.9848356204869715,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.494603396211415,
+          "rmse": 7.604549322072888,
+          "r2": 0.3491840030112767,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Random Forest|{\"max_depth\": 2, \"max_features\": 0.6, \"min_samples_leaf\": 5, \"n_estimators\": 300, \"n_jobs\": 1, \"random_state\": 42}",
+      "model": "Random Forest",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 2,
+        "min_samples_leaf": 5,
+        "max_features": 0.6,
+        "random_state": 42,
+        "n_jobs": 1
+      },
+      "original": false,
+      "validation": {
+        "mae": 3.1698569886477532,
+        "rmse": 4.750781475729973,
+        "r2": 0.4590597874815574,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 2.906264637648432,
+          "rmse": 3.9262127807204696,
+          "r2": -1.1324365385096051,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 2.6586475276977173,
+          "rmse": 2.974690281839945,
+          "r2": 0.6894679854329835,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 1.3333689367453019,
+          "rmse": 1.6660991230018898,
+          "r2": -3.0519863391802433,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.78114685249956,
+          "rmse": 7.952350794609274,
+          "r2": 0.28829123209462304,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Random Forest|{\"max_depth\": 2, \"max_features\": 1.0, \"min_samples_leaf\": 2, \"n_estimators\": 300, \"n_jobs\": 1, \"random_state\": 42}",
+      "model": "Random Forest",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 2,
+        "min_samples_leaf": 2,
+        "max_features": 1.0,
+        "random_state": 42,
+        "n_jobs": 1
+      },
+      "original": false,
+      "validation": {
+        "mae": 2.9117114332066794,
+        "rmse": 4.324732279936243,
+        "r2": 0.5517321271729239,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 1.9272192663063228,
+          "rmse": 2.4677128596812694,
+          "r2": 0.1576012785040456,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 3.0365483605198733,
+          "rmse": 3.2783639925255756,
+          "r2": 0.6228299375832722,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 1.525037640272428,
+          "rmse": 1.8915644388705104,
+          "r2": -4.222862379035073,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.158040465728095,
+          "rmse": 7.375496181326794,
+          "r2": 0.3877994121816748,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Random Forest|{\"max_depth\": 2, \"max_features\": 1.0, \"min_samples_leaf\": 5, \"n_estimators\": 300, \"n_jobs\": 1, \"random_state\": 42}",
+      "model": "Random Forest",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 2,
+        "min_samples_leaf": 5,
+        "max_features": 1.0,
+        "random_state": 42,
+        "n_jobs": 1
+      },
+      "original": false,
+      "validation": {
+        "mae": 3.249821951774583,
+        "rmse": 4.797277711126482,
+        "r2": 0.44841953208730934,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 3.3723638166523897,
+          "rmse": 4.5375459852510875,
+          "r2": -1.8482003091671442,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 2.5341366538703833,
+          "rmse": 2.849693557587256,
+          "r2": 0.7150168433697701,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 1.4334190863110536,
+          "rmse": 1.7668570024177175,
+          "r2": -3.5568958745633292,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.659368250264507,
+          "rmse": 7.760388723721815,
+          "r2": 0.3222364495142297,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Random Forest|{\"max_depth\": 5, \"max_features\": 0.6, \"min_samples_leaf\": 2, \"n_estimators\": 300, \"n_jobs\": 1, \"random_state\": 42}",
+      "model": "Random Forest",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 5,
+        "min_samples_leaf": 2,
+        "max_features": 0.6,
+        "random_state": 42,
+        "n_jobs": 1
+      },
+      "original": false,
+      "validation": {
+        "mae": 2.9362090396574576,
+        "rmse": 4.4800790823004855,
+        "r2": 0.5189496677259251,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 1.8373833550268046,
+          "rmse": 2.6909186303025265,
+          "r2": -0.0016813352933147119,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 3.06923909379247,
+          "rmse": 3.416710647056166,
+          "r2": 0.5903251781511245,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 1.408715151801501,
+          "rmse": 1.7788316328454368,
+          "r2": -3.618872655456025,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.429498558009055,
+          "rmse": 7.629235717687436,
+          "r2": 0.3449516998879659,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Random Forest|{\"max_depth\": 5, \"max_features\": 0.6, \"min_samples_leaf\": 5, \"n_estimators\": 300, \"n_jobs\": 1, \"random_state\": 42}",
+      "model": "Random Forest",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 5,
+        "min_samples_leaf": 5,
+        "max_features": 0.6,
+        "random_state": 42,
+        "n_jobs": 1
+      },
+      "original": true,
+      "validation": {
+        "mae": 3.177824920361443,
+        "rmse": 4.750046472580027,
+        "r2": 0.45922715447411144,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 2.9269301927504228,
+          "rmse": 3.8565515632266334,
+          "r2": -1.0574378979162646,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 2.5864305277738726,
+          "rmse": 2.943203664965525,
+          "r2": 0.6960070563783887,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 1.414573781097829,
+          "rmse": 1.7731234082245295,
+          "r2": -3.589276533009124,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.783365179823645,
+          "rmse": 7.9732278013734055,
+          "r2": 0.2845494825975601,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Random Forest|{\"max_depth\": 5, \"max_features\": 1.0, \"min_samples_leaf\": 2, \"n_estimators\": 300, \"n_jobs\": 1, \"random_state\": 42}",
+      "model": "Random Forest",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 5,
+        "min_samples_leaf": 2,
+        "max_features": 1.0,
+        "random_state": 42,
+        "n_jobs": 1
+      },
+      "original": false,
+      "validation": {
+        "mae": 3.0611445043671273,
+        "rmse": 4.458270925089142,
+        "r2": 0.5236215886619509,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 2.396379274605461,
+          "rmse": 3.095012171424574,
+          "r2": -0.3251137883706785,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 2.9781525134090523,
+          "rmse": 3.3568343593366543,
+          "r2": 0.6045580899781327,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 1.7756112465357006,
+          "rmse": 2.2140828344874515,
+          "r2": -6.155731406602265,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.094434982918296,
+          "rmse": 7.331788220531155,
+          "r2": 0.39503384174887257,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Random Forest|{\"max_depth\": 5, \"max_features\": 1.0, \"min_samples_leaf\": 5, \"n_estimators\": 300, \"n_jobs\": 1, \"random_state\": 42}",
+      "model": "Random Forest",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 5,
+        "min_samples_leaf": 5,
+        "max_features": 1.0,
+        "random_state": 42,
+        "n_jobs": 1
+      },
+      "original": false,
+      "validation": {
+        "mae": 3.3193069371011625,
+        "rmse": 4.83268391389336,
+        "r2": 0.44024763164200487,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 3.4350944497242484,
+          "rmse": 4.579022658505134,
+          "r2": -1.9005077861040713,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 2.4883476428047735,
+          "rmse": 2.8496131610861073,
+          "r2": 0.7150329232218813,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 1.731038087818654,
+          "rmse": 2.1282014472444066,
+          "r2": -5.6113746666780955,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.622747568056975,
+          "rmse": 7.733197926564586,
+          "r2": 0.32697761552920934,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Hist Gradient Boosting|{\"l2_regularization\": 1.0, \"learning_rate\": 0.03, \"max_depth\": 3, \"max_iter\": 60, \"min_samples_leaf\": 5, \"random_state\": 42}",
+      "model": "Hist Gradient Boosting",
+      "params": {
+        "max_iter": 60,
+        "learning_rate": 0.03,
+        "max_depth": 3,
+        "min_samples_leaf": 5,
+        "l2_regularization": 1.0,
+        "random_state": 42
+      },
+      "original": false,
+      "validation": {
+        "mae": 3.3714568244585577,
+        "rmse": 4.730849119423865,
+        "r2": 0.4635893976983677,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 1.5813410401184267,
+          "rmse": 1.945743035025185,
+          "r2": 0.47627968605685245,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 3.2183929992810096,
+          "rmse": 3.551411099445738,
+          "r2": 0.5573863870568612,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 2.9592501822428963,
+          "rmse": 3.5401458894625657,
+          "r2": -17.293997706625948,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.726843076191898,
+          "rmse": 7.78412897431178,
+          "r2": 0.3180833359403511,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Hist Gradient Boosting|{\"l2_regularization\": 1.0, \"learning_rate\": 0.03, \"max_depth\": 3, \"max_iter\": 60, \"min_samples_leaf\": 10, \"random_state\": 42}",
+      "model": "Hist Gradient Boosting",
+      "params": {
+        "max_iter": 60,
+        "learning_rate": 0.03,
+        "max_depth": 3,
+        "min_samples_leaf": 10,
+        "l2_regularization": 1.0,
+        "random_state": 42
+      },
+      "original": false,
+      "validation": {
+        "mae": 3.4541392351889018,
+        "rmse": 4.896086487028952,
+        "r2": 0.42546390252486277,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 1.7550657579426598,
+          "rmse": 2.437640034490966,
+          "r2": 0.1780079858626178,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 3.027525436603447,
+          "rmse": 3.4646824084484233,
+          "r2": 0.5787404752292458,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 2.960764518078138,
+          "rmse": 3.6259971278565373,
+          "r2": -18.192043197159073,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 6.073201228131358,
+          "rmse": 8.049390241097836,
+          "r2": 0.27081584495392397,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Hist Gradient Boosting|{\"l2_regularization\": 1.0, \"learning_rate\": 0.03, \"max_depth\": 3, \"max_iter\": 120, \"min_samples_leaf\": 5, \"random_state\": 42}",
+      "model": "Hist Gradient Boosting",
+      "params": {
+        "max_iter": 120,
+        "learning_rate": 0.03,
+        "max_depth": 3,
+        "min_samples_leaf": 5,
+        "l2_regularization": 1.0,
+        "random_state": 42
+      },
+      "original": false,
+      "validation": {
+        "mae": 3.317747090894365,
+        "rmse": 4.510413380643895,
+        "r2": 0.5124132982441039,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 2.5501069057891232,
+          "rmse": 2.922810627252103,
+          "r2": -0.18176141507839705,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 3.1014997381232243,
+          "rmse": 3.588531908565963,
+          "r2": 0.548085271273631,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 2.4472114248910213,
+          "rmse": 3.18504895713925,
+          "r2": -13.808072273749568,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.172170294774093,
+          "rmse": 7.057648005973253,
+          "r2": 0.43942820020550266,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Hist Gradient Boosting|{\"l2_regularization\": 1.0, \"learning_rate\": 0.03, \"max_depth\": 3, \"max_iter\": 120, \"min_samples_leaf\": 10, \"random_state\": 42}",
+      "model": "Hist Gradient Boosting",
+      "params": {
+        "max_iter": 120,
+        "learning_rate": 0.03,
+        "max_depth": 3,
+        "min_samples_leaf": 10,
+        "l2_regularization": 1.0,
+        "random_state": 42
+      },
+      "original": false,
+      "validation": {
+        "mae": 3.378044248592836,
+        "rmse": 4.776790702897778,
+        "r2": 0.4531205751224807,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 2.4260249949342874,
+          "rmse": 3.0617356178635236,
+          "r2": -0.29677259365581365,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 3.1546405908035315,
+          "rmse": 3.6828542162912754,
+          "r2": 0.5240164680414501,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 2.46026903186776,
+          "rmse": 3.239947691631685,
+          "r2": -14.322946959365392,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.471242376765766,
+          "rmse": 7.604999438560436,
+          "r2": 0.3491069565834326,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Hist Gradient Boosting|{\"l2_regularization\": 1.0, \"learning_rate\": 0.05, \"max_depth\": 3, \"max_iter\": 60, \"min_samples_leaf\": 5, \"random_state\": 42}",
+      "model": "Hist Gradient Boosting",
+      "params": {
+        "max_iter": 60,
+        "learning_rate": 0.05,
+        "max_depth": 3,
+        "min_samples_leaf": 5,
+        "l2_regularization": 1.0,
+        "random_state": 42
+      },
+      "original": false,
+      "validation": {
+        "mae": 3.338597541166957,
+        "rmse": 4.6105734094022885,
+        "r2": 0.4905177700749431,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 2.405648129855307,
+          "rmse": 2.732970493915282,
+          "r2": -0.03323316147408373,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 3.080977792000344,
+          "rmse": 3.578130886047919,
+          "r2": 0.5507011395959973,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 2.5144893765848013,
+          "rmse": 3.258179604083172,
+          "r2": -14.495883490116116,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.353274866227376,
+          "rmse": 7.358102062569164,
+          "r2": 0.39068359318132473,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Hist Gradient Boosting|{\"l2_regularization\": 1.0, \"learning_rate\": 0.05, \"max_depth\": 3, \"max_iter\": 60, \"min_samples_leaf\": 10, \"random_state\": 42}",
+      "model": "Hist Gradient Boosting",
+      "params": {
+        "max_iter": 60,
+        "learning_rate": 0.05,
+        "max_depth": 3,
+        "min_samples_leaf": 10,
+        "l2_regularization": 1.0,
+        "random_state": 42
+      },
+      "original": false,
+      "validation": {
+        "mae": 3.349091142426447,
+        "rmse": 4.815344122731747,
+        "r2": 0.44425723652236304,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 2.1933010335321788,
+          "rmse": 2.9715183821909394,
+          "r2": -0.22147699756052774,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 3.083422962588682,
+          "rmse": 3.6412473303694655,
+          "r2": 0.534710523714011,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 2.4827271397041737,
+          "rmse": 3.3036839601297316,
+          "r2": -14.931742943622586,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.636913433880755,
+          "rmse": 7.729632899191837,
+          "r2": 0.3275980031602228,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Hist Gradient Boosting|{\"l2_regularization\": 1.0, \"learning_rate\": 0.05, \"max_depth\": 3, \"max_iter\": 120, \"min_samples_leaf\": 5, \"random_state\": 42}",
+      "model": "Hist Gradient Boosting",
+      "params": {
+        "max_iter": 120,
+        "learning_rate": 0.05,
+        "max_depth": 3,
+        "min_samples_leaf": 5,
+        "l2_regularization": 1.0,
+        "random_state": 42
+      },
+      "original": true,
+      "validation": {
+        "mae": 3.3529502367008592,
+        "rmse": 4.5999213540192505,
+        "r2": 0.49286921891466806,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 2.5879147228564117,
+          "rmse": 3.041427823592554,
+          "r2": -0.27962724954052387,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 3.187184512542681,
+          "rmse": 3.795831118443639,
+          "r2": 0.4943655738996112,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 2.4565744823669293,
+          "rmse": 3.145345676283953,
+          "r2": -13.441192743436446,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.180127229037415,
+          "rmse": 7.147397382506655,
+          "r2": 0.4250803999046292,
+          "n": 15
+        }
+      ]
+    },
+    {
+      "key": "Hist Gradient Boosting|{\"l2_regularization\": 1.0, \"learning_rate\": 0.05, \"max_depth\": 3, \"max_iter\": 120, \"min_samples_leaf\": 10, \"random_state\": 42}",
+      "model": "Hist Gradient Boosting",
+      "params": {
+        "max_iter": 120,
+        "learning_rate": 0.05,
+        "max_depth": 3,
+        "min_samples_leaf": 10,
+        "l2_regularization": 1.0,
+        "random_state": 42
+      },
+      "original": false,
+      "validation": {
+        "mae": 3.596991812419453,
+        "rmse": 4.925121651745339,
+        "r2": 0.41862937703333036,
+        "n": 60
+      },
+      "folds": [
+        {
+          "fold": 0,
+          "mae": 3.1123511127938155,
+          "rmse": 3.734566644245391,
+          "r2": -0.9293404885151024,
+          "n": 15
+        },
+        {
+          "fold": 1,
+          "mae": 3.447467002459261,
+          "rmse": 4.120017774534724,
+          "r2": 0.40430898322413444,
+          "n": 15
+        },
+        {
+          "fold": 2,
+          "mae": 2.6451391994465023,
+          "rmse": 3.3674174135361037,
+          "r2": -15.55237083994803,
+          "n": 15
+        },
+        {
+          "fold": 3,
+          "mae": 5.183009934978235,
+          "rmse": 7.40042286752483,
+          "r2": 0.3836543570930111,
+          "n": 15
+        }
+      ]
+    }
+  ],
+  "comparison": [
+    {
+      "model": "Naive 7-day mean",
+      "stage": "reference",
+      "params": {},
+      "validation": {
+        "mae": 1.9077380952380962,
+        "rmse": 2.376512228908083,
+        "r2": 0.8646372199233365,
+        "n": 60
+      },
+      "historical_test": {
+        "mae": 1.933673469387758,
+        "rmse": 2.2347229985988153,
+        "r2": 0.8503092921859248,
+        "n": 7
+      }
+    },
+    {
+      "model": "Linear Regression",
+      "stage": "original",
+      "params": {},
+      "validation": {
+        "mae": 2.18045590447351,
+        "rmse": 2.7588255751932826,
+        "r2": 0.8175820187369996,
+        "n": 60
+      },
+      "historical_test": {
+        "mae": 2.575491601598052,
+        "rmse": 3.1139849025417368,
+        "r2": 0.7093432252178669,
+        "n": 7
+      }
+    },
+    {
+      "model": "Linear Regression",
+      "stage": "selected_configuration",
+      "params": {},
+      "validation": {
+        "mae": 2.18045590447351,
+        "rmse": 2.7588255751932826,
+        "r2": 0.8175820187369996,
+        "n": 60
+      },
+      "historical_test": {
+        "mae": 2.575491601598052,
+        "rmse": 3.1139849025417368,
+        "r2": 0.7093432252178669,
+        "n": 7
+      }
+    },
+    {
+      "model": "Random Forest",
+      "stage": "original",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 5,
+        "min_samples_leaf": 5,
+        "max_features": 0.6,
+        "random_state": 42,
+        "n_jobs": 1
+      },
+      "validation": {
+        "mae": 3.177824920361443,
+        "rmse": 4.750046472580027,
+        "r2": 0.45922715447411144,
+        "n": 60
+      },
+      "historical_test": {
+        "mae": 2.959332062992323,
+        "rmse": 3.440746932239855,
+        "r2": 0.6451433833185107,
+        "n": 7
+      }
+    },
+    {
+      "model": "Random Forest",
+      "stage": "selected_configuration",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 2,
+        "min_samples_leaf": 2,
+        "max_features": 1.0,
+        "random_state": 42,
+        "n_jobs": 1
+      },
+      "validation": {
+        "mae": 2.9117114332066794,
+        "rmse": 4.324732279936243,
+        "r2": 0.5517321271729239,
+        "n": 60
+      },
+      "historical_test": {
+        "mae": 2.6820033859953725,
+        "rmse": 3.236340106993613,
+        "r2": 0.6860534206116166,
+        "n": 7
+      }
+    },
+    {
+      "model": "Hist Gradient Boosting",
+      "stage": "original",
+      "params": {
+        "max_iter": 120,
+        "learning_rate": 0.05,
+        "max_depth": 3,
+        "min_samples_leaf": 5,
+        "l2_regularization": 1.0,
+        "random_state": 42
+      },
+      "validation": {
+        "mae": 3.3529502367008592,
+        "rmse": 4.5999213540192505,
+        "r2": 0.49286921891466806,
+        "n": 60
+      },
+      "historical_test": {
+        "mae": 3.6934015596669445,
+        "rmse": 4.83155121004614,
+        "r2": 0.30028591062284515,
+        "n": 7
+      }
+    },
+    {
+      "model": "Hist Gradient Boosting",
+      "stage": "selected_configuration",
+      "params": {
+        "max_iter": 120,
+        "learning_rate": 0.03,
+        "max_depth": 3,
+        "min_samples_leaf": 5,
+        "l2_regularization": 1.0,
+        "random_state": 42
+      },
+      "validation": {
+        "mae": 3.317747090894365,
+        "rmse": 4.510413380643895,
+        "r2": 0.5124132982441039,
+        "n": 60
+      },
+      "historical_test": {
+        "mae": 3.630538822294812,
+        "rmse": 4.65123167905802,
+        "r2": 0.351539704894842,
+        "n": 7
+      }
+    }
+  ],
+  "leakage_audits": {
+    "Linear Regression / original": {
+      "subject_overlap": [],
+      "shared_measurement_id_dates": 0,
+      "train_target_end_max": "2026-09-18",
+      "test_origin_min": "2026-09-18",
+      "labels_available_before_test": true,
+      "test_overlapping_target_id_days": 0,
+      "imputer_matches_training_only": true,
+      "scaler_matches_training_only": true,
+      "training_overlapping_target_id_days": 288
+    },
+    "Linear Regression / selected_configuration": {
+      "subject_overlap": [],
+      "shared_measurement_id_dates": 0,
+      "train_target_end_max": "2026-09-18",
+      "test_origin_min": "2026-09-18",
+      "labels_available_before_test": true,
+      "test_overlapping_target_id_days": 0,
+      "imputer_matches_training_only": true,
+      "scaler_matches_training_only": true,
+      "training_overlapping_target_id_days": 288
+    },
+    "Random Forest / original": {
+      "subject_overlap": [],
+      "shared_measurement_id_dates": 0,
+      "train_target_end_max": "2026-09-18",
+      "test_origin_min": "2026-09-18",
+      "labels_available_before_test": true,
+      "test_overlapping_target_id_days": 0,
+      "imputer_matches_training_only": true,
+      "scaler_matches_training_only": true,
+      "training_overlapping_target_id_days": 288
+    },
+    "Random Forest / selected_configuration": {
+      "subject_overlap": [],
+      "shared_measurement_id_dates": 0,
+      "train_target_end_max": "2026-09-18",
+      "test_origin_min": "2026-09-18",
+      "labels_available_before_test": true,
+      "test_overlapping_target_id_days": 0,
+      "imputer_matches_training_only": true,
+      "scaler_matches_training_only": true,
+      "training_overlapping_target_id_days": 288
+    },
+    "Hist Gradient Boosting / original": {
+      "subject_overlap": [],
+      "shared_measurement_id_dates": 0,
+      "train_target_end_max": "2026-09-18",
+      "test_origin_min": "2026-09-18",
+      "labels_available_before_test": true,
+      "test_overlapping_target_id_days": 0,
+      "imputer_matches_training_only": true,
+      "scaler_matches_training_only": true,
+      "training_overlapping_target_id_days": 288
+    },
+    "Hist Gradient Boosting / selected_configuration": {
+      "subject_overlap": [],
+      "shared_measurement_id_dates": 0,
+      "train_target_end_max": "2026-09-18",
+      "test_origin_min": "2026-09-18",
+      "labels_available_before_test": true,
+      "test_overlapping_target_id_days": 0,
+      "imputer_matches_training_only": true,
+      "scaler_matches_training_only": true,
+      "training_overlapping_target_id_days": 288
+    }
+  },
+  "provenance": {
+    "profile_sha256": "041778498fca147f2690b1612518eabec71f8db5ac449ef074695293b066e3c3",
+    "daily_sha256": "140734ffbbe95d31ba6c70d34e15f78b2174bd2bf71d5edc1061d6f8cbb7c70f",
+    "prepared_content_sha256": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+    "code_sha256": {
+      "model_tuning.py": "e12daf7b1b490b57df5946fee5b480f700afb5a32ac1fdf625123959a307d81a",
+      "model_comparison.py": "89436a4dfe9816ecf5e6c54c093c8a31f2b88f748667d9821392a40d641abeb7",
+      "baseline.py": "c9ffb174cb656d79a8572b9a055bf41a7a4840f46ce4215a1470bc1c4bfe73e1",
+      "pipeline.py": "41939dd2ad71f2b5e5b10b4f53d3bf34418e9c6d9fe7bd7f3e14c77de08b8e82",
+      "bp_policy.py": "6941b059ba2529dc05f780bb874e5d04899020ddb4ef176de276942720351509",
+      "survey_schema.py": "1f1d2b98ff22aad6ef2e73a24c16706b6ba9c94f52a6abc9eea177ff4d501923"
+    },
+    "versions": {
+      "python": "3.13.7",
+      "sklearn": "1.9.1",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "joblib": "1.6.0"
+    }
+  },
+  "historical_test": true,
+  "limitation": "DATA SINTETIS / SIMULASI. Inner GroupKFold memisahkan ID, tetapi kalender fit/validasi dapat beririsan dan target window training berkorelasi. Ini bukan validasi forecasting kronologis penuh. Test CP3 sudah pernah diperiksa; evaluasi ulang bersifat historis, bukan holdout baru. Sampel kecil; bukan validasi klinis atau hasil data aktual. Persetujuan target diasumsikan untuk tugas ini; bukti akademik belum direkam dalam artefak aktif."
+}

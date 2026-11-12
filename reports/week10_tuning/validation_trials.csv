@@ -1,0 +1,18 @@
+model,params,original,mae,rmse,r2,n
+Linear Regression,{},True,2.18045590447351,2.7588255751932826,0.8175820187369996,60
+Random Forest,"{""max_depth"": 2, ""max_features"": 0.6, ""min_samples_leaf"": 2, ""n_estimators"": 300, ""n_jobs"": 1, ""random_state"": 42}",False,2.897935169580681,4.411719054493177,0.5335180384307316,60
+Random Forest,"{""max_depth"": 2, ""max_features"": 0.6, ""min_samples_leaf"": 5, ""n_estimators"": 300, ""n_jobs"": 1, ""random_state"": 42}",False,3.1698569886477532,4.750781475729973,0.4590597874815574,60
+Random Forest,"{""max_depth"": 2, ""max_features"": 1.0, ""min_samples_leaf"": 2, ""n_estimators"": 300, ""n_jobs"": 1, ""random_state"": 42}",False,2.9117114332066794,4.324732279936243,0.5517321271729239,60
+Random Forest,"{""max_depth"": 2, ""max_features"": 1.0, ""min_samples_leaf"": 5, ""n_estimators"": 300, ""n_jobs"": 1, ""random_state"": 42}",False,3.249821951774583,4.797277711126482,0.44841953208730934,60
+Random Forest,"{""max_depth"": 5, ""max_features"": 0.6, ""min_samples_leaf"": 2, ""n_estimators"": 300, ""n_jobs"": 1, ""random_state"": 42}",False,2.9362090396574576,4.4800790823004855,0.5189496677259251,60
+Random Forest,"{""max_depth"": 5, ""max_features"": 0.6, ""min_samples_leaf"": 5, ""n_estimators"": 300, ""n_jobs"": 1, ""random_state"": 42}",True,3.177824920361443,4.750046472580027,0.45922715447411144,60
+Random Forest,"{""max_depth"": 5, ""max_features"": 1.0, ""min_samples_leaf"": 2, ""n_estimators"": 300, ""n_jobs"": 1, ""random_state"": 42}",False,3.0611445043671273,4.458270925089142,0.5236215886619509,60
+Random Forest,"{""max_depth"": 5, ""max_features"": 1.0, ""min_samples_leaf"": 5, ""n_estimators"": 300, ""n_jobs"": 1, ""random_state"": 42}",False,3.3193069371011625,4.83268391389336,0.44024763164200487,60
+Hist Gradient Boosting,"{""l2_regularization"": 1.0, ""learning_rate"": 0.03, ""max_depth"": 3, ""max_iter"": 60, ""min_samples_leaf"": 5, ""random_state"": 42}",False,3.3714568244585577,4.730849119423865,0.4635893976983677,60
+Hist Gradient Boosting,"{""l2_regularization"": 1.0, ""learning_rate"": 0.03, ""max_depth"": 3, ""max_iter"": 60, ""min_samples_leaf"": 10, ""random_state"": 42}",False,3.4541392351889018,4.896086487028952,0.42546390252486277,60
+Hist Gradient Boosting,"{""l2_regularization"": 1.0, ""learning_rate"": 0.03, ""max_depth"": 3, ""max_iter"": 120, ""min_samples_leaf"": 5, ""random_state"": 42}",False,3.317747090894365,4.510413380643895,0.5124132982441039,60
+Hist Gradient Boosting,"{""l2_regularization"": 1.0, ""learning_rate"": 0.03, ""max_depth"": 3, ""max_iter"": 120, ""min_samples_leaf"": 10, ""random_state"": 42}",False,3.378044248592836,4.776790702897778,0.4531205751224807,60
+Hist Gradient Boosting,"{""l2_regularization"": 1.0, ""learning_rate"": 0.05, ""max_depth"": 3, ""max_iter"": 60, ""min_samples_leaf"": 5, ""random_state"": 42}",False,3.338597541166957,4.6105734094022885,0.4905177700749431,60
+Hist Gradient Boosting,"{""l2_regularization"": 1.0, ""learning_rate"": 0.05, ""max_depth"": 3, ""max_iter"": 60, ""min_samples_leaf"": 10, ""random_state"": 42}",False,3.349091142426447,4.815344122731747,0.44425723652236304,60
+Hist Gradient Boosting,"{""l2_regularization"": 1.0, ""learning_rate"": 0.05, ""max_depth"": 3, ""max_iter"": 120, ""min_samples_leaf"": 5, ""random_state"": 42}",True,3.3529502367008592,4.5999213540192505,0.49286921891466806,60
+Hist Gradient Boosting,"{""l2_regularization"": 1.0, ""learning_rate"": 0.05, ""max_depth"": 3, ""max_iter"": 120, ""min_samples_leaf"": 10, ""random_state"": 42}",False,3.596991812419453,4.925121651745339,0.41862937703333036,60

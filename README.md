@@ -1,5 +1,24 @@
 # Toba Health Insight - Dashboard v1 CP3
 
+## Evaluasi dan analisis error Minggu 10
+
+[Laporan evaluasi](docs/WEEK10_EVALUATION_REPORT.md) menghitung ulang metrik dan
+arah error dari prediksi tuning tersimpan, termasuk error per responden dan contoh
+terbesar. Jalankan `python -m etl.evaluate_week10_models` dari root; tidak melatih
+ulang atau mengganti model serving. Notebook:
+[06_evaluasi_error_minggu10.ipynb](notebooks/06_evaluasi_error_minggu10.ipynb).
+Prasyarat: artefak tuning Minggu 10 tersedia. Hasil tetap sintetis dan test historis.
+
+## Eksperimen tuning Minggu 10 (sintetis, terpisah dari model aktif)
+
+Laporan: [WEEK10_TUNING_REPORT.md](docs/WEEK10_TUNING_REPORT.md).
+Notebook: [05_tuning_model_minggu10.ipynb](notebooks/05_tuning_model_minggu10.ipynb).
+Dari root dengan environment Python proyek: `python -m etl.run_week10_tuning`.
+Perintah ini tidak membuka database dan hanya memperbarui artefak tuning terpisah,
+laporan serta gambar eksperimennya. Model yang dipakai API/dashboard tetap model P2.
+Validasi tuning memisahkan responden; keterbatasan kalender pendek dan penggunaan
+ulang test historis dijelaskan dalam laporan. Hasil tetap DATA SINTETIS / SIMULASI.
+
 **React + Vite + Plotly · FastAPI · PostgreSQL · Docker Compose**
 
 Prototipe interaktif untuk eksplorasi pola pengukuran tekanan darah **pagi dan malam** serta faktor gaya hidup. Dashboard memakai **dua formulir sintetis**, bukan data penelitian aktual dan bukan alat diagnosis.

@@ -1,0 +1,7 @@
+{
+  "run_id": "e34327cd28c78f592900",
+  "metrics_hash_mode": "utf8-lf-v1",
+  "metrics_sha256": "cb03d3d1047e05c6102c309f012ecc2a02aef20d9245fd6b0375cb513096454c",
+  "model_file": "selected_model.joblib",
+  "model_sha256": "50c8b1e49f2fbc68615ee56f82ceb235271a4ccf3a8ea6b960cd51e4e255b7ca"
+}

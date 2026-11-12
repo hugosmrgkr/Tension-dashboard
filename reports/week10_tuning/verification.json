@@ -1,0 +1,24 @@
+{
+  "run_id": "e34327cd28c78f592900",
+  "repeat_run_identical_scores": true,
+  "saved_model_prediction_parity": true,
+  "original_scores_match_p2": true,
+  "active_model_files_unchanged": true,
+  "protected_files": {
+    "models\\baseline_manifest.json": "6dd068b07d503b16985c1725085833f378ad1da9d93dcf9a3a1efec43cc06815",
+    "models\\baseline_metrics.json": "e832a810675fcdccc537d3ad7ac28aa5bf6e4f42f1d213981fa6b9912af84000",
+    "models\\linear_regression_synthetic.joblib": "50c8b1e49f2fbc68615ee56f82ceb235271a4ccf3a8ea6b960cd51e4e255b7ca",
+    "models\\README.md": "a6ae82acd4df867e7ad822f02ee8cab81db59918b00f9d3137b4d35a538a7896",
+    "models\\experiments\\comparison_manifest.json": "291fbd42b303001bc4397bba484c5eed48a94ebc429717d8895532b3f39f0000",
+    "models\\experiments\\comparison_metrics.json": "13b4ce741f1aeb4d98d931f98bde8d38570ecc040e714c9495b558c474c23d3f",
+    "models\\experiments\\linear_regression_synthetic.joblib": "327eb82ea728ad312e6534a24fe4888c3d4d41c4f5a9bf9b98e1dc47f545ac71",
+    "models\\experiments\\MODEL_CARD.md": "8d03561ceb948fbbb52bcf9d43f3e474c9cf5e82c7d6e94fbd98ab8d9aaff2ad"
+  },
+  "targeted_tests": {
+    "passed": 16,
+    "failed": 0,
+    "command": "python -m pytest backend/tests/test_week10_tuning.py backend/tests/test_p2_model_comparison.py -q -p no:cacheprovider"
+  },
+  "database_accessed": false,
+  "promoted_to_serving": false
+}
