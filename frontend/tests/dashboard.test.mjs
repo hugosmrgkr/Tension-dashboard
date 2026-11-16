@@ -8,8 +8,8 @@ import TestRenderer, {act} from 'react-test-renderer';
 // Exercise the real React tree and API helper. Only the browser-only Plotly
 // renderer is substituted; the production build separately bundles real Plotly.
 const bundled=await build({
-  stdin:{contents:"export {default as App} from './src/App.jsx'; export {MiniTable} from './src/components/Common.jsx'; export {Tren} from './src/pages/Pages.jsx'; export {SessionPressureLines} from './src/components/Visuals.jsx';",resolveDir:process.cwd(),loader:'jsx'},
-  bundle:true,write:false,platform:'node',format:'cjs',external:['react','react-dom','lucide-react'],
+  stdin:{contents:"export {default as App} from './src/App.jsx'; export {MiniTable} from './src/components/Common.jsx'; export {Tren} from './src/pages/Pages.jsx'; export {SessionPressureLines} from './src/components/Visuals.jsx'; export * as PageExports from './src/pages/Pages.jsx'; import Dashboard from './src/pages/Dashboard.jsx'; import DataPartisipan from './src/pages/DataPartisipan.jsx'; import FaktorRisiko from './src/pages/AnalisisFaktorRisiko.jsx'; import Tren from './src/pages/TrenTekananDarah.jsx'; import Prediksi from './src/pages/PrediksiTekananDarah.jsx'; import Evaluasi from './src/pages/EvaluasiModel.jsx'; import Laporan from './src/pages/LaporanRingkasan.jsx'; import KelolaData from './src/pages/KelolaData.jsx'; export const ActivePages={Dashboard,DataPartisipan,FaktorRisiko,Tren,Prediksi,Evaluasi,Laporan,KelolaData};",resolveDir:process.cwd(),loader:'jsx'},
+  bundle:true,write:false,metafile:true,platform:'node',format:'cjs',external:['react','react-dom','lucide-react'],
   plugins:[{name:'plotly-renderer-probe',setup(builder){
     builder.onResolve({filter:/^(react-plotly\.js\/factory|plotly\.js-dist-min)$/},args=>({path:args.path,namespace:'probe'}));
     builder.onLoad({filter:/.*/,namespace:'probe'},args=>({loader:'js',contents:args.path.startsWith('react-')?
@@ -18,7 +18,7 @@ const bundled=await build({
 });
 const entry={exports:{}};
 new Function('require','module','exports',bundled.outputFiles[0].text)(createRequire(import.meta.url),entry,entry.exports);
-const {App,MiniTable,Tren,SessionPressureLines}=entry.exports;
+const {App,MiniTable,Tren,SessionPressureLines,PageExports,ActivePages}=entry.exports;
 const meta={source_kind:'synthetic',source:'Fixture API',message:'DATA SINTETIS / SIMULASI',warehouse_empty:false,access_restricted:false,
   participants:23,daily_records:77,session_records:151,respondent_ids:['SIM009'],sessions:['Pagi','Malam'],age_groups:[],province:[],city:[],gender:[],occupation:[],min_date:'2026-01-01',max_date:'2026-01-30',etl_audit_version:'cp2-1'};
 const payload={empty:false,kpis:{respondents:23,daily_records:77,sessions:151,mean_sbp:123.4,mean_dbp:78.9},comparison:null,
@@ -233,4 +233,17 @@ test('session trend compares SBP and DBP together, isolates morning/night and pr
  assert.equal(empty.root.findAllByType('plot-probe').length,0);
  assert.match(JSON.stringify(empty.toJSON()),/Belum ada nilai valid/);
  empty.unmount();
+});
+
+
+test('compatibility exports resolve to the eight active page modules without legacy pages in the bundle',()=>{
+  const names=['Dashboard','DataPartisipan','FaktorRisiko','Tren','Prediksi','Evaluasi','Laporan','KelolaData'];
+  assert.deepEqual(Object.keys(ActivePages).sort(), [...names].sort());
+  for(const name of names)assert.equal(PageExports[name],ActivePages[name]);
+  assert.equal(typeof PageExports.QualitySummary,'function');
+  const files=Object.keys(bundled.metafile.inputs).map(path=>path.replaceAll('\\','/'));
+  for(const filename of ['Dashboard','DataPartisipan','AnalisisFaktorRisiko','TrenTekananDarah','PrediksiTekananDarah','EvaluasiModel','LaporanRingkasan','KelolaData']){
+    assert.ok(files.some(path=>path.endsWith('/pages/'+filename+'.jsx')),filename+' must use its active module');
+  }
+  assert.ok(!files.some(path=>path.endsWith('/Dashboard.legacy.jsx')||path.endsWith('/OtherPages.jsx')));
 });
