@@ -1,7 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Sidebar, Header, Footer, Notice, Loading, Empty, NAV} from './components/Common';
 import FilterBar from './components/FilterBar';
-import {Dashboard, DataPartisipan, FaktorRisiko, Tren, Prediksi, Evaluasi, Laporan, KelolaData} from './pages/Pages';
+import Dashboard from './pages/Dashboard';
+import DataPartisipan from './pages/DataPartisipan';
+import FaktorRisiko from './pages/AnalisisFaktorRisiko';
+import Tren from './pages/TrenTekananDarah';
+import Prediksi from './pages/PrediksiTekananDarah';
+import Evaluasi from './pages/EvaluasiModel';
+import Laporan from './pages/LaporanRingkasan';
+import KelolaData from './pages/KelolaData';
 import {api,queryString,setToken} from './lib/api';
 
 const pages=NAV.map(item=>item[0]);
