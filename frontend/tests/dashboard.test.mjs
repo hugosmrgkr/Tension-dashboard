@@ -8,7 +8,7 @@ import TestRenderer, {act} from 'react-test-renderer';
 // Exercise the real React tree and API helper. Only the browser-only Plotly
 // renderer is substituted; the production build separately bundles real Plotly.
 const bundled=await build({
-  stdin:{contents:"export {default as App} from './src/App.jsx'; export {MiniTable} from './src/components/Common.jsx'; export {Tren} from './src/pages/Pages.jsx'; export {SessionPressureLines} from './src/components/Visuals.jsx'; export * as PageExports from './src/pages/Pages.jsx'; import Dashboard from './src/pages/Dashboard.jsx'; import DataPartisipan from './src/pages/DataPartisipan.jsx'; import FaktorRisiko from './src/pages/AnalisisFaktorRisiko.jsx'; import Tren from './src/pages/TrenTekananDarah.jsx'; import Prediksi from './src/pages/PrediksiTekananDarah.jsx'; import Evaluasi from './src/pages/EvaluasiModel.jsx'; import Laporan from './src/pages/LaporanRingkasan.jsx'; import KelolaData from './src/pages/KelolaData.jsx'; export const ActivePages={Dashboard,DataPartisipan,FaktorRisiko,Tren,Prediksi,Evaluasi,Laporan,KelolaData};",resolveDir:process.cwd(),loader:'jsx'},
+  stdin:{contents:"export {default as App} from './src/App.jsx'; export {MiniTable} from './src/components/Common.jsx'; export {Tren} from './src/pages/Pages.jsx'; export {SessionPressureLines} from './src/components/Visuals.jsx'; export {default as PredictionCharts,historyForChart} from './src/components/prediction/PredictionCharts.jsx'; export * as PageExports from './src/pages/Pages.jsx'; import Dashboard from './src/pages/Dashboard.jsx'; import DataPartisipan from './src/pages/DataPartisipan.jsx'; import FaktorRisiko from './src/pages/AnalisisFaktorRisiko.jsx'; import Tren from './src/pages/TrenTekananDarah.jsx'; import Prediksi from './src/pages/PrediksiTekananDarah.jsx'; import Evaluasi from './src/pages/EvaluasiModel.jsx'; import Laporan from './src/pages/LaporanRingkasan.jsx'; import KelolaData from './src/pages/KelolaData.jsx'; export const ActivePages={Dashboard,DataPartisipan,FaktorRisiko,Tren,Prediksi,Evaluasi,Laporan,KelolaData};",resolveDir:process.cwd(),loader:'jsx'},
   bundle:true,write:false,metafile:true,platform:'node',format:'cjs',external:['react','react-dom','lucide-react'],
   plugins:[{name:'plotly-renderer-probe',setup(builder){
     builder.onResolve({filter:/^(react-plotly\.js\/factory|plotly\.js-dist-min)$/},args=>({path:args.path,namespace:'probe'}));
@@ -18,7 +18,7 @@ const bundled=await build({
 });
 const entry={exports:{}};
 new Function('require','module','exports',bundled.outputFiles[0].text)(createRequire(import.meta.url),entry,entry.exports);
-const {App,MiniTable,Tren,SessionPressureLines,PageExports,ActivePages}=entry.exports;
+const {App,MiniTable,Tren,SessionPressureLines,PageExports,ActivePages,PredictionCharts,historyForChart}=entry.exports;
 const meta={source_kind:'synthetic',source:'Fixture API',message:'DATA SINTETIS / SIMULASI',warehouse_empty:false,access_restricted:false,
   participants:23,daily_records:77,session_records:151,respondent_ids:['SIM009'],sessions:['Pagi','Malam'],age_groups:[],province:[],city:[],gender:[],occupation:[],min_date:'2026-01-01',max_date:'2026-01-30',etl_audit_version:'cp2-1'};
 const payload={empty:false,kpis:{respondents:23,daily_records:77,sessions:151,mean_sbp:123.4,mean_dbp:78.9},comparison:null,
@@ -246,4 +246,71 @@ test('compatibility exports resolve to the eight active page modules without leg
     assert.ok(files.some(path=>path.endsWith('/pages/'+filename+'.jsx')),filename+' must use its active module');
   }
   assert.ok(!files.some(path=>path.endsWith('/Dashboard.legacy.jsx')||path.endsWith('/OtherPages.jsx')));
+});
+
+
+const historyResult={...prediction,history_start:'2026-09-14',history_daily:Array.from({length:7},(_,index)=>({date:'2026-09-'+(14+index),sbp:118+index,dbp:index===2?null:72+index/10})),data_version:'batch1',training_data_version:'batch1',compatibility_status:'matched'};
+
+test('prediction charts show observed SBP/DBP only through origin and two aggregate comparison bars',()=>{
+  const result={...historyResult,history_daily:[...historyResult.history_daily,{date:'2026-09-21',sbp:999,dbp:999}]};
+  const chart=TestRenderer.create(React.createElement(PredictionCharts,{result}));
+  const plots=chart.root.findAllByType('plot-probe');
+  assert.equal(plots.length,2);
+  assert.deepEqual(plots[0].props.data.map(trace=>trace.name),['SBP','DBP']);
+  assert.equal(plots[0].props.data[0].x.length,7);
+  assert.ok(plots[0].props.data[0].x.every(date=>date<=result.last_date));
+  assert.equal(plots[0].props.data[1].y[2],null);
+  assert.equal(plots[0].props.data[1].connectgaps,false);
+  assert.deepEqual(plots[1].props.data[0].x,['Model','Baseline naif']);
+  assert.deepEqual(plots[1].props.data[0].y,[prediction.prediction_mmHg,prediction.reference_naive_mmHg]);
+  assert.match(JSON.stringify(chart.toJSON()),/bukan tujuh prediksi harian/);
+  chart.unmount();
+});
+
+test('missing or duplicate history never creates observation points',()=>{
+  assert.deepEqual(historyForChart({...historyResult,history_daily:[historyResult.history_daily[0],historyResult.history_daily[0]]}),[]);
+  const chart=TestRenderer.create(React.createElement(PredictionCharts,{result:prediction}));
+  assert.match(JSON.stringify(chart.toJSON()),/Riwayat valid belum tersedia/);
+  assert.equal(chart.root.findAllByType('plot-probe').filter(plot=>plot.props.data.some(trace=>trace.type==='scatter')).length,0);
+  chart.unmount();
+});
+
+test('prediction origin is submitted explicitly and changed origin clears the old result',async()=>{
+  try{
+    await mount({page:'Prediksi Tekanan Darah'});
+    global.fetch=async(url,options={})=>{requests.push({url});return {ok:true,json:async()=>historyResult}};
+    await act(async()=>renderer.root.findByProps({'aria-label':'Tanggal origin prediksi'}).props.onChange({target:{value:'2026-09-20'}}));
+    await act(async()=>renderer.root.findByType('form').props.onSubmit({preventDefault(){}}));await settle();
+    assert.ok(requests.some(row=>row.url==='/api/model/predict?respondent_id=SIM009&asof_date=2026-09-20'));
+    assert.equal(renderer.root.findAllByType('plot-probe').length,2);
+    await act(async()=>renderer.root.findByProps({'aria-label':'Tanggal origin prediksi'}).props.onChange({target:{value:'2026-09-19'}}));
+    assert.equal(renderer.root.findAllByType('plot-probe').length,0);
+    assert.equal(renderer.root.findAll(node=>node.props.className==='prediction-result').length,0);
+  }finally{await dispose();}
+});
+
+test('data/model context change aborts pending prediction and discards late response',async()=>{
+  try{
+    await mount({page:'Prediksi Tekanan Darah'});await dispose();
+    await act(async()=>{renderer=TestRenderer.create(React.createElement(ActivePages.Prediksi,{meta:{...meta,data_version:'batch1'},model:comparison}))});await settle();
+    let resolve,signal,pending;
+    global.fetch=(_url,options)=>{signal=options.signal;return new Promise(done=>resolve=done)};
+    await act(async()=>{pending=renderer.root.findByType('form').props.onSubmit({preventDefault(){}})});
+    await act(async()=>renderer.update(React.createElement(ActivePages.Prediksi,{meta:{...meta,data_version:'batch2'},model:{...comparison,run_id:'new-run'}})));
+    assert.equal(signal.aborted,true);
+    await act(async()=>{resolve({ok:true,json:async()=>historyResult});await pending});await settle();
+    assert.equal(renderer.root.findAll(node=>node.props.className==='prediction-result').length,0);
+    assert.equal(renderer.root.findAllByType('plot-probe').length,0);
+  }finally{await dispose();}
+});
+
+test('mismatched model response is rejected rather than displayed with the wrong context',async()=>{
+  try{
+    await mount({page:'Prediksi Tekanan Darah'});
+    global.fetch=async()=>({ok:true,json:async()=>({...historyResult,model:{...prediction.model,version:'wrong-model'}})});
+    await act(async()=>renderer.root.findByType('form').props.onSubmit({preventDefault(){}}));await settle();
+    assert.match(text(),/Konteks ID, data atau model berubah/);
+    assert.equal(renderer.root.findAllByType('plot-probe').length,0);
+    assert.equal(renderer.root.findAll(node=>node.props.className==='prediction-result').length,0);
+  }finally{await dispose();}
 });
