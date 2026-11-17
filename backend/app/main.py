@@ -110,11 +110,26 @@ def predict_baseline(respondent_id:str=Query(...,min_length=1,max_length=40),aso
 @app.get('/api/model/comparison')
 def model_comparison(db:Session=Depends(get_db)):
     """P2-03: hasil perbandingan algoritma dari artefak terverifikasi (hanya DATA SINTETIS)."""
-    from .model_comparison import load_comparison
+    from . import model_service as ms
     state=db.get(SourceState,1)
     if not state or state.source_kind!='synthetic':
         return dict(available=False,message='Perbandingan model hanya tersedia pada DATA SINTETIS / SIMULASI.')
-    return load_comparison(Path(os.getenv('MODEL_DIR','/app/models'))/'experiments')
+    try:
+        return ms.load_serving_metadata(Path(os.getenv('MODEL_DIR','/app/models'))/'experiments',
+                                        source_kind=state.source_kind, data_version=model_batch_version(state))
+    except ms.ModelUnavailable as exc:
+        return dict(available=False,message=str(exc),error_code=exc.error_code)
+
+
+def model_batch_version(state):
+    """Missing legacy fingerprint stays explicitly unverified; malformed metadata fails closed."""
+    from .model_service import ModelUnavailable
+    try:
+        quality=json.loads(state.quality_json or '{}')
+        if not isinstance(quality,dict):raise ValueError('not an object')
+        return quality.get('prepared_content_sha256')
+    except (ValueError,TypeError) as exc:
+        raise ModelUnavailable('Metadata batch warehouse tidak valid.','DATASET_METADATA_INVALID') from exc
 
 
 @app.get('/api/model/predict')
@@ -123,8 +138,11 @@ def predict_model(respondent_id:str=Query(...,min_length=1,max_length=40),asof_d
     from . import model_service as ms
     state=db.get(SourceState,1)
     if not state or state.source_kind!='synthetic':raise HTTPException(409,'Prediksi model hanya tersedia pada dataset sintetis.')
-    try:model,info=ms.load_serving_model(Path(os.getenv('MODEL_DIR','/app/models'))/'experiments')
-    except ms.ModelUnavailable as exc:raise HTTPException(409,str(exc))
+    try:
+        model,info=ms.load_serving_model(Path(os.getenv('MODEL_DIR','/app/models'))/'experiments',
+                                       source_kind=state.source_kind,data_version=model_batch_version(state))
+    except ms.ModelUnavailable as exc:
+        return JSONResponse(status_code=409,content={'detail':str(exc),'error_code':exc.error_code})
     profiles,sessions,days=frames(db)
     try:return ms.predict(model,info,profiles,days,sessions,respondent_id,asof_date)
     except ms.UnknownRespondent as exc:raise HTTPException(404,str(exc))

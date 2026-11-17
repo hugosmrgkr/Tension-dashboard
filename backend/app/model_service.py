@@ -4,12 +4,10 @@ DATA SINTETIS / SIMULASI. Target belum disetujui dosen; keluaran bukan diagnosis
 Fitur inferensi dihitung dengan rumus yang sama dengan `baseline.make_training` (diuji paritasnya)
 dan hanya memakai riwayat t-6..t. Tidak ada data masa depan dan tidak ada data buatan.
 """
-from pathlib import Path
-import joblib
 import numpy as np
 import pandas as pd
 from .baseline import FEATURES, TARGET, daily_bp
-from .model_comparison import NAIVE, load_comparison
+from . import model_registry
 
 HISTORY_DAYS = 7
 HORIZON_DAYS = 7
@@ -17,6 +15,9 @@ HORIZON_DAYS = 7
 
 class ModelUnavailable(Exception):
     """Artefak tidak ada, rusak, tidak cocok kontraknya, atau data aktif bukan sintetis (HTTP 409)."""
+    def __init__(self, message, error_code='MODEL_UNAVAILABLE'):
+        super().__init__(message)
+        self.error_code = error_code
 
 
 class InsufficientHistory(ValueError):
@@ -31,22 +32,19 @@ class ModelFailure(Exception):
     """Model gagal menghasilkan angka yang valid (HTTP 503)."""
 
 
-def load_serving_model(folder):
-    """Muat model terpilih dengan verifikasi hash dan kontrak fitur. Gagal tertutup."""
-    info = load_comparison(folder)
-    if not info['available']:
-        raise ModelUnavailable(info['message'])
-    if info.get('target') != TARGET or info.get('features') != FEATURES:
-        raise ModelUnavailable('Kontrak fitur/target artefak tidak cocok dengan kode aktif.')
-    path = Path(folder) / info['model_file']
+def load_serving_model(folder, *, source_kind='synthetic', data_version=None):
+    """Compatibility entry point; all validation is delegated to the P2 adapter."""
     try:
-        model = joblib.load(path)
-    except Exception as exc:  # artefak rusak yang lolos hash tidak boleh menjatuhkan server
-        raise ModelUnavailable('Artefak model tidak dapat dimuat.') from exc
-    names = list(getattr(model, 'feature_names_in_', []))
-    if names != FEATURES:
-        raise ModelUnavailable('Nama fitur pada model tidak cocok dengan kontrak inferensi.')
-    return model, info
+        return model_registry.load_model(folder, source_kind=source_kind, data_version=data_version)
+    except model_registry.RegistryError as exc:
+        raise ModelUnavailable(str(exc), exc.code) from exc
+
+
+def load_serving_metadata(folder, *, source_kind='synthetic', data_version=None):
+    try:
+        return model_registry.load_metadata(folder, source_kind=source_kind, data_version=data_version)
+    except model_registry.RegistryError as exc:
+        raise ModelUnavailable(str(exc), exc.code) from exc
 
 
 def inference_features(profiles, days, sessions, respondent_id, asof=None):
@@ -81,7 +79,9 @@ def inference_features(profiles, days, sessions, respondent_id, asof=None):
                     age=profile['age'], bmi=profile['bmi'], past_7d_activity=float(window.activity_minutes.mean()),
                     past_7d_sleep=float(window.sleep_hours.mean()), past_7d_stress=float(window.stress.mean()))
     features = {name: (None if pd.isna(features[name]) else float(features[name])) for name in FEATURES}
-    return dict(features=features, origin=origin, history_start=dates[0], forecast_start=origin + pd.Timedelta(days=1),
+    history = [dict(date=str(day.date.date()), sbp=float(day.sbp),
+                    dbp=None if pd.isna(day.dbp) else float(day.dbp)) for day in window.itertuples()]
+    return dict(features=features, history_daily=history, origin=origin, history_start=dates[0], forecast_start=origin + pd.Timedelta(days=1),
                 forecast_end=origin + pd.Timedelta(days=HORIZON_DAYS))
 
 
@@ -105,9 +105,12 @@ def predict(model, info, profiles, days, sessions, respondent_id, asof=None):
         notes.append('Fitur kosong diisi median training: ' + ', '.join(imputed) + '.')
     if not info['selection']['beats_naive_on_validation']:
         notes.append('Pada validasi, model ini tidak lebih baik dari baseline naif; gunakan angka naif sebagai pembanding.')
+    if info.get('compatibility_status') == 'batch_unverified':
+        notes.append('Fingerprint batch warehouse belum tersedia; kecocokan batch training belum terverifikasi.')
     return dict(
         respondent_id=respondent_id, last_date=str(built['origin'].date()), history_start=str(built['history_start'].date()),
         forecast_start=str(built['forecast_start'].date()), forecast_end=str(built['forecast_end'].date()),
+        history_daily=built['history_daily'], history_grain='respondent-date',
         prediction_mmHg=round(value, 2), reference_naive_mmHg=round(built['features']['past_7d_sbp'], 2),
         features_used=built['features'], features_imputed=imputed, features_out_of_range=outside, notes=notes,
         model=dict(algorithm=info['selected_model'], version=info['run_id'], trained_on=info['as_of'], target=info['target'],
@@ -115,4 +118,9 @@ def predict(model, info, profiles, days, sessions, respondent_id, asof=None):
                    target_approved=info['target_approved'], model_sha256=info['model_sha256'],
                    beats_naive_on_validation=info['selection']['beats_naive_on_validation']),
         is_synthetic=True, is_diagnosis=False, target_approved=False,
+        source_kind=info.get('source_kind', 'synthetic'),
+        data_version=info.get('data_version'), training_data_version=info.get('training_data_version'),
+        feature_schema_version=info.get('feature_schema_version'),
+        warehouse_batch_match=info.get('warehouse_batch_match'),
+        compatibility_status=info.get('compatibility_status'), metrics_scope=info.get('metrics_scope'),
         status='DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS')
