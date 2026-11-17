@@ -1,0 +1,28 @@
+{
+  "stage": "Hugo Stage 3",
+  "backend_targeted": {
+    "tests": 51,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 51
+  },
+  "frontend_tests": {
+    "passed": 22,
+    "failed": 0
+  },
+  "production_build": "passed",
+  "browser_stats": {
+    "startTime": "2026-11-17T13:19:30.935Z",
+    "duration": 12495.41,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "model_files_byte_identical": 12,
+  "active_database_accessed": false,
+  "temporary_browser_database": "SQLite synthetic two-CSV fixture",
+  "actual_source_enabled": false,
+  "stage4_started": false
+}

@@ -1,0 +1,46 @@
+{
+  "stage": "Hugo Stage 2",
+  "adapter": "p2-comparison-v1",
+  "targeted_tests": {
+    "tests": 48,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 48
+  },
+  "backend_tests": {
+    "tests": 226,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "passed": 225
+  },
+  "frontend_tests": {
+    "passed": 17,
+    "failed": 0
+  },
+  "frontend_build": "passed",
+  "models_byte_identical": 12,
+  "protected_source_paths_unchanged": [
+    "frontend/src",
+    "data",
+    "etl",
+    "models",
+    "compose.yaml",
+    "compose.prod.yaml",
+    ".env"
+  ],
+  "actual_access_enabled": false,
+  "database_test_environment": "in-memory SQLite",
+  "active_database_accessed": false,
+  "frontend_source_changed": false,
+  "browser_tests_run": false,
+  "postgresql_tests_run": false,
+  "stage3_started": false,
+  "code_sha256": {
+    "backend/app/model_registry.py": "91c382b54a48fc026e4583a36c480bafc1d0f175310a2ffad6325be3aa403b13",
+    "backend/app/model_service.py": "a8fa0f9ba683b4cf05f6328f76b8bb415d9ec4ba2ff437b31cea01bcb8a4f203",
+    "backend/app/main.py": "5f7e243395bb3b54536926c28d77d243eaff2c9d711eae18759f681badba4613",
+    "backend/tests/test_model_registry.py": "3495b5d763d160103ebaeab82e11c3d0c2d71fd22235146056946a8208bd59fa"
+  }
+}

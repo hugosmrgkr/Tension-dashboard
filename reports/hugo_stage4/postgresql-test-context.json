@@ -1,0 +1,12 @@
+{
+  "temporary": true,
+  "data": "C:\\Users\\TUF GAMING\\AppData\\Local\\Temp\\toba_hugo_stage4_696f8da843c04596b56440f88b5353d1\\pgdata",
+  "user": "hugo_test",
+  "host": "127.0.0.1",
+  "browser_database": "hugo_browser_test",
+  "port": 63846,
+  "backend_database": "toba_cp2_test",
+  "root": "C:\\Users\\TUF GAMING\\AppData\\Local\\Temp\\toba_hugo_stage4_696f8da843c04596b56440f88b5353d1",
+  "server_version": "17.6",
+  "api_port": 59724
+}

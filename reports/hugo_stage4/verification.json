@@ -1,0 +1,75 @@
+{
+  "verified_at": "2026-11-17T13:41:45.151714+00:00",
+  "scope": "Hugo stages 1-4, synthetic only",
+  "backend": {
+    "sqlite": {
+      "tests": 233,
+      "passed": 232,
+      "skipped": 1,
+      "failures": 0,
+      "errors": 0
+    },
+    "postgresql": {
+      "tests": 233,
+      "passed": 232,
+      "skipped": 1,
+      "failures": 0,
+      "errors": 0
+    }
+  },
+  "frontend": {
+    "passed": 22,
+    "failed": 0,
+    "command": "npm test",
+    "evidence": "Actual command output in task session; no frontend JUnit reporter configured"
+  },
+  "production_build": {
+    "succeeded": true,
+    "modules": 1602,
+    "duration_seconds": 13.94,
+    "warning": "Large Plotly bundle (~4.9 MB)"
+  },
+  "browser": {
+    "startTime": "2026-11-17T13:33:57.354Z",
+    "duration": 83476.30399999999,
+    "expected": 21,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "http_checks": {
+    "artifact_integrity": true,
+    "source_and_batch_match": true,
+    "all_seven_historical_predictions": true,
+    "history_matches_inference_features": true,
+    "no_future_rows_in_history": true,
+    "filters_and_csv_same_scope": true,
+    "empty_without_fake_values": true
+  },
+  "historical_origins_verified": 7,
+  "counts": {
+    "profiles": 19,
+    "daily": 570,
+    "sessions": 1140
+  },
+  "model_run_id": "d43ac5c17c70cead67c7",
+  "data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+  "protected_file_count": 16,
+  "protected_sha256_unchanged": true,
+  "env_file_created": false,
+  "postgresql_version": "17.6",
+  "test_cluster_stopped": true,
+  "test_api_stopped": true,
+  "docker_tested": false,
+  "docker_limitation": "Docker daemon unavailable",
+  "linux_runtime_tested": false,
+  "actual_data_activated": false,
+  "active_warehouse_etl_commit": false,
+  "initial_browser_attempt": "Harness relative-path error; stopped and corrected; final full run 21 passed",
+  "limitations": [
+    "P2 synthetic adapter only",
+    "Aldi/Nahesson contract and final model release pending",
+    "No production deployment verification",
+    "No new academic or clinical approval"
+  ]
+}
