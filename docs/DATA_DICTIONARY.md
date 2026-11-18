@@ -103,3 +103,10 @@ Missing kosong/NaN/None/NaT tetap NA; tidak diimputasi nol. ID atau tanggal tida
 - IQR pada sumber sintetis tetap flag deskriptif; bukan diagnosis dan tidak otomatis dihapus. Commit aktual dengan issues/karantina/IQR belum diselesaikan ditolak quality gate. Arti tidur aktual masih pending.
 - Header dikenali secara eksplisit: BOM/spasi/kapital/CRLF aman; urutan/pertanyaan baru atau kolom hilang ditolak. Ekspor aktual belum tersedia untuk membuktikan mapping final; jangan mengira pemetaan bebas berdasarkan posisi.
 - Ekspor CSV mengawali teks berpotensi formula spreadsheet dengan apostrof. Ini pelindung ekspor, bukan pengubahan nilai database.
+
+
+## Pemeriksaan kesiapan data aktual (CP4)
+
+Kontrak parser mengharuskan header dan urutan dua ekspor cocok dengan kontrak formulir yang diperiksa. Normalisasi hanya mencakup BOM, spasi, kapitalisasi, dan CRLF; perubahan pertanyaan, kolom tambahan/hilang, atau urutan berbeda ditolak. Ekspor aktual belum tersedia dalam source checkout ini sehingga kompatibilitas aktual belum dapat dinyatakan lulus. Lihat `ACTUAL_DATA_READINESS.md` untuk prosedur penyimpanan privat dan dry-run.
+
+Kelayakan window ML dilaporkan terpisah dari jumlah catatan. Satu contoh training target `future_7d_mean_sbp` memerlukan tujuh tanggal histori dan tujuh tanggal target berturut-turut, seluruhnya memiliki sesi BP valid. Hitungan teknis ini tidak menyetujui target, protokol, atau kelayakan ilmiah.

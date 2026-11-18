@@ -19,7 +19,7 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 
 PUBLIC_PATHS = {'/health', '/api/health'}
-ADMIN_PREFIXES = ('/api/data/export/', '/api/quality')
+ADMIN_PREFIXES = ('/api/data/export/', '/api/quality', '/api/data-readiness')
 DEFAULT_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8080']
 SECURE_ENVS = {'production', 'staging'}
 HEX64 = re.compile(r'^[0-9a-f]{64}$')

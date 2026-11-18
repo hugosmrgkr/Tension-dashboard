@@ -24,7 +24,7 @@ export default function App(){
   const [comparison,setComparison]=useState(null), [comparisonLoading,setComparisonLoading]=useState(false);
   const filterKey=JSON.stringify(filters);
   const baselinePage=['Prediksi Tekanan Darah','Evaluasi Model'].includes(page);
-  const independent=baselinePage || page==='Kelola Data';
+  const independent=baselinePage;
   const reload=()=>setRevision(value=>value+1);
   const crossFilter=values=>setFilters(old=>({...old,...values,...('province' in values&&!('city' in values)?{city:''}:{})}));
   const go=name=>{setPage(name);window.location.hash=encodeURIComponent(name);window.scrollTo({top:0,behavior:'smooth'})};
@@ -95,6 +95,7 @@ export default function App(){
   }
   let content;
   if(authRequired)content=<Notice tone="warning"><form onSubmit={event=>{event.preventDefault();setToken(tokenInput.trim());setTokenInput('');setAuthRequired(false);reload()}}><strong>Masuk diperlukan.</strong> Tempel token akses dari pengelola. Token disimpan hanya pada tab ini.<label className="field"><span>Token akses</span><input type="password" autoComplete="off" aria-label="Token akses" value={tokenInput} onChange={event=>setTokenInput(event.target.value)}/></label><button className="button primary" type="submit" disabled={!tokenInput.trim()}>Masuk</button></form></Notice>;
+  else if(meta?.access_restricted && page==='Kelola Data')content=current();
   else if(meta?.access_restricted)content=<Notice tone="warning">{meta.message}</Notice>;
   else if(meta?.warehouse_empty)content=<Empty message={meta.message}/>;
   else if(independent && meta)content=current();

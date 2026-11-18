@@ -81,6 +81,25 @@ def get_quality(db:Session=Depends(get_db)):
     return {'source_kind':state.source_kind if state else 'empty','quality':json.loads(state.quality_json or '{}') if state else {}}
 
 
+@app.get('/api/data-readiness')
+def get_data_readiness(db:Session=Depends(get_db)):
+    """Aggregate-only data and ML readiness for the admin data-management page."""
+    from .data_readiness import build_readiness
+    from .bp_policy import assessed_frame
+    state=db.get(SourceState,1)
+    source_kind=state.source_kind if state else 'empty'
+    quality=json.loads(state.quality_json or '{}') if state else {}
+    profiles,sessions,daily=frames(db)
+    if len(sessions):
+        sessions=assessed_frame(sessions)
+    result=build_readiness(profiles,sessions,daily,quality,source_kind)
+    result['access_restricted']=source_kind not in ('synthetic','empty')
+    if result['access_restricted']:
+        # Keep actual-data metadata aggregate-only; never return respondent-level data.
+        result['message']='Sumber aktual: ringkasan agregat hanya tersedia bagi pengelola berwenang.'
+    return result
+
+
 @app.get('/api/model/baseline')
 def baseline_metadata(db:Session=Depends(get_db)):
     from .baseline import load_experiment
