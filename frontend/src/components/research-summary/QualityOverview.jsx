@@ -3,11 +3,11 @@ import React from 'react';
 import { whole } from '../../lib/api';
 
 const fields = [
-  { key: 'missing_sleep_hours', label: 'Durasi tidur' },
-  { key: 'missing_sitting', label: 'Durasi duduk' },
-  { key: 'missing_stress', label: 'Stres' },
-  { key: 'missing_activity_minutes', label: 'Durasi aktivitas' },
-  { key: 'missing_smoke_count', label: 'Jumlah merokok' }
+  { key: 'missing_sleep_hours', label: ['Durasi', 'Tidur'] },
+  { key: 'missing_sitting', label: ['Durasi', 'Duduk'] },
+  { key: 'missing_stress', label: ['Stres'] },
+  { key: 'missing_activity_minutes', label: ['Durasi', 'Aktivitas'] },
+  { key: 'missing_smoke_count', label: ['Jumlah', 'Merokok'] }
 ];
 
 const getCount = value => {
@@ -52,7 +52,11 @@ export default function QualityOverview({ quality }) {
     };
   }).sort((a, b) => b.value - a.value);
 
-  const maxValue = Math.max(...chartData.map(item => item.value), 0);
+  const maxValue = Math.max(
+    ...chartData.map(item => item.value),
+    0
+  );
+
   const step = getAxisStep(maxValue);
   const axisMax = maxValue > 0
     ? Math.ceil(maxValue / step) * step
@@ -63,14 +67,18 @@ export default function QualityOverview({ quality }) {
     (_, index) => index * step
   );
 
-  // Ukuran dan posisi elemen grafik
+  // Ukuran grafik
   const width = 900;
-  const plotX = 250;
-  const plotWidth = 540;
-  const rowHeight = 46;
-  const top = 25;
-  const axisY = top + chartData.length * rowHeight;
-  const height = axisY + 65;
+  const plotLeft = 85;
+  const plotRight = 30;
+  const plotTop = 40;
+  const plotHeight = 275;
+  const plotWidth = width - plotLeft - plotRight;
+  const plotBottom = plotTop + plotHeight;
+  const slotWidth = plotWidth / chartData.length;
+  const barWidth = Math.min(76, slotWidth * 0.55);
+
+  const height = 455;
 
   return (
     <section style={{
@@ -137,7 +145,7 @@ export default function QualityOverview({ quality }) {
         )}
       </div>
 
-      {/* HORIZONTAL BAR CHART */}
+      {/* VERTICAL BAR CHART */}
       <div style={{
         borderTop: '1px solid #e5eaf1',
         marginTop: 20,
@@ -165,32 +173,33 @@ export default function QualityOverview({ quality }) {
               width="100%"
               height="auto"
               role="img"
-              aria-label="Diagram batang horizontal jumlah nilai kosong berdasarkan variabel"
+              aria-label="Diagram batang vertikal jumlah nilai kosong berdasarkan variabel"
               style={{
                 display: 'block',
                 minWidth: 560,
                 fontFamily: 'Arial, sans-serif'
               }}
             >
-              {/* Garis sumbu dan angka X */}
+              {/* Garis grid dan sumbu Y */}
               {ticks.map(tick => {
-                const x = plotX + (tick / axisMax) * plotWidth;
+                const y = plotBottom -
+                  (tick / axisMax) * plotHeight;
 
                 return (
                   <g key={tick}>
                     <line
-                      x1={x}
-                      y1={top - 5}
-                      x2={x}
-                      y2={axisY}
+                      x1={plotLeft}
+                      y1={y}
+                      x2={width - plotRight}
+                      y2={y}
                       stroke="#e5e7eb"
                       strokeWidth="1"
                     />
 
                     <text
-                      x={x}
-                      y={axisY + 19}
-                      textAnchor="middle"
+                      x={plotLeft - 12}
+                      y={y + 4}
+                      textAnchor="end"
                       fill="#64748b"
                       fontSize="12"
                     >
@@ -200,59 +209,76 @@ export default function QualityOverview({ quality }) {
                 );
               })}
 
-              {/* Label variabel dan batang horizontal */}
+              {/* Batang dan label variabel */}
               {chartData.map((item, index) => {
-                const y = top + index * rowHeight;
-                const barWidth = (item.value / axisMax) * plotWidth;
+                const centerX =
+                  plotLeft + (index + 0.5) * slotWidth;
+
+                const barHeight =
+                  (item.value / axisMax) * plotHeight;
+
+                const barY = plotBottom - barHeight;
 
                 return (
-                  <g key={item.label}>
-                    <line
-                      x1={plotX}
-                      y1={y + rowHeight - 3}
-                      x2={plotX + plotWidth}
-                      y2={y + rowHeight - 3}
-                      stroke="#eef1f5"
-                      strokeWidth="1"
-                    />
-
-                    <text
-                      x={plotX - 15}
-                      y={y + 19}
-                      textAnchor="end"
-                      fill="#334155"
-                      fontSize="13"
-                    >
-                      {item.label}
-                    </text>
-
+                  <g key={item.label.join('-')}>
+                    {/* Batang */}
                     <rect
-                      x={plotX}
-                      y={y + 3}
+                      x={centerX - barWidth / 2}
+                      y={barY}
                       width={barWidth}
-                      height={20}
-                      rx="2"
+                      height={barHeight}
                       fill="#397bc5"
+                      rx="2"
                     />
 
+                    {/* Angka dan persentase */}
                     <text
-                      x={875}
-                      y={y + 19}
-                      textAnchor="end"
+                      x={centerX}
+                      y={Math.max(plotTop - 8, barY - 10)}
+                      textAnchor="middle"
                       fill="#1e293b"
                       fontSize="12"
                       fontWeight="600"
                     >
-                      {whole(item.value)} ({item.percentage.toFixed(1)}%)
+                      {whole(item.value)}
+                    </text>
+
+                    {/* Label sumbu X */}
+                    <text
+                      x={centerX}
+                      y={plotBottom + 23}
+                      textAnchor="middle"
+                      fill="#334155"
+                      fontSize="12"
+                    >
+                      {item.label.map((line, lineIndex) => (
+                        <tspan
+                          key={lineIndex}
+                          x={centerX}
+                          dy={lineIndex === 0 ? 0 : 16}
+                        >
+                          {line}
+                        </tspan>
+                      ))}
+                    </text>
+
+                    {/* Persentase di bawah label */}
+                    <text
+                      x={centerX}
+                      y={plotBottom + 62}
+                      textAnchor="middle"
+                      fill="#64748b"
+                      fontSize="11"
+                    >
+                      {item.percentage.toFixed(1)}%
                     </text>
                   </g>
                 );
               })}
 
-              {/* Judul sumbu X */}
+              {/* Judul sumbu Y */}
               <text
-                x={plotX + plotWidth / 2}
-                y={height - 5}
+                transform={`translate(19 ${plotTop + plotHeight / 2}) rotate(-90)`}
                 textAnchor="middle"
                 fill="#475569"
                 fontSize="13"
