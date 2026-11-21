@@ -4,7 +4,8 @@ Project: **Toba Health Insight**. Dokumen ini khusus tugas **Hugo** dan mengikut
 pembagian terakhir: Ruben menangani deployment serta Dashboard/Tren; Nahesson
 menangani model serta Evaluasi/Faktor Risiko. Semua delapan halaman sudah dibagi.
 
-Checklist adalah rencana kerja, **bukan klaim selesai**. Dokumen ini tidak membuat
+Checklist mencatat rencana dan hasil yang sudah diuji; status sintetis dan aktual
+dibedakan pada bagian progres di bawah. Dokumen ini tidak membuat
 branch, commit atau push. Jangan mengulang pekerjaan sintetis yang sudah selesai.
 
 ## Tugas utama
@@ -26,11 +27,11 @@ atau penjelasan jelas mengapa prediksi belum tersedia.
       aktual tidak boleh dihapus begitu saja agar dashboard terlihat berisi data.
 - [ ] Integrasikan rilis dari Nahesson ke endpoint prediksi/evaluasi tanpa merusak
       kompatibilitas atau eksperimen historis.
-- [ ] Tampilkan riwayat SBP/DBP, hasil estimasi **rerata SBP** tujuh hari berikutnya,
+- [x] Tampilkan riwayat SBP/DBP, hasil estimasi **rerata SBP** tujuh hari berikutnya,
       rentang tanggal, pembanding naif, asal data dan versi model pada React.
-- [ ] Bedakan observasi historis dari estimasi target dengan jelas. Jangan
+- [x] Bedakan observasi historis dari estimasi target dengan jelas. Jangan
       menggambar tujuh nilai prediksi harian dari satu output rerata.
-- [ ] Pertahankan pembatalan request, validasi ID/tanggal, dan loading/error/empty
+- [x] Pertahankan pembatalan request, validasi ID/tanggal, dan loading/error/empty
       state. Tampilkan kondisi riwayat kurang atau model belum tersedia tanpa angka palsu.
 - [ ] Integrasikan endpoint/perubahan agregasi yang diminta anggota lain melalui
       PR terkoordinasi; jangan membiarkan beberapa orang menyunting `main.py` bersamaan.
@@ -124,6 +125,25 @@ dan minimal enam PR merged per anggota sepanjang proyek yang mencakup DA dan DS.
 Penuhi melalui pekerjaan nyata, bukan memecah perubahan kosong atau memalsukan riwayat.
 
 ## Referensi
+
+### Progres Hugo — 17 November 2026
+
+Empat tahap teknis telah dikerjakan bertahap setelah konfirmasi Hugo. Ini bukan
+klaim seluruh tugas final atau aktivasi aktual selesai. Checklist yang belum
+dicentang tetap memerlukan dependensi/review; beberapa sudah diterapkan terbatas
+untuk adapter sintetis seperti dijelaskan berikut.
+
+| Tahap | Hasil | Status/batas |
+|---|---|---|
+| 1 | [Draf kontrak](MODEL_INTEGRATION_CONTRACT.md) | Selesai disusun; review Aldi/Nahesson pending |
+| 2 | [Registry dan API](HUGO_STAGE2_REPORT.md) | Adapter P2 sintetis terverifikasi; menolak hash/fitur/batch yang tidak cocok; bukan loader rilis final |
+| 3 | [Prediksi React](HUGO_STAGE3_REPORT.md) | Grafik histori SBP/DBP, estimasi rerata vs naif, origin, provenance dan perlindungan respons usang |
+| 4 | [Acceptance terisolasi](HUGO_STAGE4_REPORT.md) | SQLite 232 passed + 1 skipped; PostgreSQL 232 passed + 1 skipped; frontend 22 passed; browser 21 passed; build berhasil |
+
+Pemisahan sumber telah diterapkan secara konservatif: sintetis berlabel, sumber
+aktual tetap diblokir; belum akses aktual end-to-end atau paket rilis Nahesson.
+Review kontrak, kebijakan batch baru, deployment, uji pengguna dan kontribusi
+commit/PR nyata tetap menjadi pekerjaan lanjutan. Tidak membuat commit/push otomatis.
 
 - [Peta halaman aktif](ACTIVE_PAGE_SPLIT.md)
 - [Tuning sintetis yang sudah dikerjakan](WEEK10_TUNING_REPORT.md)

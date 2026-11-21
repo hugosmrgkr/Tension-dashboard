@@ -1,0 +1,699 @@
+{
+  "verified_at": "2026-11-17T13:33:33.461384+00:00",
+  "url": "http://127.0.0.1:59724",
+  "database": "postgresql",
+  "source_kind": "synthetic",
+  "counts": {
+    "profiles": 19,
+    "daily": 570,
+    "sessions": 1140
+  },
+  "kpis": {
+    "respondents": 19,
+    "respondents_with_valid_bp": 19,
+    "daily_records": 570,
+    "sessions": 1140,
+    "mean_sbp": 118.9,
+    "mean_dbp": 72.6,
+    "dates": 30
+  },
+  "data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+  "model_run_id": "d43ac5c17c70cead67c7",
+  "historical_test": true,
+  "checks": {
+    "artifact_integrity": true,
+    "source_and_batch_match": true,
+    "all_seven_historical_predictions": true,
+    "history_matches_inference_features": true,
+    "no_future_rows_in_history": true,
+    "filters_and_csv_same_scope": true,
+    "empty_without_fake_values": true
+  },
+  "forecasts": [
+    {
+      "respondent_id": "SIM001",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "history_daily": [
+        {
+          "date": "2026-09-12",
+          "sbp": 126.0,
+          "dbp": 73.25
+        },
+        {
+          "date": "2026-09-13",
+          "sbp": 120.75,
+          "dbp": 76.5
+        },
+        {
+          "date": "2026-09-14",
+          "sbp": 122.75,
+          "dbp": 73.5
+        },
+        {
+          "date": "2026-09-15",
+          "sbp": 121.25,
+          "dbp": 74.75
+        },
+        {
+          "date": "2026-09-16",
+          "sbp": 116.75,
+          "dbp": 74.25
+        },
+        {
+          "date": "2026-09-17",
+          "sbp": 118.25,
+          "dbp": 76.0
+        },
+        {
+          "date": "2026-09-18",
+          "sbp": 122.5,
+          "dbp": 74.0
+        }
+      ],
+      "history_grain": "respondent-date",
+      "prediction_mmHg": 123.38,
+      "reference_naive_mmHg": 121.18,
+      "features_used": {
+        "past_7d_sbp": 121.17857142857143,
+        "past_7d_dbp": 74.60714285714286,
+        "past_7d_sbp_std": 2.824365559966792,
+        "age": 55.0,
+        "bmi": 23.417,
+        "past_7d_activity": 46.42857142857143,
+        "past_7d_sleep": 6.938142857142856,
+        "past_7d_stress": 3.0
+      },
+      "features_imputed": [],
+      "features_out_of_range": [],
+      "notes": [
+        "Pada validasi, model ini tidak lebih baik dari baseline naif; gunakan angka naif sebagai pembanding."
+      ],
+      "model": {
+        "algorithm": "Linear Regression",
+        "version": "d43ac5c17c70cead67c7",
+        "trained_on": "2026-11-10",
+        "target": "future_7d_mean_sbp",
+        "horizon_days": 7,
+        "features": [
+          "past_7d_sbp",
+          "past_7d_dbp",
+          "past_7d_sbp_std",
+          "age",
+          "bmi",
+          "past_7d_activity",
+          "past_7d_sleep",
+          "past_7d_stress"
+        ],
+        "data_source": "19 ID sintetis, 570 ID-tanggal, 1140 sesi; 323 complete windows.",
+        "target_approved": false,
+        "model_sha256": "327eb82ea728ad312e6534a24fe4888c3d4d41c4f5a9bf9b98e1dc47f545ac71",
+        "beats_naive_on_validation": false
+      },
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "target_approved": false,
+      "source_kind": "synthetic",
+      "data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "training_data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "feature_schema_version": "cp3-history7-v1",
+      "warehouse_batch_match": true,
+      "compatibility_status": "matched",
+      "metrics_scope": "synthetic_historical_test",
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS"
+    },
+    {
+      "respondent_id": "SIM002",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "history_daily": [
+        {
+          "date": "2026-09-12",
+          "sbp": 123.5,
+          "dbp": 73.75
+        },
+        {
+          "date": "2026-09-13",
+          "sbp": 115.5,
+          "dbp": 73.75
+        },
+        {
+          "date": "2026-09-14",
+          "sbp": 123.5,
+          "dbp": 72.75
+        },
+        {
+          "date": "2026-09-15",
+          "sbp": 122.5,
+          "dbp": 71.0
+        },
+        {
+          "date": "2026-09-16",
+          "sbp": 120.25,
+          "dbp": 73.75
+        },
+        {
+          "date": "2026-09-17",
+          "sbp": 120.5,
+          "dbp": 77.75
+        },
+        {
+          "date": "2026-09-18",
+          "sbp": 115.5,
+          "dbp": 74.75
+        }
+      ],
+      "history_grain": "respondent-date",
+      "prediction_mmHg": 117.67,
+      "reference_naive_mmHg": 120.18,
+      "features_used": {
+        "past_7d_sbp": 120.17857142857143,
+        "past_7d_dbp": 73.92857142857143,
+        "past_7d_sbp_std": 3.192385711440935,
+        "age": 22.0,
+        "bmi": 24.674,
+        "past_7d_activity": 54.285714285714285,
+        "past_7d_sleep": 7.685857142857143,
+        "past_7d_stress": 2.857142857142857
+      },
+      "features_imputed": [],
+      "features_out_of_range": [],
+      "notes": [
+        "Pada validasi, model ini tidak lebih baik dari baseline naif; gunakan angka naif sebagai pembanding."
+      ],
+      "model": {
+        "algorithm": "Linear Regression",
+        "version": "d43ac5c17c70cead67c7",
+        "trained_on": "2026-11-10",
+        "target": "future_7d_mean_sbp",
+        "horizon_days": 7,
+        "features": [
+          "past_7d_sbp",
+          "past_7d_dbp",
+          "past_7d_sbp_std",
+          "age",
+          "bmi",
+          "past_7d_activity",
+          "past_7d_sleep",
+          "past_7d_stress"
+        ],
+        "data_source": "19 ID sintetis, 570 ID-tanggal, 1140 sesi; 323 complete windows.",
+        "target_approved": false,
+        "model_sha256": "327eb82ea728ad312e6534a24fe4888c3d4d41c4f5a9bf9b98e1dc47f545ac71",
+        "beats_naive_on_validation": false
+      },
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "target_approved": false,
+      "source_kind": "synthetic",
+      "data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "training_data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "feature_schema_version": "cp3-history7-v1",
+      "warehouse_batch_match": true,
+      "compatibility_status": "matched",
+      "metrics_scope": "synthetic_historical_test",
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS"
+    },
+    {
+      "respondent_id": "SIM004",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "history_daily": [
+        {
+          "date": "2026-09-12",
+          "sbp": 133.0,
+          "dbp": 78.25
+        },
+        {
+          "date": "2026-09-13",
+          "sbp": 126.25,
+          "dbp": 75.5
+        },
+        {
+          "date": "2026-09-14",
+          "sbp": 130.5,
+          "dbp": 76.25
+        },
+        {
+          "date": "2026-09-15",
+          "sbp": 127.25,
+          "dbp": 77.5
+        },
+        {
+          "date": "2026-09-16",
+          "sbp": 125.5,
+          "dbp": 81.0
+        },
+        {
+          "date": "2026-09-17",
+          "sbp": 129.5,
+          "dbp": 76.5
+        },
+        {
+          "date": "2026-09-18",
+          "sbp": 128.75,
+          "dbp": 79.0
+        }
+      ],
+      "history_grain": "respondent-date",
+      "prediction_mmHg": 126.16,
+      "reference_naive_mmHg": 128.68,
+      "features_used": {
+        "past_7d_sbp": 128.67857142857142,
+        "past_7d_dbp": 77.71428571428571,
+        "past_7d_sbp_std": 2.4117061451620185,
+        "age": 35.0,
+        "bmi": 32.678,
+        "past_7d_activity": 57.142857142857146,
+        "past_7d_sleep": 6.792999999999999,
+        "past_7d_stress": 2.5714285714285716
+      },
+      "features_imputed": [],
+      "features_out_of_range": [
+        "bmi"
+      ],
+      "notes": [
+        "Sebagian fitur berada di luar rentang data training: bmi. Prediksi merupakan ekstrapolasi.",
+        "Pada validasi, model ini tidak lebih baik dari baseline naif; gunakan angka naif sebagai pembanding."
+      ],
+      "model": {
+        "algorithm": "Linear Regression",
+        "version": "d43ac5c17c70cead67c7",
+        "trained_on": "2026-11-10",
+        "target": "future_7d_mean_sbp",
+        "horizon_days": 7,
+        "features": [
+          "past_7d_sbp",
+          "past_7d_dbp",
+          "past_7d_sbp_std",
+          "age",
+          "bmi",
+          "past_7d_activity",
+          "past_7d_sleep",
+          "past_7d_stress"
+        ],
+        "data_source": "19 ID sintetis, 570 ID-tanggal, 1140 sesi; 323 complete windows.",
+        "target_approved": false,
+        "model_sha256": "327eb82ea728ad312e6534a24fe4888c3d4d41c4f5a9bf9b98e1dc47f545ac71",
+        "beats_naive_on_validation": false
+      },
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "target_approved": false,
+      "source_kind": "synthetic",
+      "data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "training_data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "feature_schema_version": "cp3-history7-v1",
+      "warehouse_batch_match": true,
+      "compatibility_status": "matched",
+      "metrics_scope": "synthetic_historical_test",
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS"
+    },
+    {
+      "respondent_id": "SIM006",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "history_daily": [
+        {
+          "date": "2026-09-12",
+          "sbp": 116.0,
+          "dbp": 70.0
+        },
+        {
+          "date": "2026-09-13",
+          "sbp": 119.25,
+          "dbp": 69.25
+        },
+        {
+          "date": "2026-09-14",
+          "sbp": 118.5,
+          "dbp": 69.75
+        },
+        {
+          "date": "2026-09-15",
+          "sbp": 115.0,
+          "dbp": 66.75
+        },
+        {
+          "date": "2026-09-16",
+          "sbp": 118.25,
+          "dbp": 72.25
+        },
+        {
+          "date": "2026-09-17",
+          "sbp": 118.0,
+          "dbp": 72.25
+        },
+        {
+          "date": "2026-09-18",
+          "sbp": 113.5,
+          "dbp": 70.25
+        }
+      ],
+      "history_grain": "respondent-date",
+      "prediction_mmHg": 114.78,
+      "reference_naive_mmHg": 116.93,
+      "features_used": {
+        "past_7d_sbp": 116.92857142857143,
+        "past_7d_dbp": 70.07142857142857,
+        "past_7d_sbp_std": 1.9672056219886302,
+        "age": 33.0,
+        "bmi": 27.695,
+        "past_7d_activity": 43.57142857142857,
+        "past_7d_sleep": 7.059571428571428,
+        "past_7d_stress": 3.0
+      },
+      "features_imputed": [],
+      "features_out_of_range": [],
+      "notes": [
+        "Pada validasi, model ini tidak lebih baik dari baseline naif; gunakan angka naif sebagai pembanding."
+      ],
+      "model": {
+        "algorithm": "Linear Regression",
+        "version": "d43ac5c17c70cead67c7",
+        "trained_on": "2026-11-10",
+        "target": "future_7d_mean_sbp",
+        "horizon_days": 7,
+        "features": [
+          "past_7d_sbp",
+          "past_7d_dbp",
+          "past_7d_sbp_std",
+          "age",
+          "bmi",
+          "past_7d_activity",
+          "past_7d_sleep",
+          "past_7d_stress"
+        ],
+        "data_source": "19 ID sintetis, 570 ID-tanggal, 1140 sesi; 323 complete windows.",
+        "target_approved": false,
+        "model_sha256": "327eb82ea728ad312e6534a24fe4888c3d4d41c4f5a9bf9b98e1dc47f545ac71",
+        "beats_naive_on_validation": false
+      },
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "target_approved": false,
+      "source_kind": "synthetic",
+      "data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "training_data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "feature_schema_version": "cp3-history7-v1",
+      "warehouse_batch_match": true,
+      "compatibility_status": "matched",
+      "metrics_scope": "synthetic_historical_test",
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS"
+    },
+    {
+      "respondent_id": "SIM009",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "history_daily": [
+        {
+          "date": "2026-09-12",
+          "sbp": 122.25,
+          "dbp": 74.5
+        },
+        {
+          "date": "2026-09-13",
+          "sbp": 121.25,
+          "dbp": 71.5
+        },
+        {
+          "date": "2026-09-14",
+          "sbp": 123.0,
+          "dbp": 69.75
+        },
+        {
+          "date": "2026-09-15",
+          "sbp": 118.25,
+          "dbp": 71.0
+        },
+        {
+          "date": "2026-09-16",
+          "sbp": 123.25,
+          "dbp": 72.0
+        },
+        {
+          "date": "2026-09-17",
+          "sbp": 118.25,
+          "dbp": 73.5
+        },
+        {
+          "date": "2026-09-18",
+          "sbp": 122.0,
+          "dbp": 71.5
+        }
+      ],
+      "history_grain": "respondent-date",
+      "prediction_mmHg": 116.72,
+      "reference_naive_mmHg": 121.18,
+      "features_used": {
+        "past_7d_sbp": 121.17857142857143,
+        "past_7d_dbp": 71.96428571428571,
+        "past_7d_sbp_std": 1.948966235663179,
+        "age": 44.0,
+        "bmi": 24.276,
+        "past_7d_activity": 49.285714285714285,
+        "past_7d_sleep": 6.676,
+        "past_7d_stress": 2.857142857142857
+      },
+      "features_imputed": [],
+      "features_out_of_range": [],
+      "notes": [
+        "Pada validasi, model ini tidak lebih baik dari baseline naif; gunakan angka naif sebagai pembanding."
+      ],
+      "model": {
+        "algorithm": "Linear Regression",
+        "version": "d43ac5c17c70cead67c7",
+        "trained_on": "2026-11-10",
+        "target": "future_7d_mean_sbp",
+        "horizon_days": 7,
+        "features": [
+          "past_7d_sbp",
+          "past_7d_dbp",
+          "past_7d_sbp_std",
+          "age",
+          "bmi",
+          "past_7d_activity",
+          "past_7d_sleep",
+          "past_7d_stress"
+        ],
+        "data_source": "19 ID sintetis, 570 ID-tanggal, 1140 sesi; 323 complete windows.",
+        "target_approved": false,
+        "model_sha256": "327eb82ea728ad312e6534a24fe4888c3d4d41c4f5a9bf9b98e1dc47f545ac71",
+        "beats_naive_on_validation": false
+      },
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "target_approved": false,
+      "source_kind": "synthetic",
+      "data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "training_data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "feature_schema_version": "cp3-history7-v1",
+      "warehouse_batch_match": true,
+      "compatibility_status": "matched",
+      "metrics_scope": "synthetic_historical_test",
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS"
+    },
+    {
+      "respondent_id": "SIM012",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "history_daily": [
+        {
+          "date": "2026-09-12",
+          "sbp": 103.75,
+          "dbp": 68.0
+        },
+        {
+          "date": "2026-09-13",
+          "sbp": 108.5,
+          "dbp": 66.5
+        },
+        {
+          "date": "2026-09-14",
+          "sbp": 106.25,
+          "dbp": 64.25
+        },
+        {
+          "date": "2026-09-15",
+          "sbp": 102.75,
+          "dbp": 68.25
+        },
+        {
+          "date": "2026-09-16",
+          "sbp": 106.25,
+          "dbp": 65.0
+        },
+        {
+          "date": "2026-09-17",
+          "sbp": 110.25,
+          "dbp": 70.0
+        },
+        {
+          "date": "2026-09-18",
+          "sbp": 108.25,
+          "dbp": 66.75
+        }
+      ],
+      "history_grain": "respondent-date",
+      "prediction_mmHg": 111.59,
+      "reference_naive_mmHg": 106.57,
+      "features_used": {
+        "past_7d_sbp": 106.57142857142857,
+        "past_7d_dbp": 66.96428571428571,
+        "past_7d_sbp_std": 2.4738427515069894,
+        "age": 24.0,
+        "bmi": 27.205,
+        "past_7d_activity": 52.857142857142854,
+        "past_7d_sleep": 6.802428571428571,
+        "past_7d_stress": 2.857142857142857
+      },
+      "features_imputed": [],
+      "features_out_of_range": [
+        "past_7d_sbp",
+        "past_7d_dbp"
+      ],
+      "notes": [
+        "Sebagian fitur berada di luar rentang data training: past_7d_sbp, past_7d_dbp. Prediksi merupakan ekstrapolasi.",
+        "Pada validasi, model ini tidak lebih baik dari baseline naif; gunakan angka naif sebagai pembanding."
+      ],
+      "model": {
+        "algorithm": "Linear Regression",
+        "version": "d43ac5c17c70cead67c7",
+        "trained_on": "2026-11-10",
+        "target": "future_7d_mean_sbp",
+        "horizon_days": 7,
+        "features": [
+          "past_7d_sbp",
+          "past_7d_dbp",
+          "past_7d_sbp_std",
+          "age",
+          "bmi",
+          "past_7d_activity",
+          "past_7d_sleep",
+          "past_7d_stress"
+        ],
+        "data_source": "19 ID sintetis, 570 ID-tanggal, 1140 sesi; 323 complete windows.",
+        "target_approved": false,
+        "model_sha256": "327eb82ea728ad312e6534a24fe4888c3d4d41c4f5a9bf9b98e1dc47f545ac71",
+        "beats_naive_on_validation": false
+      },
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "target_approved": false,
+      "source_kind": "synthetic",
+      "data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "training_data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "feature_schema_version": "cp3-history7-v1",
+      "warehouse_batch_match": true,
+      "compatibility_status": "matched",
+      "metrics_scope": "synthetic_historical_test",
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS"
+    },
+    {
+      "respondent_id": "SIM017",
+      "last_date": "2026-09-18",
+      "history_start": "2026-09-12",
+      "forecast_start": "2026-09-19",
+      "forecast_end": "2026-09-25",
+      "history_daily": [
+        {
+          "date": "2026-09-12",
+          "sbp": 124.75,
+          "dbp": 73.75
+        },
+        {
+          "date": "2026-09-13",
+          "sbp": 123.75,
+          "dbp": 74.25
+        },
+        {
+          "date": "2026-09-14",
+          "sbp": 117.25,
+          "dbp": 70.25
+        },
+        {
+          "date": "2026-09-15",
+          "sbp": 118.0,
+          "dbp": 71.5
+        },
+        {
+          "date": "2026-09-16",
+          "sbp": 116.5,
+          "dbp": 73.25
+        },
+        {
+          "date": "2026-09-17",
+          "sbp": 122.0,
+          "dbp": 74.5
+        },
+        {
+          "date": "2026-09-18",
+          "sbp": 126.5,
+          "dbp": 76.5
+        }
+      ],
+      "history_grain": "respondent-date",
+      "prediction_mmHg": 125.53,
+      "reference_naive_mmHg": 121.25,
+      "features_used": {
+        "past_7d_sbp": 121.25,
+        "past_7d_dbp": 73.42857142857143,
+        "past_7d_sbp_std": 3.698455275999891,
+        "age": 52.0,
+        "bmi": 30.792,
+        "past_7d_activity": 50.714285714285715,
+        "past_7d_sleep": 6.883285714285714,
+        "past_7d_stress": 2.857142857142857
+      },
+      "features_imputed": [],
+      "features_out_of_range": [],
+      "notes": [
+        "Pada validasi, model ini tidak lebih baik dari baseline naif; gunakan angka naif sebagai pembanding."
+      ],
+      "model": {
+        "algorithm": "Linear Regression",
+        "version": "d43ac5c17c70cead67c7",
+        "trained_on": "2026-11-10",
+        "target": "future_7d_mean_sbp",
+        "horizon_days": 7,
+        "features": [
+          "past_7d_sbp",
+          "past_7d_dbp",
+          "past_7d_sbp_std",
+          "age",
+          "bmi",
+          "past_7d_activity",
+          "past_7d_sleep",
+          "past_7d_stress"
+        ],
+        "data_source": "19 ID sintetis, 570 ID-tanggal, 1140 sesi; 323 complete windows.",
+        "target_approved": false,
+        "model_sha256": "327eb82ea728ad312e6534a24fe4888c3d4d41c4f5a9bf9b98e1dc47f545ac71",
+        "beats_naive_on_validation": false
+      },
+      "is_synthetic": true,
+      "is_diagnosis": false,
+      "target_approved": false,
+      "source_kind": "synthetic",
+      "data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "training_data_version": "51394dad1ec8fa22d6ff2ed5503319625e956b366fe8ed87b92e8e0824d32427",
+      "feature_schema_version": "cp3-history7-v1",
+      "warehouse_batch_match": true,
+      "compatibility_status": "matched",
+      "metrics_scope": "synthetic_historical_test",
+      "status": "DATA SINTETIS / SIMULASI - BUKAN DIAGNOSIS"
+    }
+  ]
+}

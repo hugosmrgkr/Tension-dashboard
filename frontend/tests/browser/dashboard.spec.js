@@ -22,7 +22,7 @@ test('verified comparison scores match raw predictions and evaluation UI (P2-03)
   }
 });
 
-test('8 desktop pages render real read-only PostgreSQL data and the baseline API',async({page})=>{
+test('8 desktop pages render API-backed synthetic data and the baseline API',async({page})=>{
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   await mkdir(screenshotDir,{recursive:true});
   await page.goto('/');await ready(page);
